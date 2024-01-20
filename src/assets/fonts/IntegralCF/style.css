@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Integral CF';
+    src: local('Integral CF Demi Bold'), local('Integral-CF-Demi-Bold'),
+        url('IntegralCF-DemiBold.woff2') format('woff2'),
+        url('IntegralCF-DemiBold.woff') format('woff'),
+        url('IntegralCF-DemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+  }
