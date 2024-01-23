@@ -3,6 +3,27 @@ import { useState } from 'react';
 import MenuItemEl from './MenuItemEl';
 import { motion } from 'framer-motion';
 import MenuToggleIcon from './MenuToggleIcon';
+import { NavLink } from 'react-router-dom';
+
+type StyledNavLinkProps = {
+  path: string;
+  targetName: string;
+  onClose: () => void;
+};
+
+const StyledNavLink = ({ path, targetName, onClose }: StyledNavLinkProps) => {
+  return (
+    <NavLink to={path} style={{ textDecoration: 'none' }}>
+      {({ isActive }) => {
+        return (
+          <MenuItemEl onCloseMenu={onClose} isActive={isActive}>
+            {targetName}
+          </MenuItemEl>
+        );
+      }}
+    </NavLink>
+  );
+};
 
 const MobileNavMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -50,7 +71,7 @@ const MobileNavMenu = () => {
             sx: {
               bgcolor: 'primary.light',
               borderRadius: '25px',
-              height: '60vh',
+              padding: '2rem 0',
               width: '90%',
               m: '0 5% 0 5%',
               left: '0 !important',
@@ -62,12 +83,14 @@ const MobileNavMenu = () => {
           },
         }}
       >
-        <MenuItemEl onCloseMenu={handleClose}>Home</MenuItemEl>
-        <MenuItemEl onCloseMenu={handleClose}>My account</MenuItemEl>
-        <MenuItemEl onCloseMenu={handleClose}>Products</MenuItemEl>
-        <MenuItemEl onCloseMenu={handleClose}>Partnership</MenuItemEl>
-        <MenuItemEl onCloseMenu={handleClose}>About us</MenuItemEl>
-        <MenuItemEl onCloseMenu={handleClose}>Contact us</MenuItemEl>
+        <StyledNavLink path='/' targetName='Home' onClose={handleClose} />
+        <StyledNavLink path='/account' targetName='My account' onClose={handleClose} />
+        <StyledNavLink path='/products' targetName='Products' onClose={handleClose} />
+        <StyledNavLink path='/shopping-cart' targetName='Shopping cart' onClose={handleClose} />
+        <StyledNavLink path='/wish-list' targetName='Wish list' onClose={handleClose} />
+        <StyledNavLink path='/partnership' targetName='Partnership' onClose={handleClose} />
+        <StyledNavLink path='/about' targetName='About us' onClose={handleClose} />
+        <StyledNavLink path='/contact' targetName='Contact us' onClose={handleClose} />
       </Menu>
     </>
   );

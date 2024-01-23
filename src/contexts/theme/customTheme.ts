@@ -12,11 +12,7 @@ import Causten_Regular_ttf from '../../assets/fonts/Causten-Round/Causten-Regula
 
 const options = {
   palette: {
-    primary: {
-      main: '#A581C7',
-      light: '#B598D2',
-      dark: '#9268BA',
-    },
+    primary: { main: '#A581C7', light: '#B598D2', dark: '#9268BA' },
     secondary: { main: '#FFDA55', light: '#fff771', dark: '#FFB500' },
     grey: { 50: '#F1EDEA' },
     background: {

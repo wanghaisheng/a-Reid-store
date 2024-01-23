@@ -22,12 +22,11 @@ const StyledFormControlLabel = styled(FormControlLabel)({
 const GeneralSettings = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const theme = useTheme();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const theme = useTheme();
 
   return (
     <>
@@ -62,7 +61,7 @@ const GeneralSettings = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={() => setAnchorEl(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         disableScrollLock={true}
         // MuiPaper-root

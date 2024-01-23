@@ -2,17 +2,19 @@ import { MenuItem } from '@mui/material';
 import { motion } from 'framer-motion';
 
 type MenuItemElProps = {
-  children: string;
+  children: string | React.ReactNode;
   onCloseMenu: () => void;
+  isActive?: boolean;
 };
 
-const MenuItemEl = ({ children, onCloseMenu }: MenuItemElProps) => {
+const MenuItemEl = ({ children, onCloseMenu, isActive }: MenuItemElProps) => {
   return (
     <MenuItem
       onClick={() => onCloseMenu()}
       sx={{
-        color: 'white',
+        color: isActive ? 'secondary.main' : 'white',
         fontSize: '2rem',
+        padding: '1rem 0',
         justifyContent: 'center',
         '&:hover': { color: 'secondary.main' },
       }}

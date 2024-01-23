@@ -1,29 +1,31 @@
 import { Box, Fab, Fade, useScrollTrigger } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
-const ScrollTop = () => {
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 1500,
   });
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const anchor = ((event.target as HTMLDivElement).ownerDocument || document).querySelector(
-      '#back-to-top-anchor'
-    );
-
-    if (anchor) {
-      anchor.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-    }
+  const handleScroll = () => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
   };
+
+  useEffect(() => {
+    handleScroll();
+  }, [pathname]);
 
   return (
     <Fade in={trigger}>
       <Box
-        onClick={handleClick}
+        onClick={handleScroll}
         role='presentation'
         sx={{ position: 'fixed', bottom: 16, right: 16 }}
       >
@@ -39,4 +41,4 @@ const ScrollTop = () => {
   );
 };
 
-export default ScrollTop;
+export default ScrollToTop;

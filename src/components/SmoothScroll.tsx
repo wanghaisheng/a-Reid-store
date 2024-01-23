@@ -1,6 +1,6 @@
 import ReactLenis from '@studio-freight/react-lenis';
 
-const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
+const SmoothScroll = ({ children }: { children?: React.ReactNode }) => {
   return (
     <ReactLenis
       root

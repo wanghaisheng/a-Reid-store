@@ -46,7 +46,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 })) as typeof Switch;
 
 const ThemeSwitch = () => {
-  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down(640));
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down(1024));
 
   return (
     <MenuItem
