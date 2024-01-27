@@ -4,7 +4,7 @@ const StyledButton = styled(Button)<ButtonProps>({
   textTransform: 'capitalize',
   fontSize: '1.5rem !important',
   fontWeight: 'bold',
-  borderRadius: '30px',
+  borderRadius: '40px',
   padding: '0.5rem 2.5rem',
 }) as typeof Button;
 

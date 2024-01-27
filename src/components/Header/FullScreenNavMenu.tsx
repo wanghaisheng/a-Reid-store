@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const FullScreenNavMenu = () => {
-  const matchesFullScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up(1100));
+  const matchesFullScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up(1150));
 
   return (
     <>
@@ -19,6 +19,7 @@ const FullScreenNavMenu = () => {
         <Link to='/account'>
           <StyledButton
             sx={{
+              p: '0.3rem 1.8rem',
               ml: 2,
               mr: 2,
               color: 'black',
@@ -28,7 +29,7 @@ const FullScreenNavMenu = () => {
               },
             }}
             component={motion.button}
-            whileTap={{ scale: 0.9 }}
+            whileTap={{ scale: 0.95 }}
           >
             My Account
           </StyledButton>

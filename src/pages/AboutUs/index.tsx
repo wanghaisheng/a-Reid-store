@@ -1,6 +1,7 @@
 const AboutUs = () => {
   return (
     <>
+      <div style={{ padding: '2rem 0', background: 'red' }}>acacac</div>
       <h1>AboutUs</h1>
       {
         <p>
