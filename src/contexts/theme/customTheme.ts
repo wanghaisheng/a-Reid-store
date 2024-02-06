@@ -10,11 +10,22 @@ import Causten_Regular_woff2 from '../../assets/fonts/Causten-Round/Causten-Regu
 import Causten_Regular_woff from '../../assets/fonts/Causten-Round/Causten-Regular.woff';
 import Causten_Regular_ttf from '../../assets/fonts/Causten-Round/Causten-Regular.ttf';
 
+// Augment the palette to include an gray color
+declare module '@mui/material/styles' {
+  interface Palette {
+    gray: Palette['primary'];
+  }
+
+  interface PaletteOptions {
+    gray?: PaletteOptions['primary'];
+  }
+}
+
 const options = {
   palette: {
     primary: { main: '#A581C7', light: '#B598D2', dark: '#9268BA' },
     secondary: { main: '#FFDA55', light: '#fff771', dark: '#FFB500' },
-    grey: { 50: '#F1EDEA' },
+    gray: { main: '#F1EDEA', light: '#f4f1ee', dark: '#9B9792' },
     background: {
       default: '#A581C7',
     },

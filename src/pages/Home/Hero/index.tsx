@@ -9,6 +9,7 @@ const StyledBox = styled(Box)({
   minHeight: '100vh',
   display: 'flex',
   alignItems: 'flex-start',
+  overflow: 'hidden',
 }) as typeof Box;
 
 const Hero = () => {
