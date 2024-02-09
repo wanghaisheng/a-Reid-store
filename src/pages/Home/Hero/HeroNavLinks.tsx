@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { styled } from '@mui/material';
 import StyledButton from '../../../components/Buttons/StyledButton';
 import StyledNavButton from './StyledNavButton';
@@ -16,7 +16,7 @@ const StyledContainer = styled('div')({
 const HeroNavLinks = () => {
   return (
     <StyledContainer>
-      <NavLink to='/'>
+      <Link to='/'>
         <StyledButton
           sx={{
             width: 150,
@@ -31,27 +31,27 @@ const HeroNavLinks = () => {
         >
           Home
         </StyledButton>
-      </NavLink>
-      <NavLink to='/products'>
+      </Link>
+      <Link to='/products'>
         <StyledNavButton zIndex={4} x={25} rotate={5}>
           Products
         </StyledNavButton>
-      </NavLink>
-      <NavLink to='/partnership'>
+      </Link>
+      <Link to='/partnership'>
         <StyledNavButton zIndex={3} x={0} rotate={-3}>
           Partnership
         </StyledNavButton>
-      </NavLink>
-      <NavLink to='/about'>
+      </Link>
+      <Link to='/about'>
         <StyledNavButton zIndex={2} x={25} rotate={-10}>
           About us
         </StyledNavButton>
-      </NavLink>
-      <NavLink to='/contact'>
+      </Link>
+      <Link to='/contact'>
         <StyledNavButton zIndex={1} x={0} rotate={3}>
           Contact us
         </StyledNavButton>
-      </NavLink>
+      </Link>
     </StyledContainer>
   );
 };

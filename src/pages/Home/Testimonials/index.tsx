@@ -3,7 +3,7 @@ import Headline from './Headline';
 import TestimonialsSlider from './TestimonialsSlider';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
-  height: '100vh',
+  height: '140vh',
   overflow: 'hidden',
   paddingTop: '10rem',
   display: 'flex',

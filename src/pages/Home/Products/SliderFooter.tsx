@@ -14,6 +14,12 @@ const SliderFooter = styled('div')(({ theme }) => ({
     marginTop: '4rem',
   },
 
+  '& .ProductDetailsButtons': {
+    display: 'flex',
+    justifyContent: 'center',
+    minWidth: '204px',
+  },
+
   '& .ProductDetailsBtn': {
     color: 'black',
     background: theme.palette.secondary.main,
@@ -35,7 +41,7 @@ const SliderFooter = styled('div')(({ theme }) => ({
   },
 
   '& .SlideButtons': {
-    maxWidth: '170px',
+    minWidth: '170px',
     '& .ArrowBtn': {
       color: 'black',
       width: '100px',
