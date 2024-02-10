@@ -12,6 +12,7 @@ import Partnership from './pages/Partnership';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import NotFound from './pages/NotFound';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='/contact' element={<ContactUs />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
+      <Footer />
       <SmoothScroll />
       <ScrollToTop />
     </ThemeContextProvider>
