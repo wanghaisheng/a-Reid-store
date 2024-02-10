@@ -51,7 +51,7 @@ const GridItem = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    transition: 'opacity 0.4s ease-in-out 0s',
+    transition: 'opacity 0.3s ease-in-out 0s',
   },
 
   '& .content': {

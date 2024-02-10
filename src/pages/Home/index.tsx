@@ -2,6 +2,7 @@ import Hero from './Hero/index.tsx';
 import Products from './Products/index.tsx';
 import Testimonials from './Testimonials/index.tsx';
 import Partnership from './Partnership/index.tsx';
+import Newsletter from './Newsletter/index.tsx';
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
       <Products />
       <Testimonials />
       <Partnership />
+      <Newsletter />
     </>
   );
 };
