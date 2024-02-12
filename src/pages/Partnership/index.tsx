@@ -22,8 +22,9 @@ const Container = styled('div')(({ theme }) => ({
     },
 
     '& .gridItem': {
-      padding: '2rem',
+      padding: '3rem',
       height: '150px',
+      borderRadius: '2rem',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
