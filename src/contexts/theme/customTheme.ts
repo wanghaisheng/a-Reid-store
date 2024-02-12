@@ -78,6 +78,20 @@ const options = {
         }
       `,
     },
+    MuiInputLabel: {
+      defaultProps: {
+        sx: {
+          fontSize: '2rem !important',
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      defaultProps: {
+        sx: {
+          fontSize: '2rem !important',
+        },
+      },
+    },
   },
 };
 
