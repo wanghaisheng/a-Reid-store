@@ -3,7 +3,7 @@ import { Card, Typography, styled } from '@mui/material';
 const Container = styled('div')(({ theme }) => ({
   borderBottomLeftRadius: '40px',
   borderBottomRightRadius: '40px',
-  borderBottom: `2px solid ${theme.palette.gray.light}`,
+  borderBottom: `2px solid white`,
   padding: '8rem 0',
 
   '& .grid': {

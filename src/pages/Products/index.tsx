@@ -1,6 +1,30 @@
+import { styled } from '@mui/material';
+import ProductsHeader from './ProductsHeader';
+import ProductsGrid from './ProductsGrid';
+import { useState } from 'react';
+import ProductView from './ProductView';
+
+const Container = styled('div')({
+  borderBottomLeftRadius: '40px',
+  borderBottomRightRadius: '40px',
+  borderBottom: `2px solid white`,
+  padding: '8rem 0',
+  minHeight: '100vh',
+});
+
 const Products = () => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <h1 style={{ /* position: 'sticky', bottom: 0, width: '100%' */ flexGrow: 1 }}>Products</h1>
+    <>
+      <Container>
+        <div style={{ width: '90%', maxWidth: '1200px', margin: '0 auto' }}>
+          <ProductsHeader />
+          <ProductsGrid setOpen={setOpen} />
+        </div>
+      </Container>
+      <ProductView open={open} setOpen={setOpen} />
+    </>
   );
 };
 

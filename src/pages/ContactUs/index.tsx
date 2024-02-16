@@ -8,14 +8,14 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 const Container = styled('div')(({ theme }) => ({
   borderBottomLeftRadius: '40px',
   borderBottomRightRadius: '40px',
-  borderBottom: `2px solid ${theme.palette.gray.light}`,
+  borderBottom: `2px solid white`,
   padding: '8rem 0',
 
   '& .contact': {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    border: `2px solid ${theme.palette.gray.light}`,
+    border: `2px solid white`,
     borderRadius: '20px',
     marginBottom: '8rem',
     padding: '4rem',
@@ -94,7 +94,7 @@ const Container = styled('div')(({ theme }) => ({
     '& iframe': {
       width: '100%',
       height: '425px',
-      border: `4px solid ${theme.palette.gray.light}`,
+      border: `4px solid white`,
       borderRadius: '20px',
     },
 

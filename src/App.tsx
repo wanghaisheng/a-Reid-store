@@ -6,6 +6,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import MyAccount from './pages/MyAccount';
 import Products from './pages/Products';
+import ProductsDetails from './pages/ProductsDetails';
 import ShoppingCart from './pages/ShoppingCart';
 import WishList from './pages/WishList';
 import Partnership from './pages/Partnership';
@@ -22,6 +23,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/account' element={<MyAccount />} />
         <Route path='/products' element={<Products />} />
+        <Route path='/products/:id' element={<ProductsDetails />} />
         <Route path='/shopping-cart' element={<ShoppingCart />} />
         <Route path='/wish-list' element={<WishList />} />
         <Route path='/partnership' element={<Partnership />} />
