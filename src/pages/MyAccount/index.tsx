@@ -1,6 +1,8 @@
+import PageContainer from "../../components/PageContainer";
+
 const MyAccount = () => {
   return (
-    <>
+    <PageContainer>
       <h1>MyAccount</h1>
       {
         <p>
@@ -94,7 +96,7 @@ const MyAccount = () => {
           consequuntur molestiae!
         </p>
       }
-    </>
+    </PageContainer>
   );
 };
 

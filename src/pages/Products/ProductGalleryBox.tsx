@@ -1,7 +1,4 @@
 import { styled } from '@mui/material';
-import { products } from './_data';
-
-const product = products[0];
 
 const Container = styled('div')(({ theme }) => ({
   height: '100%',
@@ -36,7 +33,7 @@ const Container = styled('div')(({ theme }) => ({
   },
 }));
 
-const ProductGalleryBox = () => {
+const ProductGalleryBox = ({ thumbs, img }: { thumbs: string[]; img: string }) => {
   const handleFilter = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     const filterItems = document.querySelectorAll('.thumbs img');
     for (const item of filterItems) item.classList.remove('active');
@@ -49,7 +46,7 @@ const ProductGalleryBox = () => {
   return (
     <Container>
       <div className='thumbs'>
-        {product.thumbs.map((thumb, index) => (
+        {thumbs.map((thumb, index) => (
           <img
             src={thumb}
             key={index}
@@ -59,7 +56,7 @@ const ProductGalleryBox = () => {
         ))}
       </div>
       <div className='mainPhoto'>
-        <img src={product.img} />
+        <img src={img} />
       </div>
     </Container>
   );

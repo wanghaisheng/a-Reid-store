@@ -1,21 +1,14 @@
-import { Container, Grid, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Grid, Theme, Typography, useMediaQuery } from '@mui/material';
 import { Link } from 'react-router-dom';
 import NotFoundImage from '../../assets/404.png';
 import StyledButton from '../../components/Buttons/StyledButton';
+import PageContainer from '../../components/PageContainer';
 
 const NotFound = () => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down(640));
-  const theme = useTheme();
 
   return (
-    <Container
-      maxWidth='md'
-      sx={{
-        height: `calc(100vh - ${+theme.mixins.toolbar.minHeight!}px)`,
-        display: 'flex',
-        alignItems: 'center',
-      }}
-    >
+    <PageContainer>
       <Grid
         container
         spacing={2}
@@ -72,7 +65,7 @@ const NotFound = () => {
           />
         </Grid>
       </Grid>
-    </Container>
+    </PageContainer>
   );
 };
 

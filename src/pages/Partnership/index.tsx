@@ -1,11 +1,7 @@
 import { Card, Typography, styled } from '@mui/material';
+import PageContainer from '../../components/PageContainer';
 
 const Container = styled('div')(({ theme }) => ({
-  borderBottomLeftRadius: '40px',
-  borderBottomRightRadius: '40px',
-  borderBottom: `2px solid white`,
-  padding: '8rem 0',
-
   '& .grid': {
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
@@ -35,8 +31,8 @@ const Container = styled('div')(({ theme }) => ({
 
 const Partnership = () => {
   return (
-    <Container>
-      <div style={{ width: '90%', maxWidth: '1200px', margin: '0 auto' }}>
+    <PageContainer>
+      <Container>
         <div className='text'>
           <Typography variant='h2' sx={{ color: 'white', marginBottom: '2rem' }}>
             Partners & Team
@@ -86,8 +82,8 @@ const Partnership = () => {
             <img src='./assets/p1.png' />
           </Card>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </PageContainer>
   );
 };
 

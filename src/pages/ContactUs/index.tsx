@@ -4,13 +4,9 @@ import { motion } from 'framer-motion';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import PageContainer from '../../components/PageContainer';
 
 const Container = styled('div')(({ theme }) => ({
-  borderBottomLeftRadius: '40px',
-  borderBottomRightRadius: '40px',
-  borderBottom: `2px solid white`,
-  padding: '8rem 0',
-
   '& .contact': {
     display: 'flex',
     flexDirection: 'column',
@@ -115,8 +111,8 @@ const Container = styled('div')(({ theme }) => ({
 
 const ContactUs = () => {
   return (
-    <Container>
-      <div style={{ width: '90%', maxWidth: '1200px', margin: '0 auto' }}>
+    <PageContainer>
+      <Container>
         <div className='contact'>
           <div className='formContainer'>
             <form>
@@ -185,8 +181,8 @@ const ContactUs = () => {
             </a>
           </small>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </PageContainer>
   );
 };
 

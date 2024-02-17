@@ -2,8 +2,11 @@ import { Modal, styled } from '@mui/material';
 import ProductCartDetails from './ProductCartDetails';
 import ProductGalleryBox from './ProductGalleryBox';
 import CloseIcon from '@mui/icons-material/Close';
+import { products } from './_data';
 
-const ModalContainer = styled('div')(({ theme }) => ({
+const { thumbs, img } = products[0];
+
+export const ModalContainer = styled('div')(({ theme }) => ({
   background: 'white',
   width: '95%',
   borderTopLeftRadius: '2rem',
@@ -61,7 +64,7 @@ const ProductView = ({ open, setOpen }: ProductViewProps) => {
           <CloseIcon sx={{ color: 'gray.main' }} />
         </div>
         <ModalContainer>
-          <ProductGalleryBox />
+          <ProductGalleryBox thumbs={thumbs} img={img} />
           {<ProductCartDetails />}
         </ModalContainer>
       </>

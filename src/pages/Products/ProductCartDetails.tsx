@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useState } from 'react';
 import { products } from './_data';
 import StyledButton from '../../components/Buttons/StyledButton';
@@ -100,7 +101,7 @@ const ProductCartDetails = () => {
             >
               <RemoveIcon fontSize='small' />
             </Button>
-            <Button>{count}</Button>
+            <Button sx={{ fontSize: '1.8rem !important' }}>{count}</Button>
             <Button
               aria-label='increase'
               onClick={() => {
@@ -115,6 +116,7 @@ const ProductCartDetails = () => {
       <StyledButton
         sx={{
           p: '1rem 3rem',
+          mb: '2rem',
           color: 'white',
           bgcolor: 'primary.main',
           '&:hover': { bgcolor: 'black' },
@@ -123,6 +125,12 @@ const ProductCartDetails = () => {
       >
         ADD TO CART
       </StyledButton>
+      <Box>
+        <FavoriteBorderIcon
+          sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer' }}
+          onClick={handleOpenModal}
+        />
+      </Box>
       <Modal
         open={open}
         onClose={handleCloseModal}
@@ -136,7 +144,15 @@ const ProductCartDetails = () => {
           alignItems: 'center',
         }}
       >
-        <Stack sx={{ width: '30%' }} spacing={2}>
+        <Stack
+          sx={(theme) => ({
+            width: '80%',
+            [theme.breakpoints.up('sm')]: { width: '60%' },
+            [theme.breakpoints.up('md')]: { width: '40%' },
+            [theme.breakpoints.up('lg')]: { width: '30%' },
+          })}
+          spacing={2}
+        >
           <Alert
             severity='success'
             action={

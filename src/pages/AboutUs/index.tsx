@@ -1,11 +1,7 @@
 import { Card, CardMedia, Typography, styled } from '@mui/material';
+import PageContainer from '../../components/PageContainer';
 
 const Container = styled('div')(({ theme }) => ({
-  borderBottomLeftRadius: '40px',
-  borderBottomRightRadius: '40px',
-  borderBottom: `2px solid white`,
-  padding: '8rem 0',
-
   '& .section': {
     display: 'flex',
     flexDirection: 'column',
@@ -41,8 +37,8 @@ const Container = styled('div')(({ theme }) => ({
 
 const AboutUs = () => {
   return (
-    <Container>
-      <div style={{ width: '90%', maxWidth: '1200px', margin: '0 auto' }}>
+    <PageContainer>
+      <Container>
         <div className='section'>
           <div className='sectionText'>
             <Typography variant='h2' sx={{ color: 'white', marginBottom: '2rem' }}>
@@ -91,8 +87,8 @@ const AboutUs = () => {
             <CardMedia component='img' image='./assets/about-02.jpg' />
           </Card>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </PageContainer>
   );
 };
 
