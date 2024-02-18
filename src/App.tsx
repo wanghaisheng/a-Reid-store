@@ -9,19 +9,21 @@ import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
 import ShoppingCart from './pages/ShoppingCart';
 import Checkout from './pages/CheckOut';
-import WishList from './pages/WishList';
+import Wishlist from './pages/Wishlist';
 import Partnership from './pages/Partnership';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
 import Cart from './components/Cart';
+import WishlistAside from './components/WishlistAside';
 
 function App() {
   return (
     <ThemeContextProvider>
       <Header />
       <Cart />
+      <WishlistAside />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/account' element={<MyAccount />} />
@@ -31,7 +33,7 @@ function App() {
         </Route>
         <Route path='/shopping-cart' element={<ShoppingCart />} />
         <Route path='/checkout' element={<Checkout />} />
-        <Route path='/wish-list' element={<WishList />} />
+        <Route path='/wishlist' element={<Wishlist />} />
         <Route path='/partnership' element={<Partnership />} />
         <Route path='/about' element={<AboutUs />} />
         <Route path='/contact' element={<ContactUs />} />

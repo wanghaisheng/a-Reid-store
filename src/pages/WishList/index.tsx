@@ -1,5 +1,5 @@
-const WishList = () => {
-  return <h1>WishList</h1>;
+const Wishlist = () => {
+  return <h1>Wishlist</h1>;
 };
 
-export default WishList;
+export default Wishlist;

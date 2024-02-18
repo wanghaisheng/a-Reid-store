@@ -81,7 +81,10 @@ type ProductsGridProps = {
 };
 
 const ProductsGrid = ({ setOpen }: ProductsGridProps) => {
-  const handleOpenModal = () => setOpen(true);
+  const handleOpenModal = () => {
+    setOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
 
   return (
     <>

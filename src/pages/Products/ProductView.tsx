@@ -35,7 +35,10 @@ type ProductViewProps = {
 };
 
 const ProductView = ({ open, setOpen }: ProductViewProps) => {
-  const handleCloseModal = () => setOpen(false);
+  const handleCloseModal = () => {
+    setOpen(false);
+    document.body.style.overflow = 'unset';
+  };
 
   return (
     <Modal
@@ -63,9 +66,9 @@ const ProductView = ({ open, setOpen }: ProductViewProps) => {
         <div className='modalHeader' onClick={handleCloseModal}>
           <CloseIcon sx={{ color: 'gray.main' }} />
         </div>
-        <ModalContainer>
+        <ModalContainer className='lenis lenis-smooth'>
           <ProductGalleryBox thumbs={thumbs} img={img} />
-          {<ProductCartDetails />}
+          <ProductCartDetails />
         </ModalContainer>
       </>
     </Modal>

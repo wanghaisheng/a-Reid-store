@@ -1,11 +1,11 @@
-import { Box, Drawer, Typography, styled } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Box, Drawer, styled } from '@mui/material';
 import React, { useState } from 'react';
 import CartFooter from './CartFooter';
 import CartBody from './CartBody';
+import Header from './Header';
 import { products } from './_data';
 
-const CartContainer = styled(Box)({
+export const CartContainer = styled(Box)({
   padding: '4rem',
   width: '390px',
   height: '100%',
@@ -33,18 +33,9 @@ const Cart = () => {
   };
 
   return (
-    <Drawer variant='persistent' anchor='right' open={open} onClose={toggleDrawer(false)}>
+    <Drawer anchor='right' open={open} onClose={toggleDrawer(false)}>
       <CartContainer role='presentation'>
-        <div className='cartHeader'>
-          <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
-            YOUR CART
-          </Typography>
-          <CloseIcon
-            sx={{ fontSize: '3.5rem', cursor: 'pointer' }}
-            onClick={toggleDrawer(false)}
-            onKeyDown={toggleDrawer(false)}
-          />
-        </div>
+        <Header toggleDrawer={toggleDrawer} title='YOUR CART' />
         <CartBody
           cartProducts={cartProducts}
           toggleDrawer={toggleDrawer}
