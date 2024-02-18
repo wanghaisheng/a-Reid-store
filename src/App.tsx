@@ -8,17 +8,20 @@ import MyAccount from './pages/MyAccount';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
 import ShoppingCart from './pages/ShoppingCart';
+import Checkout from './pages/CheckOut';
 import WishList from './pages/WishList';
 import Partnership from './pages/Partnership';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
+import Cart from './components/Cart';
 
 function App() {
   return (
     <ThemeContextProvider>
       <Header />
+      <Cart />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/account' element={<MyAccount />} />
@@ -27,6 +30,7 @@ function App() {
           <Route path=':id' element={<ProductDetails />} />
         </Route>
         <Route path='/shopping-cart' element={<ShoppingCart />} />
+        <Route path='/checkout' element={<Checkout />} />
         <Route path='/wish-list' element={<WishList />} />
         <Route path='/partnership' element={<Partnership />} />
         <Route path='/about' element={<AboutUs />} />
