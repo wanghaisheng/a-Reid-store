@@ -8,9 +8,9 @@ import {
   useTheme,
 } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
-import ThemeSwitch from './ThemeSwtich';
+import { ColorModeContext } from '../../contexts/theme/ThemeContext';
 
 const StyledFormControlLabel = styled(FormControlLabel)({
   marginLeft: 0,
@@ -23,6 +23,7 @@ const GeneralSettings = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const theme = useTheme();
+  const { toggleColorMode } = useContext(ColorModeContext);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -69,7 +70,12 @@ const GeneralSettings = () => {
           paper: { sx: { bgcolor: 'primary.light', borderRadius: '20px', mt: 0.4 } },
         }}
       >
-        <ThemeSwitch />
+        <MenuItem disableRipple sx={{ color: 'white', '&:hover': { color: 'secondary.main' } }}>
+          <StyledFormControlLabel
+            control={<Switch color='secondary' onChange={toggleColorMode} />}
+            label='Dark'
+          />
+        </MenuItem>
         <MenuItem disableRipple sx={{ color: 'white', '&:hover': { color: 'secondary.main' } }}>
           <StyledFormControlLabel control={<Switch color='secondary' />} label='Arabic' />
         </MenuItem>

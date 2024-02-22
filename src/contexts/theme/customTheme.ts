@@ -1,4 +1,3 @@
-import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 // fonts
 import IntegralCF_DemiBold_woff2 from '../../assets/fonts/IntegralCF/IntegralCF-DemiBold.woff2';
 import IntegralCF_DemiBold_woff from '../../assets/fonts/IntegralCF/IntegralCF-DemiBold.woff';
@@ -9,6 +8,7 @@ import IntegralCF_Medium_ttf from '../../assets/fonts/IntegralCF/IntegralCF-Medi
 import Causten_Regular_woff2 from '../../assets/fonts/Causten-Round/Causten-Regular.woff2';
 import Causten_Regular_woff from '../../assets/fonts/Causten-Round/Causten-Regular.woff';
 import Causten_Regular_ttf from '../../assets/fonts/Causten-Round/Causten-Regular.ttf';
+import { PaletteMode } from '@mui/material';
 
 // Augment the palette to include an gray color
 declare module '@mui/material/styles' {
@@ -21,14 +21,24 @@ declare module '@mui/material/styles' {
   }
 }
 
-const options = {
+const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
-    primary: { main: '#A581C7', light: '#B598D2', dark: '#9268BA' },
-    secondary: { main: '#FFDA55', light: '#fff771', dark: '#FFB500' },
-    gray: { main: '#F1EDEA', light: '#f4f1ee', dark: '#9B9792' },
-    background: {
-      default: '#A581C7',
-    },
+    mode,
+    ...(mode === 'light'
+      ? {
+          // palette values for light mode
+          primary: { main: '#A581C7', light: '#B598D2', dark: '#9268BA' },
+          secondary: { main: '#FFDA55', light: '#fff771', dark: '#FFB500' },
+          gray: { main: '#F1EDEA', light: '#f4f1ee', dark: '#9B9792' },
+          background: { default: '#A581C7' },
+        }
+      : {
+          // palette values for dark mode
+          primary: { main: '#020617', light: '#020617', dark: '#020617' },
+          secondary: { main: '#020617', light: '#020617', dark: '#020617' },
+          gray: { main: '#F1EDEA', light: '#f4f1ee', dark: '#9B9792' },
+          background: { default: '#020617' },
+        }),
   },
   typography: {
     htmlFontSize: 10,
@@ -93,6 +103,6 @@ const options = {
       },
     },
   },
-};
+});
 
-export default responsiveFontSizes(createTheme(options));
+export default getDesignTokens;
