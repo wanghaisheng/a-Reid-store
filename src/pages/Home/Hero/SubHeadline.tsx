@@ -1,4 +1,5 @@
 import { Container, Typography, styled } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const StyledSubHeadline = styled('div')(({ theme }) => ({
   color: 'white',
@@ -25,13 +26,12 @@ const StyledSubHeadline = styled('div')(({ theme }) => ({
 }));
 
 const SubHeadline = () => {
+  const { t } = useTranslation();
+
   return (
     <Container maxWidth='md'>
       <StyledSubHeadline>
-        <Typography variant='body1'>
-          Unveil Your Inner Expression Through Our Diverse Collection of Timeless Styles and Unique
-          Fashion Discoveries
-        </Typography>
+        <Typography variant='body1'>{t('homePage.heroDesc')}</Typography>
       </StyledSubHeadline>
     </Container>
   );

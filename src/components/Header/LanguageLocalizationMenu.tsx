@@ -1,12 +1,15 @@
-import { Button, ButtonProps, Menu, styled } from '@mui/material';
+import { List, ListItemText, Menu, MenuItem, Button, ButtonProps, styled } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useState } from 'react';
 import StyledButton from '../Buttons/StyledButton';
-import MenuItemEl from './MenuItemEl';
+import { useContext, useState } from 'react';
+import { LocaleContext } from '../../contexts/Locale/LocaleContext';
+import { useTranslation } from 'react-i18next';
 
-const LanguageLocalizationButton = styled(StyledButton)<ButtonProps>(({ theme }) => ({
+const ListItemButton = styled(StyledButton)<ButtonProps>(({ theme }) => ({
   color: 'white',
   maxWidth: 50,
+  gap: '1.5rem',
+  padding: '0.3rem 2.5rem',
   backgroundColor: theme.palette.primary.dark,
   'span.MuiButton-endIcon': {
     marginLeft: 0,
@@ -17,11 +20,22 @@ const LanguageLocalizationButton = styled(StyledButton)<ButtonProps>(({ theme })
 })) as typeof Button;
 
 const LanguageLocalizationMenu = () => {
+  const { lang, handleSetLang } = useContext(LocaleContext);
+  const options = ['En', 'Ar'];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const openLangLocalizationMenu = Boolean(anchorEl);
+  const [selectedIndex, setSelectedIndex] = useState(lang ? (lang == 'en' ? 0 : 1) : 0);
+  const open = Boolean(anchorEl);
+  const { i18n } = useTranslation();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (index: number) => {
+    setSelectedIndex(index);
+    handleSetLang(index == 0 ? 'en' : 'ar');
+    i18n.changeLanguage(index == 0 ? 'en' : 'ar');
+    setAnchorEl(null);
   };
 
   const handleClose = () => {
@@ -29,27 +43,30 @@ const LanguageLocalizationMenu = () => {
   };
 
   return (
-    <>
-      <LanguageLocalizationButton
-        id='demo-positioned-button'
-        endIcon={<ArrowDropDownIcon />}
-        onClick={handleClick}
-      >
-        En
-      </LanguageLocalizationButton>
+    <div>
+      <List component='nav' aria-label='Device settings'>
+        <ListItemButton
+          id='lock-button'
+          aria-haspopup='listbox'
+          aria-controls='lock-menu'
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClickListItem}
+          endIcon={<ArrowDropDownIcon />}
+        >
+          <ListItemText
+            sx={{ '& p.MuiTypography-root': { color: 'white', fontSize: '1.5rem' } }}
+            secondary={options[selectedIndex]}
+          />
+        </ListItemButton>
+      </List>
       <Menu
-        id='demo-positioned-menu'
-        aria-labelledby='demo-positioned-button'
+        id='lock-menu'
         anchorEl={anchorEl}
-        open={openLangLocalizationMenu}
+        open={open}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+        MenuListProps={{
+          'aria-labelledby': 'lock-button',
+          role: 'listbox',
         }}
         disableScrollLock={true}
         slotProps={{
@@ -62,10 +79,22 @@ const LanguageLocalizationMenu = () => {
           },
         }}
       >
-        <MenuItemEl onCloseMenu={handleClose}>En</MenuItemEl>
-        <MenuItemEl onCloseMenu={handleClose}>Ar</MenuItemEl>
+        {options.map((option, index) => (
+          <MenuItem
+            key={option}
+            selected={index === selectedIndex}
+            onClick={() => handleMenuItemClick(index)}
+            sx={{
+              color: 'white',
+              fontSize: '2rem',
+              '&:hover': { color: 'secondary.main' },
+            }}
+          >
+            {option}
+          </MenuItem>
+        ))}
       </Menu>
-    </>
+    </div>
   );
 };
 

@@ -8,7 +8,11 @@ import { Button } from '../Cart/CartFooter';
 import { products } from './_data';
 
 const WishlistAside = () => {
-  const [cartProducts, setCartProducts] = useState(products.filter((p, index) => index < 10 ?? p));
+  const [cartProducts, setCartProducts] = useState(
+    products.filter((p, index) => {
+      if (index < 10) return p;
+    })
+  );
   const [open, setOpen] = React.useState(true);
 
   const toggleDrawer = (open: boolean) => () => {

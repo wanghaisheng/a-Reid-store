@@ -4,6 +4,7 @@ import { createContext, useMemo, useState } from 'react';
 import getDesignTokens from './customTheme';
 
 export const ColorModeContext = createContext({
+  mode: 'light',
   toggleColorMode: () => {},
 });
 
@@ -13,6 +14,7 @@ const ThemeContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const colorMode = useMemo(
     () => ({
+      mode,
       // The dark mode switch would invoke this method
       toggleColorMode: () => {
         setMode((prevMode: PaletteMode) => (prevMode === 'light' ? 'dark' : 'light'));

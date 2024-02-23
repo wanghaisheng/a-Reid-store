@@ -21,7 +21,11 @@ export const CartContainer = styled(Box)({
 });
 
 const Cart = () => {
-  const [cartProducts, setCartProducts] = useState(products.filter((p, index) => index < 5 ?? p));
+  const [cartProducts, setCartProducts] = useState(
+    products.filter((p, index) => {
+      if (index < 5) return p;
+    })
+  );
   const [open, setOpen] = React.useState(true);
 
   const toggleDrawer = (open: boolean) => () => {

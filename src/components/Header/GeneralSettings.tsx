@@ -1,4 +1,5 @@
 import {
+  Divider,
   FormControlLabel,
   IconButton,
   Menu,
@@ -11,6 +12,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ColorModeContext } from '../../contexts/theme/ThemeContext';
+import { LocaleContext } from '../../contexts/Locale/LocaleContext';
+import { useTranslation } from 'react-i18next';
 
 const StyledFormControlLabel = styled(FormControlLabel)({
   marginLeft: 0,
@@ -23,10 +26,17 @@ const GeneralSettings = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const theme = useTheme();
-  const { toggleColorMode } = useContext(ColorModeContext);
+  const { mode, toggleColorMode } = useContext(ColorModeContext);
+  const { lang, handleSetLang } = useContext(LocaleContext);
+  const { i18n } = useTranslation();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleLocalization = (lang: string) => {
+    handleSetLang(lang);
+    i18n.changeLanguage(lang);
   };
 
   return (
@@ -72,16 +82,43 @@ const GeneralSettings = () => {
       >
         <MenuItem disableRipple sx={{ color: 'white', '&:hover': { color: 'secondary.main' } }}>
           <StyledFormControlLabel
-            control={<Switch color='secondary' onChange={toggleColorMode} />}
-            label='Dark'
+            control={
+              <Switch color='secondary' checked={mode === 'light'} onChange={toggleColorMode} />
+            }
+            label='Light'
           />
         </MenuItem>
         <MenuItem disableRipple sx={{ color: 'white', '&:hover': { color: 'secondary.main' } }}>
-          <StyledFormControlLabel control={<Switch color='secondary' />} label='Arabic' />
+          <StyledFormControlLabel
+            control={
+              <Switch color='secondary' checked={mode === 'dark'} onChange={toggleColorMode} />
+            }
+            label='Dark'
+          />
+        </MenuItem>
+        <Divider />
+        <MenuItem disableRipple sx={{ color: 'white', '&:hover': { color: 'secondary.main' } }}>
+          <StyledFormControlLabel
+            control={
+              <Switch
+                color='secondary'
+                checked={lang == 'ar'}
+                onChange={() => handleLocalization('ar')}
+              />
+            }
+            label='Arabic'
+          />
         </MenuItem>
         <MenuItem disableRipple sx={{ color: 'white', '&:hover': { color: 'secondary.main' } }}>
           <StyledFormControlLabel
-            control={<Switch defaultChecked color='secondary' />}
+            control={
+              <Switch
+                defaultChecked
+                color='secondary'
+                checked={lang == 'en'}
+                onChange={() => handleLocalization('en')}
+              />
+            }
             label='English'
           />
         </MenuItem>
