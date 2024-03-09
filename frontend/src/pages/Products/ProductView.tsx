@@ -1,10 +1,13 @@
 import { Modal, styled } from '@mui/material';
-import ProductCartDetails from './ProductCartDetails';
+import ProductCartDetails from './ProductCartDetails.tsx';
 import ProductGalleryBox from './ProductGalleryBox';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import { closeModal } from '../../app/features/modalSlice';
 import { productThumbs } from './_data.ts';
+import { useQuery } from '@apollo/client';
+import { GET_PRODUCT } from './queries.ts';
+import { Maybe } from '../../gql/graphql.ts';
 
 export const ModalContainer = styled('div')(({ theme }) => ({
   background: 'white',
@@ -29,15 +32,20 @@ export const ModalContainer = styled('div')(({ theme }) => ({
   },
 }));
 
-const ProductView = () => {
+const ProductView = ({ modalItem }: { modalItem: Maybe<string> }) => {
   const dispatch = useAppDispatch();
-  const { open, modalItem: product } = useAppSelector((store) => store.modal);
-  const thumbs = productThumbs.find((p) => p.id == product?.attributes.product_id)?.thumbs;
+  const { open } = useAppSelector((store) => store.modal);
+  const { loading, error, data } = useQuery(GET_PRODUCT, {
+    variables: { id: modalItem },
+  });
+  const thumbs = productThumbs.find((p) => p.id == modalItem)?.thumbs;
 
   const handleCloseModal = () => {
     dispatch(closeModal());
-    document.body.style.overflow = 'unset';
   };
+
+  if (loading) return false;
+  if (error) return <p>Error : {error.message}</p>;
 
   return (
     <Modal
@@ -66,8 +74,8 @@ const ProductView = () => {
           <CloseIcon sx={{ color: 'gray.main' }} />
         </div>
         <ModalContainer className='lenis lenis-smooth'>
-          <ProductGalleryBox thumbs={thumbs!} img={product?.attributes.img} />
-          <ProductCartDetails />
+          <ProductGalleryBox thumbs={thumbs!} img={data.product.data.attributes.img} />
+          <ProductCartDetails loading={loading} error={error} product={data.product.data} />
         </ModalContainer>
       </>
     </Modal>

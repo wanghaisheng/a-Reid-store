@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Product } from '../../pages/Products/types';
+import { Maybe } from '../../gql/graphql';
 
 type ModalState = {
   open: boolean;
-  modalItem: Product | null;
+  modalItem: Maybe<string>;
 };
 
 const initialState: ModalState = {
@@ -17,12 +17,16 @@ export const modalSlice = createSlice({
   reducers: {
     openModal: (state) => {
       state.open = true;
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('lenis', 'lenis-smooth');
     },
     closeModal: (state) => {
       state.open = false;
+      document.body.style.overflow = 'unset';
+      document.body.classList.remove('lenis', 'lenis-smooth');
     },
     setModalItem: (state, action) => {
-      state.modalItem = action.payload.product;
+      state.modalItem = action.payload.id;
     },
   },
 });

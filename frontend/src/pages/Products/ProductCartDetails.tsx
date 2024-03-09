@@ -17,9 +17,13 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
 import StyledButton from '../../components/Buttons/StyledButton';
-import { useAppSelector } from '../../app/store';
+import { useWishlist } from './hooks';
+import { ApolloError } from '@apollo/client';
+import { ProductEntity } from '../../gql/graphql';
+import { motion } from 'framer-motion';
 
 const Container = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -27,34 +31,41 @@ const Container = styled('div')(({ theme }) => ({
   },
 }));
 
-const ProductCartDetails = () => {
+type ProductCartDetailsProps = {
+  loading: boolean;
+  error: ApolloError | undefined;
+  product: ProductEntity;
+};
+
+const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps) => {
   const [size, setSize] = useState('');
   const [color, setColor] = useState('');
   const [count, setCount] = useState(1);
   const [open, setOpen] = useState(false);
-  const { modalItem: product } = useAppSelector((store) => store.modal);
+  const { handleWishlistProduct } = useWishlist();
 
   const handleChangeSize = (event: SelectChangeEvent) => {
     setSize(event.target.value as string);
   };
-
   const handleChangeColor = (event: SelectChangeEvent) => {
     setColor(event.target.value as string);
   };
-
   const handleOpenModal = () => setOpen(true);
   const handleCloseModal = () => setOpen(false);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
 
   return (
     <Container>
       <Typography variant='h5' sx={{ fontWeight: 'bold', mb: '1rem' }}>
-        {product?.attributes.name}
+        {product.attributes?.name}
       </Typography>
       <Typography variant='h5' sx={{ fontWeight: 'bold', mb: '1rem' }}>
-        $ {product?.attributes.price}
+        $ {product.attributes?.price}
       </Typography>
       <Typography variant='body1' sx={{ color: 'gray.dark', mb: '4rem' }}>
-        $ {product?.attributes.desc}
+        $ {product.attributes?.desc}
       </Typography>
       <Box sx={{ mb: '2rem' }}>
         <FormControl fullWidth>
@@ -126,10 +137,25 @@ const ProductCartDetails = () => {
         ADD TO CART
       </StyledButton>
       <Box>
-        <FavoriteBorderIcon
-          sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer' }}
-          onClick={handleOpenModal}
-        />
+        {product.attributes?.isLiked ? (
+          <FavoriteIcon
+            sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
+            onClick={() => {
+              handleWishlistProduct(product.id, false);
+            }}
+            component={motion.svg}
+            whileTap={{ scale: 0.75 }}
+          />
+        ) : (
+          <FavoriteBorderIcon
+            sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
+            onClick={() => {
+              handleWishlistProduct(product.id, true);
+            }}
+            component={motion.svg}
+            whileTap={{ scale: 0.75 }}
+          />
+        )}
       </Box>
       <Modal
         open={open}
@@ -162,7 +188,7 @@ const ProductCartDetails = () => {
             }
           >
             <AlertTitle>Success</AlertTitle>
-            {product?.attributes.name} is added to cart!
+            {product.attributes?.name} is added to cart!
           </Alert>
         </Stack>
       </Modal>

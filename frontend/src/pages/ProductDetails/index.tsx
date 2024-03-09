@@ -1,10 +1,12 @@
-import ProductCartDetails from '../Products/ProductCartDetails';
 import ProductGalleryBox from '../Products/ProductGalleryBox';
-import { useParams } from 'react-router-dom';
+import ProductCartDetails from '../Products/ProductCartDetails';
 import PageContainer from '../../components/PageContainer';
 import { ModalContainer } from '../Products/ProductView';
+import { useParams } from 'react-router-dom';
 import { styled } from '@mui/system';
-import { products } from './_data';
+import { useQuery } from '@apollo/client';
+import { GET_PRODUCT } from '../Products/queries';
+import { productThumbs } from './_data';
 
 const Container = styled(ModalContainer)(({ theme }) => ({
   width: '100%',
@@ -18,14 +20,19 @@ const Container = styled(ModalContainer)(({ theme }) => ({
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const { loading, error, data } = useQuery(GET_PRODUCT, {
+    variables: { id },
+  });
+  const thumbs = productThumbs.find((p) => p.id == id)?.thumbs;
 
-  const { thumbs, img } = products[0];
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
 
   return (
     <PageContainer>
       <Container>
-        <ProductGalleryBox thumbs={thumbs} img={img} />
-        <ProductCartDetails />
+        <ProductGalleryBox thumbs={thumbs!} img={data.product.data.attributes.img} />
+        <ProductCartDetails loading={loading} error={error} product={data.product.data} />
       </Container>
     </PageContainer>
   );

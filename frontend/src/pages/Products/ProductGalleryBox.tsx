@@ -2,6 +2,7 @@ import { styled } from '@mui/material';
 
 const Container = styled('div')(({ theme }) => ({
   height: '100%',
+  maxHeight: '503.22px',
   display: 'flex',
   gap: '2rem',
   [theme.breakpoints.up('md')]: {
@@ -29,6 +30,8 @@ const Container = styled('div')(({ theme }) => ({
 
   '& .mainPhoto': {
     width: 'calc(100% - 70px)',
+    maxHeight: '100%',
+    textAlign: 'center',
     '& img': { maxWidth: '100%', height: '100%', objectFit: 'cover', borderRadius: '1.5rem' },
   },
 }));
@@ -48,7 +51,7 @@ const ProductGalleryBox = ({ thumbs, img }: { thumbs: string[]; img: string | un
       <div className='thumbs'>
         {thumbs.map((thumb, index) => (
           <img
-            src={thumb}
+            src={window.origin + thumb}
             key={index}
             onClick={handleFilter}
             className={index == 0 ? 'active' : ''}
@@ -56,7 +59,7 @@ const ProductGalleryBox = ({ thumbs, img }: { thumbs: string[]; img: string | un
         ))}
       </div>
       <div className='mainPhoto'>
-        <img src={img} />
+        <img src={window.origin + img} />
       </div>
     </Container>
   );
