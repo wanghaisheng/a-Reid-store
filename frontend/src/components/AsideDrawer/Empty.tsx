@@ -1,8 +1,10 @@
 import { Box, Typography, styled } from '@mui/material';
 import { Link } from 'react-router-dom';
 import StyledButton from '../Buttons/StyledButton';
+import { closeDrawer } from '../../app/features/drawerSlice';
+import { useAppDispatch } from '../../app/store';
 
-const StyledEmptyCart = styled(Box)(({ theme }) => ({
+const StyledEmpty = styled(Box)(({ theme }) => ({
   height: '100%',
   display: 'flex',
   justifyContent: 'center',
@@ -25,24 +27,26 @@ const StyledEmptyCart = styled(Box)(({ theme }) => ({
   },
 }));
 
-const EmptyCart = ({ toggleDrawer }: { toggleDrawer: (open: boolean) => () => void }) => {
+const Empty = ({ name }: { name: string }) => {
+  const dispatch = useAppDispatch();
+
   return (
-    <StyledEmptyCart>
+    <StyledEmpty>
       <Box>
-        <img src='./assets/pngwing.com.png' />
+        <img src={window.origin + '/assets/pngwing.com.png'} />
         <Typography variant='h5' sx={{ textAlign: 'center', mb: '2rem' }}>
-          Your cart is empty!
+          Your {name} is empty!
         </Typography>
         <Typography variant='body1' sx={{ textAlign: 'center', mb: '2rem' }}>
-          You have no items in your shopping cart.
+          You have no items in your {name}.
           <br /> Let's go buy something!
         </Typography>
-        <StyledButton className='button' onClick={toggleDrawer(false)}>
+        <StyledButton className='button' onClick={() => dispatch(closeDrawer())}>
           <Link to='products'>SHOP NOW</Link>
         </StyledButton>
       </Box>
-    </StyledEmptyCart>
+    </StyledEmpty>
   );
 };
 
-export default EmptyCart;
+export default Empty;

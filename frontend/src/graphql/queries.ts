@@ -1,36 +1,38 @@
 import { gql } from '@apollo/client';
 
-// export const GET_PRODUCTS = gql`
-//   query GetProducts($limit: Int, $name: String, $categoryId: IDFilterInput) {
-//     products(
-//       pagination: { limit: $limit }
-//       sort: "id:asc"
-//       filters: { name: { contains: $name }, categories: { id: { in: [$categoryId] } } }
-//     ) {
-//       data {
-//         id
-//         __typename
-//         attributes {
-//           name
-//           desc
-//           img
-//           price
-//           rating
-//           isLiked
-//           categories
-//         }
-//       }
-//       meta {
-//         pagination {
-//           page
-//           pageSize
-//           total
-//           pageCount
-//         }
-//       }
-//     }
-//   }
-// `;
+export const GET_PRODUCTS = gql`
+  query GetProducts($isLiked: Boolean, $isAddedToCart: Boolean) {
+    products(
+      filters: { isLiked: { eq: $isLiked }, isAddedToCart: { eq: $isAddedToCart } }
+      pagination: { limit: 50 }
+    ) {
+      data {
+        id
+        __typename
+        attributes {
+          name
+          desc
+          img
+          price
+          rating
+          isLiked
+          isAddedToCart
+          size
+          color
+          cartCounter
+        }
+      }
+      meta {
+        pagination {
+          page
+          pageSize
+          total
+          pageCount
+        }
+      }
+    }
+  }
+`;
 
 export const GET_PRODUCT = gql`
   query GetProduct($id: ID!) {
@@ -45,6 +47,10 @@ export const GET_PRODUCT = gql`
           price
           rating
           isLiked
+          isAddedToCart
+          size
+          color
+          cartCounter
         }
       }
     }
@@ -52,8 +58,24 @@ export const GET_PRODUCT = gql`
 `;
 
 export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct($id: ID!, $isLiked: Boolean) {
-    updateProduct(id: $id, data: { isLiked: $isLiked }) {
+  mutation UpdateProduct(
+    $id: ID!
+    $isLiked: Boolean
+    $isAddedToCart: Boolean
+    $size: String
+    $color: String
+    $cartCounter: Int
+  ) {
+    updateProduct(
+      id: $id
+      data: {
+        isLiked: $isLiked
+        isAddedToCart: $isAddedToCart
+        size: $size
+        color: $color
+        cartCounter: $cartCounter
+      }
+    ) {
       data {
         id
         attributes {
@@ -63,6 +85,10 @@ export const UPDATE_PRODUCT = gql`
           price
           rating
           isLiked
+          isAddedToCart
+          size
+          color
+          cartCounter
         }
       }
     }
@@ -104,6 +130,10 @@ export const GET_CATEGORY = gql`
                 price
                 rating
                 isLiked
+                isAddedToCart
+                size
+                color
+                cartCounter
               }
             }
           }
@@ -114,7 +144,7 @@ export const GET_CATEGORY = gql`
 `;
 
 export const PAGINATION = gql`
-  query GetProducts($categoryId: ID!, $limit: Int) {
+  query GetPagination($categoryId: ID!, $limit: Int) {
     products(
       pagination: { limit: $limit }
       filters: { categories: { id: { in: [$categoryId] } } }

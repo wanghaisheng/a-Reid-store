@@ -18,14 +18,17 @@ import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
 import Cart from './components/Cart';
 import WishlistAside from './components/WishlistAside';
+import { useAppSelector } from './app/store';
 
 function App() {
+  const { activeDrawer } = useAppSelector((store) => store.drawer);
+
   return (
     <ThemeContextProvider>
       <LocaleContextProvider>
         <Header />
-        <Cart />
-        <WishlistAside />
+        {activeDrawer == 'cart' && <Cart />}
+        {activeDrawer == 'wishlist' && <WishlistAside />}
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/account' element={<MyAccount />} />

@@ -2,7 +2,7 @@ import { styled } from '@mui/material';
 import { useAppSelector } from '../../app/store';
 import ProductCard from './ProductCard';
 import StyledButton from '../../components/Buttons/StyledButton';
-import { useProductsQuery } from './hooks';
+import { useProductsQuery } from '../../graphql/hooks';
 
 const StyledProductsGrid = styled('div')(({ theme }) => ({
   margin: '6rem auto',
@@ -42,7 +42,7 @@ const ProductsGrid = () => {
     <>
       <StyledProductsGrid>
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.id} id={product.id} />
         ))}
       </StyledProductsGrid>
       {pagination.total > products.length && (

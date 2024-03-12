@@ -1,53 +1,43 @@
-import { Box, Drawer, styled } from '@mui/material';
-import React, { useState } from 'react';
+import AsideDrawer from '../AsideDrawer';
+import Header from '../AsideDrawer/Header';
+import Body from '../AsideDrawer/Body';
+import Footer from '../AsideDrawer/Footer';
 import CartFooter from './CartFooter';
-import CartBody from './CartBody';
-import Header from './Header';
-import { products } from './_data';
-
-export const CartContainer = styled(Box)({
-  padding: '4rem',
-  width: '390px',
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '4rem',
-
-  '& .cartHeader': {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-});
+import { useAsideDrawer } from '../../graphql/hooks';
+import { useAppSelector } from '../../app/store';
+import { useQuery } from '@apollo/client';
+import { GET_PRODUCTS } from '../../graphql/queries';
+import { useEffect } from 'react';
+import { Maybe } from '../../gql/graphql';
 
 const Cart = () => {
-  const [cartProducts, setCartProducts] = useState(
-    products.filter((p, index) => {
-      if (index < 5) return p;
-    })
-  );
-  const [open, setOpen] = React.useState(true);
+  const { handleCartProduct } = useAsideDrawer();
+  const { open } = useAppSelector((store) => store.drawer);
+  const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
+    variables: { isAddedToCart: true, isLiked: false },
+  });
 
-  const toggleDrawer = (open: boolean) => () => {
-    setOpen(open);
+  useEffect(() => {
+    if (open) refetch();
+  });
+
+  const handleRemoveProduct = (id: Maybe<string> | undefined, isLiked: boolean) => {
+    handleCartProduct(id, isLiked, false);
   };
 
-  const handleRemoveProduct = (id: number) => {
-    setCartProducts(cartProducts.filter((p) => p.id !== id));
-  };
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
 
   return (
-    <Drawer anchor='right' open={open} onClose={toggleDrawer(false)}>
-      <CartContainer role='presentation'>
-        <Header toggleDrawer={toggleDrawer} title='YOUR CART' />
-        <CartBody
-          cartProducts={cartProducts}
-          toggleDrawer={toggleDrawer}
-          handleRemoveProduct={handleRemoveProduct}
-        />
-        {cartProducts.length > 0 && <CartFooter toggleDrawer={toggleDrawer} />}
-      </CartContainer>
-    </Drawer>
+    <AsideDrawer>
+      <Header title='YOUR CART' />
+      <Body
+        name='shopping cart'
+        products={data.products.data}
+        handleRemoveProduct={handleRemoveProduct}
+      />
+      <Footer>{data.products.data.length > 0 && <CartFooter />}</Footer>
+    </AsideDrawer>
   );
 };
 

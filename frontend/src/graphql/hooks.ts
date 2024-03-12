@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_CATEGORY, PAGINATION, UPDATE_PRODUCT } from './queries';
-import { useAppDispatch, useAppSelector } from '../../app/store';
-import { setProductsQuery } from '../../app/features/productsSlice';
+import { useAppDispatch, useAppSelector } from '../app/store';
+import { setProductsQuery } from '../app/features/productsSlice';
 import { useEffect } from 'react';
-import { Maybe } from '../../gql/graphql';
-import { openToast } from '../../app/features/toastSlice';
+import { Maybe } from '../gql/graphql';
+import { openToast } from '../app/features/toastSlice';
 
 export const useProductsQuery = () => {
   const PAGE_SIZE = 16;
@@ -52,21 +52,27 @@ export const useProductsQuery = () => {
   return { getCategoryProducts, refetchPagination, PAGE_SIZE };
 };
 
-export const useWishlist = () => {
+export const useAsideDrawer = () => {
   const dispatch = useAppDispatch();
   const [updateWishlist] = useMutation(UPDATE_PRODUCT, {
-    onCompleted: (data) => handleToastMessage(data),
+    onCompleted: (data) => handleWishlistToastMessage(data),
+  });
+  const [updateShoppingCart] = useMutation(UPDATE_PRODUCT, {
+    onCompleted: (data) => handleCartToastMessage(data),
   });
 
   type dataType = {
-    updateProduct: { data: { attributes: { name: string; isLiked: boolean } } };
+    updateProduct: {
+      data: { attributes: { name: string; isLiked: boolean; isAddedToCart: boolean } };
+    };
   };
 
-  const handleToastMessage = (data: dataType) => {
+  const handleWishlistToastMessage = (data: dataType) => {
     const dataExists = data.updateProduct.data;
     const isLiked = dataExists?.attributes.isLiked;
+    const isAddedToCart = dataExists?.attributes.isAddedToCart;
     const productName = dataExists?.attributes.name;
-    if (dataExists && isLiked) {
+    if (dataExists && isLiked && !isAddedToCart) {
       dispatch(
         openToast({
           type: 'success',
@@ -90,9 +96,53 @@ export const useWishlist = () => {
     }
   };
 
-  const handleWishlistProduct = (id: Maybe<string> | undefined, isLiked: boolean) => {
-    updateWishlist({ variables: { id, isLiked } });
+  const handleCartToastMessage = (data: dataType) => {
+    const dataExists = data.updateProduct.data;
+    const isLiked = dataExists?.attributes.isLiked;
+    const isAddedToCart = dataExists?.attributes.isAddedToCart;
+    const productName = dataExists?.attributes.name;
+    if (dataExists && isAddedToCart && !isLiked) {
+      dispatch(
+        openToast({
+          type: 'success',
+          message: `${productName} is added to cart!`,
+        })
+      );
+    }
+    if (dataExists && !isAddedToCart) {
+      dispatch(
+        openToast({
+          type: 'success',
+          iconName: 'HighlightOffOutlinedIcon',
+          message: `${productName} is removed from cart!`,
+        })
+      );
+    }
+    if (!dataExists) {
+      dispatch(
+        openToast({ type: 'error', message: 'Product does not exist, or some error happens!' })
+      );
+    }
   };
 
-  return { handleWishlistProduct };
+  const handleWishlistProduct = (
+    id: Maybe<string> | undefined,
+    isLiked: boolean,
+    isAddedToCart: boolean
+  ) => {
+    updateWishlist({ variables: { id, isLiked, isAddedToCart } });
+  };
+
+  const handleCartProduct = (
+    id: Maybe<string> | undefined,
+    isLiked?: boolean,
+    isAddedToCart?: boolean,
+    size?: string,
+    color?: string,
+    cartCounter?: number
+  ) => {
+    updateShoppingCart({ variables: { id, isLiked, isAddedToCart, size, color, cartCounter } });
+  };
+
+  return { handleWishlistProduct, handleCartProduct };
 };

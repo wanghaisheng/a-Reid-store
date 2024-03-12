@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../app/store';
 import { closeModal } from '../../app/features/modalSlice';
 import { productThumbs } from './_data.ts';
 import { useQuery } from '@apollo/client';
-import { GET_PRODUCT } from './queries.ts';
+import { GET_PRODUCT } from '../../graphql/queries.ts';
 import { Maybe } from '../../gql/graphql.ts';
 
 export const ModalContainer = styled('div')(({ theme }) => ({

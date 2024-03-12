@@ -5,7 +5,7 @@ import { ModalContainer } from '../Products/ProductView';
 import { useParams } from 'react-router-dom';
 import { styled } from '@mui/system';
 import { useQuery } from '@apollo/client';
-import { GET_PRODUCT } from '../Products/queries';
+import { GET_PRODUCT } from '../../graphql/queries';
 import { productThumbs } from './_data';
 
 const Container = styled(ModalContainer)(({ theme }) => ({

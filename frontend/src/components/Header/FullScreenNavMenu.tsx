@@ -7,9 +7,12 @@ import StyledIconButton from '../Buttons/StyledIconButton';
 import StyledButton from '../Buttons/StyledButton';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { openDrawer } from '../../app/features/drawerSlice';
+import { useAppDispatch } from '../../app/store';
 
 const FullScreenNavMenu = () => {
   const matchesFullScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up(1150));
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -35,12 +38,22 @@ const FullScreenNavMenu = () => {
           </StyledButton>
         </Link>
       )}
-      <StyledIconButton size='large' aria-label='show 4 new items' color='inherit'>
+      <StyledIconButton
+        onClick={() => dispatch(openDrawer({ activeDrawer: 'cart' }))}
+        size='large'
+        aria-label='show 4 new items'
+        color='inherit'
+      >
         <Badge badgeContent={4} color='secondary' sx={{ span: { fontWeight: 'bold' } }}>
           <ShoppingCartIcon />
         </Badge>
       </StyledIconButton>
-      <StyledIconButton size='large' aria-label='show 4 new items' color='inherit'>
+      <StyledIconButton
+        onClick={() => dispatch(openDrawer({ activeDrawer: 'wishlist' }))}
+        size='large'
+        aria-label='show 4 new items'
+        color='inherit'
+      >
         <Badge badgeContent={4} color='secondary' sx={{ span: { fontWeight: 'bold' } }}>
           <FavoriteIcon />
         </Badge>

@@ -1,7 +1,7 @@
 import { IconButton, InputBase, Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { useProductsQuery } from './hooks';
-import { GET_CATEGORIES } from './queries';
+import { useProductsQuery } from '../../graphql/hooks';
+import { GET_CATEGORIES } from '../../graphql/queries';
 import { useQuery } from '@apollo/client';
 import { CategoryEntity, Maybe } from '../../gql/graphql';
 import StyledProductsHeader from './StyledProductsHeader';

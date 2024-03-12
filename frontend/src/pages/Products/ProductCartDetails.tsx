@@ -1,16 +1,12 @@
 import {
-  Alert,
-  AlertTitle,
   Box,
   Button,
   ButtonGroup,
   FormControl,
   InputLabel,
   MenuItem,
-  Modal,
   Select,
   SelectChangeEvent,
-  Stack,
   Typography,
   styled,
 } from '@mui/material';
@@ -20,9 +16,9 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
 import StyledButton from '../../components/Buttons/StyledButton';
-import { useWishlist } from './hooks';
+import { useAsideDrawer } from '../../graphql/hooks';
 import { ApolloError } from '@apollo/client';
-import { ProductEntity } from '../../gql/graphql';
+import { Maybe, ProductEntity } from '../../gql/graphql';
 import { motion } from 'framer-motion';
 
 const Container = styled('div')(({ theme }) => ({
@@ -38,11 +34,10 @@ type ProductCartDetailsProps = {
 };
 
 const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps) => {
-  const [size, setSize] = useState('');
-  const [color, setColor] = useState('');
-  const [count, setCount] = useState(1);
-  const [open, setOpen] = useState(false);
-  const { handleWishlistProduct } = useWishlist();
+  const [size, setSize] = useState<Maybe<string> | undefined>(product.attributes?.size);
+  const [color, setColor] = useState<Maybe<string> | undefined>(product.attributes?.color);
+  const [count, setCount] = useState<Maybe<number> | undefined>(product.attributes?.cartCounter);
+  const { handleWishlistProduct, handleCartProduct } = useAsideDrawer();
 
   const handleChangeSize = (event: SelectChangeEvent) => {
     setSize(event.target.value as string);
@@ -50,8 +45,6 @@ const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps
   const handleChangeColor = (event: SelectChangeEvent) => {
     setColor(event.target.value as string);
   };
-  const handleOpenModal = () => setOpen(true);
-  const handleCloseModal = () => setOpen(false);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -59,7 +52,9 @@ const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps
   return (
     <Container>
       <Typography variant='h5' sx={{ fontWeight: 'bold', mb: '1rem' }}>
-        {product.attributes?.name}
+        {product.attributes!.name.length > 30
+          ? product.attributes?.name.substring(0, 30) + '...'
+          : product.attributes?.name}
       </Typography>
       <Typography variant='h5' sx={{ fontWeight: 'bold', mb: '1rem' }}>
         $ {product.attributes?.price}
@@ -73,14 +68,14 @@ const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps
           <Select
             labelId='demo-simple-select-label'
             id='demo-simple-select'
-            value={size}
+            value={size!}
             label='Size'
             onChange={handleChangeSize}
           >
-            <MenuItem value={10}>Size S</MenuItem>
-            <MenuItem value={20}>Size M</MenuItem>
-            <MenuItem value={30}>Size L</MenuItem>
-            <MenuItem value={30}>Size XL</MenuItem>
+            <MenuItem value='S'>Size S</MenuItem>
+            <MenuItem value='M'>Size M</MenuItem>
+            <MenuItem value='L'>Size L</MenuItem>
+            <MenuItem value='XL'>Size XL</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -90,14 +85,14 @@ const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps
           <Select
             labelId='demo-simple-select-label'
             id='demo-simple-select'
-            value={color}
+            value={color!}
             label='Color'
             onChange={handleChangeColor}
           >
-            <MenuItem value={10}>Red</MenuItem>
-            <MenuItem value={20}>Blue</MenuItem>
-            <MenuItem value={30}>White</MenuItem>
-            <MenuItem value={30}>Grey</MenuItem>
+            <MenuItem value='Red'>Red</MenuItem>
+            <MenuItem value='Blue'>Blue</MenuItem>
+            <MenuItem value='White'>White</MenuItem>
+            <MenuItem value='Grey'>Grey</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -107,7 +102,7 @@ const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps
             <Button
               aria-label='reduce'
               onClick={() => {
-                setCount(Math.max(count - 1, 0));
+                setCount(Math.max(count! - 1, 1));
               }}
             >
               <RemoveIcon fontSize='small' />
@@ -116,7 +111,7 @@ const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps
             <Button
               aria-label='increase'
               onClick={() => {
-                setCount(count + 1);
+                setCount(count! + 1);
               }}
             >
               <AddIcon fontSize='small' />
@@ -132,66 +127,32 @@ const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps
           bgcolor: 'primary.main',
           '&:hover': { bgcolor: 'black' },
         }}
-        onClick={handleOpenModal}
+        onClick={() => handleCartProduct(product.id, false, true, size!, color!, count!)}
       >
-        ADD TO CART
+        {product.attributes?.isAddedToCart ? 'UPDATE CART' : 'ADD TO CART'}
       </StyledButton>
       <Box>
-        {product.attributes?.isLiked ? (
-          <FavoriteIcon
-            sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
-            onClick={() => {
-              handleWishlistProduct(product.id, false);
-            }}
-            component={motion.svg}
-            whileTap={{ scale: 0.75 }}
-          />
-        ) : (
-          <FavoriteBorderIcon
-            sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
-            onClick={() => {
-              handleWishlistProduct(product.id, true);
-            }}
-            component={motion.svg}
-            whileTap={{ scale: 0.75 }}
-          />
-        )}
+        {!product.attributes?.isAddedToCart &&
+          (product.attributes?.isLiked ? (
+            <FavoriteIcon
+              sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
+              onClick={() => {
+                handleWishlistProduct(product.id, false, product.attributes!.isAddedToCart!);
+              }}
+              component={motion.svg}
+              whileTap={{ scale: 0.75 }}
+            />
+          ) : (
+            <FavoriteBorderIcon
+              sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
+              onClick={() => {
+                handleWishlistProduct(product.id, true, product.attributes!.isAddedToCart!);
+              }}
+              component={motion.svg}
+              whileTap={{ scale: 0.75 }}
+            />
+          ))}
       </Box>
-      <Modal
-        open={open}
-        onClose={handleCloseModal}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
-        disableScrollLock={true}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Stack
-          sx={(theme) => ({
-            width: '80%',
-            [theme.breakpoints.up('sm')]: { width: '60%' },
-            [theme.breakpoints.up('md')]: { width: '40%' },
-            [theme.breakpoints.up('lg')]: { width: '30%' },
-          })}
-          spacing={2}
-        >
-          <Alert
-            severity='success'
-            action={
-              <Button color='inherit' size='small' onClick={handleCloseModal}>
-                OK
-              </Button>
-            }
-          >
-            <AlertTitle>Success</AlertTitle>
-            {product.attributes?.name} is added to cart!
-          </Alert>
-        </Stack>
-      </Modal>
     </Container>
   );
 };

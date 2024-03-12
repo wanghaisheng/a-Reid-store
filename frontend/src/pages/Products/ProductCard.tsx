@@ -1,83 +1,38 @@
-import { Paper, styled } from '@mui/material';
+import { Paper } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { ProductEntity } from '../../gql/graphql';
 import { useAppDispatch } from '../../app/store';
 import { openModal, setModalItem } from '../../app/features/modalSlice';
 import StyledButton from '../../components/Buttons/StyledButton';
 import { Link } from 'react-router-dom';
-import { useWishlist } from './hooks';
+import { useAsideDrawer } from '../../graphql/hooks';
 import { motion } from 'framer-motion';
 import Toast from '../../components/Toasts/Toast';
+import { useQuery } from '@apollo/client';
+import { GET_PRODUCT } from '../../graphql/queries';
+import { Maybe } from '../../gql/graphql';
+import StyledProductCard from './StyledProductCard';
 
-const StyledProduct = styled('div')({
-  height: '400px',
-  width: '275px',
-  color: 'white',
-
-  '& .picture': {
-    height: '335px',
-    borderRadius: '1.5rem',
-    border: '2px solid rgba(0, 0, 0, 0.12)',
-    overflow: 'hidden',
-
-    '& img': {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      transition: 'all 0.4s ease',
-    },
-
-    '& .quickView': {
-      textAlign: 'center',
-      visibility: 'hidden',
-      opacity: 0,
-      transition: 'all 0.4s ease',
-    },
-
-    '&:hover': {
-      '& img': {
-        transform: 'scale(1.1)',
-      },
-      '& .quickView': {
-        visibility: 'visible',
-        opacity: 1,
-        transform: 'translate(0, -6rem)',
-      },
-    },
-  },
-
-  '& .footer': {
-    height: '65px',
-
-    '& .title': {
-      padding: '1rem 0 0.5rem',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-
-      '& a': {
-        color: 'white',
-        textDecoration: 'none',
-      },
-    },
-  },
-});
-
-const ProductCard = ({ product }: { product: ProductEntity }) => {
+const ProductCard = ({ id }: { id?: Maybe<string> | undefined }) => {
   const dispatch = useAppDispatch();
-  const { handleWishlistProduct } = useWishlist();
+  const { handleWishlistProduct } = useAsideDrawer();
+  const { loading, error, data } = useQuery(GET_PRODUCT, {
+    variables: { id },
+  });
 
-  const handleOpenModal = (product: ProductEntity) => {
+  const handleOpenModal = (id: string) => {
     dispatch(openModal());
-    dispatch(setModalItem({ id: product.id }));
+    dispatch(setModalItem({ id }));
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
 
   return (
     <>
-      <StyledProduct key={product.id}>
+      <StyledProductCard key={data.product.data.id}>
         <Paper elevation={6} className='picture'>
-          <img src={product.attributes?.img} />
+          <img src={data.product.data.attributes?.img} />
           <div className='quickView'>
             <StyledButton
               sx={{
@@ -85,7 +40,7 @@ const ProductCard = ({ product }: { product: ProductEntity }) => {
                 color: 'black',
                 '&:hover': { bgcolor: 'black', color: 'gray.main' },
               }}
-              onClick={() => handleOpenModal(product)}
+              onClick={() => handleOpenModal(data.product.data.id)}
             >
               Quick View
             </StyledButton>
@@ -93,26 +48,39 @@ const ProductCard = ({ product }: { product: ProductEntity }) => {
         </Paper>
         <div className='footer'>
           <div className='title'>
-            <Link to={`${product.id}`}>{product.attributes?.name}</Link>
-            {product.attributes?.isLiked ? (
-              <FavoriteIcon
-                sx={{ cursor: 'pointer', outline: 0 }}
-                onClick={() => handleWishlistProduct(product.id, false)}
-                component={motion.svg}
-                whileTap={{ scale: 0.75 }}
-              />
-            ) : (
-              <FavoriteBorderIcon
-                sx={{ cursor: 'pointer', outline: 0 }}
-                onClick={() => handleWishlistProduct(product.id, true)}
-                component={motion.svg}
-                whileTap={{ scale: 0.75 }}
-              />
-            )}
+            <Link to={`${data.product.data.id}`}>{data.product.data.attributes?.name}</Link>
+            {!data.product.data.attributes?.isAddedToCart &&
+              (data.product.data.attributes?.isLiked ? (
+                <FavoriteIcon
+                  sx={{ cursor: 'pointer', outline: 0 }}
+                  onClick={() =>
+                    handleWishlistProduct(
+                      data.product.data.id,
+                      false,
+                      data.product.data.attributes.isAddedToCart
+                    )
+                  }
+                  component={motion.svg}
+                  whileTap={{ scale: 0.75 }}
+                />
+              ) : (
+                <FavoriteBorderIcon
+                  sx={{ cursor: 'pointer', outline: 0 }}
+                  onClick={() =>
+                    handleWishlistProduct(
+                      data.product.data.id,
+                      true,
+                      data.product.data.attributes.isAddedToCart
+                    )
+                  }
+                  component={motion.svg}
+                  whileTap={{ scale: 0.75 }}
+                />
+              ))}
           </div>
-          <div className='price'>$ {product.attributes?.price}</div>
+          <div className='price'>$ {data.product.data.attributes?.price}</div>
         </div>
-      </StyledProduct>
+      </StyledProductCard>
       <Toast />
     </>
   );
