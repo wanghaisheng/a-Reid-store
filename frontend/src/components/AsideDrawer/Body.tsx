@@ -5,21 +5,21 @@ import { closeDrawer } from '../../app/features/drawerSlice';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import StyledBody from './StyledBody';
 import Empty from './Empty';
-import { Maybe, ProductEntity } from '../../gql/graphql';
+import { ProductEntity } from '../../gql/graphql';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
-import { useAsideDrawer } from '../../graphql/hooks';
+import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 
 type BodyProps = {
   name: string;
   products: ProductEntity[];
-  handleRemoveProduct: (id: Maybe<string> | undefined, isLiked: boolean) => void;
+  handleRemoveProduct: (product: ProductEntity) => void;
   cartIcon?: boolean;
 };
 
 const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
   const dispatch = useAppDispatch();
   const { activeDrawer } = useAppSelector((store) => store.drawer);
-  const { handleCartProduct } = useAsideDrawer();
+  const { handleProduct } = useAsideDrawer();
 
   return (
     <StyledBody className='lenis lenis-smooth'>
@@ -32,10 +32,7 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
                 <DeleteForeverIcon
                   sx={{ color: 'gray.main' }}
                   onClick={() => {
-                    if (activeDrawer == 'wishlist')
-                      handleRemoveProduct(product.id, product.attributes!.isAddedToCart!);
-                    if (activeDrawer == 'cart')
-                      handleRemoveProduct(product.id, product.attributes!.isLiked!);
+                    handleRemoveProduct(product);
                   }}
                 />
               </Box>
@@ -62,7 +59,17 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
             {cartIcon && (
               <AddShoppingCartOutlinedIcon
                 sx={{ color: 'gray.dark', cursor: 'pointer' }}
-                onClick={() => handleCartProduct(product.id, false, true, 'S', 'Red', 1)}
+                onClick={() =>
+                  handleProduct(
+                    product.id,
+                    false,
+                    true,
+                    product.attributes!.size!,
+                    product.attributes!.color!,
+                    product.attributes!.cartCounter!,
+                    'cart'
+                  )
+                }
               />
             )}
           </Box>

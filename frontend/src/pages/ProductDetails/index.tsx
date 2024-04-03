@@ -7,6 +7,7 @@ import { styled } from '@mui/system';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCT } from '../../graphql/queries';
 import { productThumbs } from './_data';
+import Toast from '../../components/Toasts/Toast';
 
 const Container = styled(ModalContainer)(({ theme }) => ({
   width: '100%',
@@ -32,7 +33,8 @@ const ProductDetails = () => {
     <PageContainer>
       <Container>
         <ProductGalleryBox thumbs={thumbs!} img={data.product.data.attributes.img} />
-        <ProductCartDetails loading={loading} error={error} product={data.product.data} />
+        <ProductCartDetails id={id!} />
+        <Toast />
       </Container>
     </PageContainer>
   );

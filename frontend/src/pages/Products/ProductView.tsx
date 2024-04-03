@@ -75,7 +75,7 @@ const ProductView = ({ modalItem }: { modalItem: Maybe<string> }) => {
         </div>
         <ModalContainer className='lenis lenis-smooth'>
           <ProductGalleryBox thumbs={thumbs!} img={data.product.data.attributes.img} />
-          <ProductCartDetails loading={loading} error={error} product={data.product.data} />
+          <ProductCartDetails id={data.product.data.id} />
         </ModalContainer>
       </>
     </Modal>

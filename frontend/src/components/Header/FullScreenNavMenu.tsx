@@ -8,10 +8,11 @@ import StyledButton from '../Buttons/StyledButton';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { openDrawer } from '../../app/features/drawerSlice';
-import { useAppDispatch } from '../../app/store';
+import { useAppDispatch, useAppSelector } from '../../app/store';
 
 const FullScreenNavMenu = () => {
   const matchesFullScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up(1150));
+  const { wishlistCounter, cartCounter } = useAppSelector((store) => store.drawer);
   const dispatch = useAppDispatch();
 
   return (
@@ -44,7 +45,12 @@ const FullScreenNavMenu = () => {
         aria-label='show 4 new items'
         color='inherit'
       >
-        <Badge badgeContent={4} color='secondary' sx={{ span: { fontWeight: 'bold' } }}>
+        <Badge
+          badgeContent={cartCounter}
+          showZero
+          color='secondary'
+          sx={{ span: { fontWeight: 'bold' } }}
+        >
           <ShoppingCartIcon />
         </Badge>
       </StyledIconButton>
@@ -54,7 +60,12 @@ const FullScreenNavMenu = () => {
         aria-label='show 4 new items'
         color='inherit'
       >
-        <Badge badgeContent={4} color='secondary' sx={{ span: { fontWeight: 'bold' } }}>
+        <Badge
+          badgeContent={wishlistCounter}
+          showZero
+          color='secondary'
+          sx={{ span: { fontWeight: 'bold' } }}
+        >
           <FavoriteIcon />
         </Badge>
       </StyledIconButton>

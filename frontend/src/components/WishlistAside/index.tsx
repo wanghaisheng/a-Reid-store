@@ -10,11 +10,11 @@ import { closeDrawer } from '../../app/features/drawerSlice';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../graphql/queries';
-import { useAsideDrawer } from '../../graphql/hooks';
-import { Maybe } from '../../gql/graphql';
+import { useAsideDrawer } from '../../hooks/useAsideDrawer';
+import { ProductEntity } from '../../gql/graphql';
 
 const WishlistAside = () => {
-  const { handleWishlistProduct } = useAsideDrawer();
+  const { handleProduct } = useAsideDrawer();
   const dispatch = useAppDispatch();
   const { open } = useAppSelector((store) => store.drawer);
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
@@ -25,8 +25,31 @@ const WishlistAside = () => {
     if (open) refetch();
   });
 
-  const handleRemoveProduct = (id: Maybe<string> | undefined, isAddedToCart: boolean) => {
-    handleWishlistProduct(id, false, isAddedToCart);
+  const handleRemoveProduct = (product: ProductEntity) => {
+    handleProduct(
+      product.id,
+      false,
+      product.attributes!.isAddedToCart!,
+      product.attributes!.size!,
+      product.attributes!.color!,
+      product.attributes!.cartCounter!,
+      'wishlist'
+    );
+  };
+
+  const handleOrder = () => {
+    data.products.data.forEach((product: ProductEntity) =>
+      handleProduct(
+        product.id,
+        false,
+        true,
+        product.attributes!.size!,
+        product.attributes!.color!,
+        product.attributes!.cartCounter!,
+        'cart'
+      )
+    );
+    dispatch(closeDrawer());
   };
 
   if (loading) return <p>Loading...</p>;
@@ -46,7 +69,7 @@ const WishlistAside = () => {
           {data.products.data.length > 0 && (
             <Box sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
               <Link to='shopping-cart'>
-                <Button onClick={() => dispatch(closeDrawer())}>ORDER NOW</Button>
+                <Button onClick={handleOrder}>ORDER NOW</Button>
               </Link>
             </Box>
           )}

@@ -87,7 +87,7 @@ const MobileNavMenu = () => {
         <StyledNavLink path='/account' targetName='My account' onClose={handleClose} />
         <StyledNavLink path='/products' targetName='Products' onClose={handleClose} />
         <StyledNavLink path='/shopping-cart' targetName='Shopping cart' onClose={handleClose} />
-        <StyledNavLink path='/wishlist' targetName='Wish list' onClose={handleClose} />
+        <StyledNavLink path='/wishlist' targetName='Wishlist' onClose={handleClose} />
         <StyledNavLink path='/partnership' targetName='Partnership' onClose={handleClose} />
         <StyledNavLink path='/about' targetName='About us' onClose={handleClose} />
         <StyledNavLink path='/contact' targetName='Contact us' onClose={handleClose} />

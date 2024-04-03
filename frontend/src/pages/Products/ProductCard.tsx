@@ -5,34 +5,37 @@ import { useAppDispatch } from '../../app/store';
 import { openModal, setModalItem } from '../../app/features/modalSlice';
 import StyledButton from '../../components/Buttons/StyledButton';
 import { Link } from 'react-router-dom';
-import { useAsideDrawer } from '../../graphql/hooks';
+import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { motion } from 'framer-motion';
-import Toast from '../../components/Toasts/Toast';
-import { useQuery } from '@apollo/client';
-import { GET_PRODUCT } from '../../graphql/queries';
-import { Maybe } from '../../gql/graphql';
+import { ProductEntity } from '../../gql/graphql';
 import StyledProductCard from './StyledProductCard';
 
-const ProductCard = ({ id }: { id?: Maybe<string> | undefined }) => {
+const ProductCard = ({ product }: { product: ProductEntity }) => {
   const dispatch = useAppDispatch();
-  const { handleWishlistProduct } = useAsideDrawer();
-  const { loading, error, data } = useQuery(GET_PRODUCT, {
-    variables: { id },
-  });
+  const { handleProduct } = useAsideDrawer();
 
   const handleOpenModal = (id: string) => {
     dispatch(openModal());
     dispatch(setModalItem({ id }));
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
+  const handleFavoriteProduct = (isLiked: boolean) => {
+    handleProduct(
+      product.id,
+      isLiked,
+      product.attributes!.isAddedToCart!,
+      product.attributes!.size!,
+      product.attributes!.color!,
+      product.attributes!.cartCounter!,
+      'wishlist'
+    );
+  };
 
   return (
     <>
-      <StyledProductCard key={data.product.data.id}>
+      <StyledProductCard key={product.id}>
         <Paper elevation={6} className='picture'>
-          <img src={data.product.data.attributes?.img} />
+          <img src={product.attributes?.img} />
           <div className='quickView'>
             <StyledButton
               sx={{
@@ -40,7 +43,7 @@ const ProductCard = ({ id }: { id?: Maybe<string> | undefined }) => {
                 color: 'black',
                 '&:hover': { bgcolor: 'black', color: 'gray.main' },
               }}
-              onClick={() => handleOpenModal(data.product.data.id)}
+              onClick={() => handleOpenModal(product.id!)}
             >
               Quick View
             </StyledButton>
@@ -48,40 +51,27 @@ const ProductCard = ({ id }: { id?: Maybe<string> | undefined }) => {
         </Paper>
         <div className='footer'>
           <div className='title'>
-            <Link to={`${data.product.data.id}`}>{data.product.data.attributes?.name}</Link>
-            {!data.product.data.attributes?.isAddedToCart &&
-              (data.product.data.attributes?.isLiked ? (
+            <Link to={`${product.id}`}>{product.attributes?.name}</Link>
+            {!product.attributes?.isAddedToCart &&
+              (product.attributes?.isLiked ? (
                 <FavoriteIcon
                   sx={{ cursor: 'pointer', outline: 0 }}
-                  onClick={() =>
-                    handleWishlistProduct(
-                      data.product.data.id,
-                      false,
-                      data.product.data.attributes.isAddedToCart
-                    )
-                  }
+                  onClick={() => handleFavoriteProduct(false)}
                   component={motion.svg}
                   whileTap={{ scale: 0.75 }}
                 />
               ) : (
                 <FavoriteBorderIcon
                   sx={{ cursor: 'pointer', outline: 0 }}
-                  onClick={() =>
-                    handleWishlistProduct(
-                      data.product.data.id,
-                      true,
-                      data.product.data.attributes.isAddedToCart
-                    )
-                  }
+                  onClick={() => handleFavoriteProduct(true)}
                   component={motion.svg}
                   whileTap={{ scale: 0.75 }}
                 />
               ))}
           </div>
-          <div className='price'>$ {data.product.data.attributes?.price}</div>
+          <div className='price'>$ {product.attributes?.price}</div>
         </div>
       </StyledProductCard>
-      <Toast />
     </>
   );
 };

@@ -1,4 +1,5 @@
 import { styled } from '@mui/material';
+import CSS from 'csstype';
 
 const Container = styled('div')({
   padding: '8rem 0',
@@ -10,9 +11,14 @@ const Container = styled('div')({
   '& .pageWrapper': { width: '90%', maxWidth: '1200px', margin: '0 auto' },
 });
 
-const PageContainer = ({ children }: { children: React.ReactNode }) => {
+type PageContainerProps = {
+  children: React.ReactNode;
+  style?: CSS.Properties;
+};
+
+const PageContainer = ({ children, style }: PageContainerProps) => {
   return (
-    <Container>
+    <Container style={style}>
       <div className='pageWrapper'>{children}</div>
     </Container>
   );

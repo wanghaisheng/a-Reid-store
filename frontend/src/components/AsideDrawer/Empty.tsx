@@ -16,6 +16,8 @@ const StyledEmpty = styled(Box)(({ theme }) => ({
     margin: '0 auto',
   },
 
+  '& a': { textDecoration: 'none' },
+
   '& .button': {
     margin: '0 auto',
     display: 'block',
@@ -31,7 +33,7 @@ const Empty = ({ name }: { name: string }) => {
   const dispatch = useAppDispatch();
 
   return (
-    <StyledEmpty>
+    <StyledEmpty className='emptyCart'>
       <Box>
         <img src={window.origin + '/assets/pngwing.com.png'} />
         <Typography variant='h5' sx={{ textAlign: 'center', mb: '2rem' }}>
@@ -41,9 +43,11 @@ const Empty = ({ name }: { name: string }) => {
           You have no items in your {name}.
           <br /> Let's go buy something!
         </Typography>
-        <StyledButton className='button' onClick={() => dispatch(closeDrawer())}>
-          <Link to='products'>SHOP NOW</Link>
-        </StyledButton>
+        <Link to={`${window.origin}/products`}>
+          <StyledButton className='button' onClick={() => dispatch(closeDrawer())}>
+            SHOP NOW
+          </StyledButton>
+        </Link>
       </Box>
     </StyledEmpty>
   );

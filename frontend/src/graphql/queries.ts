@@ -65,6 +65,7 @@ export const UPDATE_PRODUCT = gql`
     $size: String
     $color: String
     $cartCounter: Int
+    $target: String
   ) {
     updateProduct(
       id: $id
@@ -74,6 +75,7 @@ export const UPDATE_PRODUCT = gql`
         size: $size
         color: $color
         cartCounter: $cartCounter
+        target: $target
       }
     ) {
       data {
@@ -89,6 +91,7 @@ export const UPDATE_PRODUCT = gql`
           size
           color
           cartCounter
+          target
         }
       }
     }
@@ -155,6 +158,21 @@ export const PAGINATION = gql`
           pageSize
           total
           pageCount
+        }
+      }
+    }
+  }
+`;
+
+export const PRODUCTS_ITEMS_COUNT = gql`
+  query GetProductsItemsCount($isLiked: BooleanFilterInput, $isAddedToCart: BooleanFilterInput) {
+    products(
+      pagination: { limit: 100 }
+      filters: { isLiked: $isLiked, isAddedToCart: $isAddedToCart }
+    ) {
+      meta {
+        pagination {
+          total
         }
       }
     }

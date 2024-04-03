@@ -14,12 +14,13 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StyledButton from '../../components/Buttons/StyledButton';
-import { useAsideDrawer } from '../../graphql/hooks';
-import { ApolloError } from '@apollo/client';
-import { Maybe, ProductEntity } from '../../gql/graphql';
+import { useAsideDrawer } from '../../hooks/useAsideDrawer';
+import { useQuery } from '@apollo/client';
+import { Maybe } from '../../gql/graphql';
 import { motion } from 'framer-motion';
+import { GET_PRODUCT } from '../../graphql/queries';
 
 const Container = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -27,17 +28,22 @@ const Container = styled('div')(({ theme }) => ({
   },
 }));
 
-type ProductCartDetailsProps = {
-  loading: boolean;
-  error: ApolloError | undefined;
-  product: ProductEntity;
-};
+const ProductCartDetails = ({ id }: { id: string }) => {
+  const { loading, error, data } = useQuery(GET_PRODUCT, { variables: { id } });
+  const [size, setSize] = useState<Maybe<string> | undefined>(data.product?.data.attributes?.size);
+  const [color, setColor] = useState<Maybe<string> | undefined>(
+    data.product.data.attributes?.color
+  );
+  const [count, setCount] = useState<Maybe<number> | undefined>(
+    data.product.data.attributes?.cartCounter
+  );
+  const { handleProduct } = useAsideDrawer();
 
-const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps) => {
-  const [size, setSize] = useState<Maybe<string> | undefined>(product.attributes?.size);
-  const [color, setColor] = useState<Maybe<string> | undefined>(product.attributes?.color);
-  const [count, setCount] = useState<Maybe<number> | undefined>(product.attributes?.cartCounter);
-  const { handleWishlistProduct, handleCartProduct } = useAsideDrawer();
+  useEffect(() => {
+    setSize(data.product.data.attributes?.size);
+    setColor(data.product.data.attributes?.color);
+    setCount(data.product.data.attributes?.cartCounter);
+  }, [data]);
 
   const handleChangeSize = (event: SelectChangeEvent) => {
     setSize(event.target.value as string);
@@ -46,21 +52,33 @@ const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps
     setColor(event.target.value as string);
   };
 
+  const handleFavoriteProduct = (isLiked: boolean) => {
+    handleProduct(
+      data.product.data.id,
+      isLiked,
+      data.product.data.attributes!.isAddedToCart!,
+      size as string,
+      color as string,
+      count as number,
+      'wishlist'
+    );
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
   return (
     <Container>
       <Typography variant='h5' sx={{ fontWeight: 'bold', mb: '1rem' }}>
-        {product.attributes!.name.length > 30
-          ? product.attributes?.name.substring(0, 30) + '...'
-          : product.attributes?.name}
+        {data.product.data.attributes!.name.length > 30
+          ? data.product.data.attributes?.name.substring(0, 30) + '...'
+          : data.product.data.attributes?.name}
       </Typography>
       <Typography variant='h5' sx={{ fontWeight: 'bold', mb: '1rem' }}>
-        $ {product.attributes?.price}
+        $ {data.product.data.attributes?.price}
       </Typography>
       <Typography variant='body1' sx={{ color: 'gray.dark', mb: '4rem' }}>
-        $ {product.attributes?.desc}
+        $ {data.product.data.attributes?.desc}
       </Typography>
       <Box sx={{ mb: '2rem' }}>
         <FormControl fullWidth>
@@ -127,27 +145,25 @@ const ProductCartDetails = ({ loading, error, product }: ProductCartDetailsProps
           bgcolor: 'primary.main',
           '&:hover': { bgcolor: 'black' },
         }}
-        onClick={() => handleCartProduct(product.id, false, true, size!, color!, count!)}
+        onClick={() =>
+          handleProduct(data.product.data.id, false, true, size!, color!, count!, 'cart')
+        }
       >
-        {product.attributes?.isAddedToCart ? 'UPDATE CART' : 'ADD TO CART'}
+        {data.product.data.attributes?.isAddedToCart ? 'UPDATE CART' : 'ADD TO CART'}
       </StyledButton>
       <Box>
-        {!product.attributes?.isAddedToCart &&
-          (product.attributes?.isLiked ? (
+        {!data.product.data.attributes?.isAddedToCart &&
+          (data.product.data.attributes?.isLiked ? (
             <FavoriteIcon
               sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
-              onClick={() => {
-                handleWishlistProduct(product.id, false, product.attributes!.isAddedToCart!);
-              }}
+              onClick={() => handleFavoriteProduct(false)}
               component={motion.svg}
               whileTap={{ scale: 0.75 }}
             />
           ) : (
             <FavoriteBorderIcon
               sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
-              onClick={() => {
-                handleWishlistProduct(product.id, true, product.attributes!.isAddedToCart!);
-              }}
+              onClick={() => handleFavoriteProduct(true)}
               component={motion.svg}
               whileTap={{ scale: 0.75 }}
             />

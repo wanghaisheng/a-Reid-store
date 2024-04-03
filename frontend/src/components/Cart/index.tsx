@@ -3,15 +3,15 @@ import Header from '../AsideDrawer/Header';
 import Body from '../AsideDrawer/Body';
 import Footer from '../AsideDrawer/Footer';
 import CartFooter from './CartFooter';
-import { useAsideDrawer } from '../../graphql/hooks';
+import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { useAppSelector } from '../../app/store';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../graphql/queries';
 import { useEffect } from 'react';
-import { Maybe } from '../../gql/graphql';
+import { ProductEntity } from '../../gql/graphql';
 
 const Cart = () => {
-  const { handleCartProduct } = useAsideDrawer();
+  const { handleProduct } = useAsideDrawer();
   const { open } = useAppSelector((store) => store.drawer);
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
     variables: { isAddedToCart: true, isLiked: false },
@@ -21,8 +21,16 @@ const Cart = () => {
     if (open) refetch();
   });
 
-  const handleRemoveProduct = (id: Maybe<string> | undefined, isLiked: boolean) => {
-    handleCartProduct(id, isLiked, false);
+  const handleRemoveProduct = (product: ProductEntity) => {
+    handleProduct(
+      product.id,
+      product.attributes!.isLiked!,
+      false,
+      product.attributes!.size!,
+      product.attributes!.color!,
+      product.attributes!.cartCounter!,
+      'wishlist'
+    );
   };
 
   if (loading) return <p>Loading...</p>;

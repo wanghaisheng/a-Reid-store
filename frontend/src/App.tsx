@@ -9,7 +9,6 @@ import MyAccount from './pages/MyAccount';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
 import ShoppingCart from './pages/ShoppingCart';
-import Checkout from './pages/CheckOut';
 import Wishlist from './pages/Wishlist';
 import Partnership from './pages/Partnership';
 import AboutUs from './pages/AboutUs';
@@ -18,10 +17,34 @@ import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
 import Cart from './components/Cart';
 import WishlistAside from './components/WishlistAside';
-import { useAppSelector } from './app/store';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from './app/store';
+import { useAsideDrawer } from './hooks/useAsideDrawer';
+import { setDrawerCounters } from './app/features/drawerSlice';
 
 function App() {
   const { activeDrawer } = useAppSelector((store) => store.drawer);
+  const { wishlistCounter, cartCounter } = useAsideDrawer();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (wishlistCounter) {
+      dispatch(
+        setDrawerCounters({
+          target: 'wishlist',
+          counter: wishlistCounter.products.meta.pagination.total,
+        })
+      );
+    }
+    if (cartCounter) {
+      dispatch(
+        setDrawerCounters({
+          target: 'cart',
+          counter: cartCounter.products.meta.pagination.total,
+        })
+      );
+    }
+  }, [wishlistCounter, cartCounter, dispatch]);
 
   return (
     <ThemeContextProvider>
@@ -37,7 +60,6 @@ function App() {
             <Route path=':id' element={<ProductDetails />} />
           </Route>
           <Route path='/shopping-cart' element={<ShoppingCart />} />
-          <Route path='/checkout' element={<Checkout />} />
           <Route path='/wishlist' element={<Wishlist />} />
           <Route path='/partnership' element={<Partnership />} />
           <Route path='/about' element={<AboutUs />} />
