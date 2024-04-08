@@ -13,6 +13,8 @@ import Wishlist from './pages/Wishlist';
 import Partnership from './pages/Partnership';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
 import Cart from './components/Cart';
@@ -64,6 +66,8 @@ function App() {
           <Route path='/partnership' element={<Partnership />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact' element={<ContactUs />} />
+          <Route path='/sign-up' element={<SignUp />} />
+          <Route path='/login' element={<Login />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
         <Footer />

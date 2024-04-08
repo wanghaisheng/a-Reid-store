@@ -13,7 +13,7 @@ export const useAsideDrawer = () => {
   const { data: wishlistCounter, refetch: getWishlistCounter } = useQuery(PRODUCTS_ITEMS_COUNT, {
     variables: { isLiked: { eq: true } },
   });
-  
+
   const { data: cartCounter, refetch: getCartCounter } = useQuery(PRODUCTS_ITEMS_COUNT, {
     variables: { isAddedToCart: { eq: true } },
   });
