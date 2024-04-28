@@ -8,12 +8,16 @@ import { useAppSelector } from '../../app/store';
 import Toast from '../../components/Toasts/Toast';
 import CartTable from '../ShoppingCart/CartTable';
 import CartTotals from '../ShoppingCart/CartTotals';
+import useAuth from '../../hooks/useAuth';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 const Wishlist = () => {
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
     variables: { isLiked: true, isAddedToCart: false },
   });
   const { wishlistCounter } = useAppSelector((store) => store.drawer);
+  const { activeUser } = useAuth();
+  const { getLatestStoredValue } = useSessionStorage('wishlistProducts');
 
   useEffect(() => {
     refetch();
@@ -25,12 +29,18 @@ const Wishlist = () => {
   return (
     <PageContainer style={{ paddingTop: '4rem' }}>
       <PageWrapper>
-        {!data.products.data.length ? (
+        {(activeUser && !data.products.data.length) ||
+        (!activeUser && !getLatestStoredValue('wishlistProducts').data.length) ? (
           <Empty name='wishlist' />
         ) : (
           <>
-            <CartTable products={data.products.data} target='wishlist' />
-            {<CartTotals data={data} target='wishlist' />}
+            <CartTable
+              products={
+                activeUser ? data.products.data : getLatestStoredValue('wishlistProducts').data
+              }
+              target='wishlist'
+            />
+            <CartTotals data={data} target='wishlist' />
           </>
         )}
         <Toast />

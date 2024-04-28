@@ -204,3 +204,32 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const GET_ORDERS = gql`
+  query GetOrders($userId: String!) {
+    orders(
+      filters: { userId: { eq: $userId }, customOrderId: { notNull: true } }
+      pagination: { limit: 100 }
+    ) {
+      data {
+        id
+        attributes {
+          amount
+          items
+          stripeId
+          userId
+          customOrderId
+          createdAt
+        }
+      }
+      meta {
+        pagination {
+          page
+          pageSize
+          total
+          pageCount
+        }
+      }
+    }
+  }
+`;

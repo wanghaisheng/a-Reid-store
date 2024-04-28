@@ -19,6 +19,8 @@ import { ProductEntity } from '../../gql/graphql';
 import { useMutation } from '@apollo/client';
 import { UPDATE_PRODUCT } from '../../graphql/queries';
 import ItemImage from './ItemImage';
+import useAuth from '../../hooks/useAuth';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,25 +43,52 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const CartTable = ({ products, target }: { products: ProductEntity[]; target: string }) => {
-  const { cartCounter, wishlistCounter } = useAppSelector((store) => store.drawer);
-  const [updateCartCounter] = useMutation(UPDATE_PRODUCT);
+  const { cartCounter, wishlistCounter, sessionCartCounter, sessionWishlistCounter } =
+    useAppSelector((store) => store.drawer);
+  const [updateProductCounter] = useMutation(UPDATE_PRODUCT);
+  const { activeUser } = useAuth();
+  const { getLatestStoredValue, setProductCounter } = useSessionStorage('cartProducts');
+  const { getLatestStoredValue: getLatestStoredWishlistValue } =
+    useSessionStorage('wishlistProducts');
 
-  const handleCartCounter = (product: ProductEntity, counterFlag: boolean) => {
-    if (counterFlag) {
-      updateCartCounter({
-        variables: {
-          id: product.id,
-          cartCounter: product.attributes!.cartCounter! + 1,
-        },
-      });
-    } else {
-      if (product.attributes!.cartCounter! > 1) {
-        updateCartCounter({
+  let tableProducts;
+  if (activeUser) tableProducts = products;
+  if (!activeUser && target == 'cart') tableProducts = getLatestStoredValue('cartProducts').data;
+  if (!activeUser && target == 'wishlist')
+    tableProducts = getLatestStoredWishlistValue('wishlistProducts').data;
+
+  const handleProductCounter = (product: ProductEntity, counterFlag: boolean) => {
+    const updateCounter = async (cartCounter: number) => {
+      try {
+        await updateProductCounter({
           variables: {
             id: product.id,
-            cartCounter: product.attributes!.cartCounter! - 1,
+            cartCounter,
+          },
+          context: {
+            headers: {
+              Authorization: `Bearer ${activeUser.jwt}`,
+            },
           },
         });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    if (counterFlag) {
+      if (activeUser) updateCounter(product.attributes!.cartCounter! + 1);
+      if (!activeUser) {
+        product.attributes!.cartCounter! = product.attributes!.cartCounter! + 1;
+        setProductCounter(product, target == 'cart' ? 'cartProducts' : 'wishlistProducts');
+      }
+    } else {
+      if (product.attributes!.cartCounter! > 1) {
+        if (activeUser) updateCounter(product.attributes!.cartCounter! - 1);
+        if (!activeUser) {
+          product.attributes!.cartCounter! = product.attributes!.cartCounter! - 1;
+          setProductCounter(product, target == 'cart' ? 'cartProducts' : 'wishlistProducts');
+        }
       }
     }
   };
@@ -76,7 +105,10 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
         }}
       >
         <span>Your {target == 'cart' ? 'shopping cart' : 'wishlist'}</span>
-        <span>{target == 'cart' ? cartCounter : wishlistCounter} items</span>
+        {activeUser && <span>{target == 'cart' ? cartCounter : wishlistCounter} items</span>}
+        {!activeUser && (
+          <span>{target == 'cart' ? sessionCartCounter : sessionWishlistCounter} items</span>
+        )}
       </Typography>
       <TableContainer component={Paper}>
         <Table aria-label='customized table'>
@@ -92,7 +124,7 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
+            {tableProducts.map((product: ProductEntity) => (
               <StyledTableRow key={product.id}>
                 <StyledTableCell align='center'>
                   <ItemImage product={product} target={target} />
@@ -102,13 +134,19 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
                 <StyledTableCell align='center'>{product.attributes?.color}</StyledTableCell>
                 <StyledTableCell align='center'>
                   <ButtonGroup>
-                    <Button aria-label='reduce' onClick={() => handleCartCounter(product, false)}>
+                    <Button
+                      aria-label='reduce'
+                      onClick={() => handleProductCounter(product, false)}
+                    >
                       <RemoveIcon fontSize='small' />
                     </Button>
                     <Button sx={{ fontSize: '1.8rem !important' }}>
                       {product.attributes?.cartCounter}
                     </Button>
-                    <Button aria-label='increase' onClick={() => handleCartCounter(product, true)}>
+                    <Button
+                      aria-label='increase'
+                      onClick={() => handleProductCounter(product, true)}
+                    >
                       <AddIcon fontSize='small' />
                     </Button>
                   </ButtonGroup>

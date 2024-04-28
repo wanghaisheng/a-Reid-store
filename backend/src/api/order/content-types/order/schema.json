@@ -13,7 +13,7 @@
   "pluginOptions": {},
   "attributes": {
     "amount": {
-      "type": "integer",
+      "type": "decimal",
       "required": false
     },
     "items": {
@@ -21,6 +21,12 @@
       "required": false
     },
     "stripeId": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "customOrderId": {
       "type": "string"
     }
   }

@@ -5,6 +5,8 @@ import { useCheckout } from '../../hooks/useCheckout';
 import { useCartInfo } from '../../hooks/useCartInfo';
 import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 export const StyledCartTotals = styled(Paper)({
   padding: '4rem',
@@ -29,22 +31,31 @@ type CartTotalsProps = {
 };
 
 const CartTotals = ({ data, target }: CartTotalsProps) => {
-  const { handleCheckout, loadingPayment } = useCheckout();
-  const { total } = useCartInfo(data);
+  const { handleCheckout, loadingPayment } = useCheckout(data);
+  const { total } = useCartInfo(data, target);
   const { handleProduct } = useAsideDrawer();
+  const { activeUser } = useAuth();
+  const { getLatestStoredValue } = useSessionStorage('wishlistProducts');
+  const { setValue } = useSessionStorage('cartProducts');
 
   const handleOrder = () => {
-    data.products.data.forEach((product: ProductEntity) =>
-      handleProduct(
-        product.id,
-        false,
-        true,
-        product.attributes!.size!,
-        product.attributes!.color!,
-        product.attributes!.cartCounter!,
-        'cart'
-      )
-    );
+    if (activeUser) {
+      data.products.data.forEach((product: ProductEntity) =>
+        handleProduct(
+          product.id,
+          false,
+          true,
+          product.attributes!.size!,
+          product.attributes!.color!,
+          product.attributes!.cartCounter!,
+          'cart'
+        )
+      );
+    } else {
+      getLatestStoredValue('wishlistProducts').data.forEach((product: ProductEntity) => {
+        setValue(product);
+      });
+    }
   };
 
   return (
@@ -73,7 +84,7 @@ const CartTotals = ({ data, target }: CartTotalsProps) => {
         </div>
         <Box sx={{ textAlign: 'center', width: '230px' }}>
           {target == 'cart' ? (
-            <Button onClick={() => handleCheckout(data)}>
+            <Button onClick={handleCheckout}>
               {loadingPayment ? 'LOADING...' : 'PROCEED TO CHECKOUT'}
             </Button>
           ) : (

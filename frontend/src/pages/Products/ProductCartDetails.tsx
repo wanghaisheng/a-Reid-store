@@ -18,9 +18,11 @@ import { useEffect, useState } from 'react';
 import StyledButton from '../../components/Buttons/StyledButton';
 import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { useQuery } from '@apollo/client';
-import { Maybe } from '../../gql/graphql';
+import { Maybe, ProductEntity } from '../../gql/graphql';
 import { motion } from 'framer-motion';
 import { GET_PRODUCT } from '../../graphql/queries';
+import useAuth from '../../hooks/useAuth';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 const Container = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -38,6 +40,13 @@ const ProductCartDetails = ({ id }: { id: string }) => {
     data.product.data.attributes?.cartCounter
   );
   const { handleProduct } = useAsideDrawer();
+  const { activeUser } = useAuth();
+  const { getLatestStoredValue, setValue } = useSessionStorage('wishlistProducts');
+  const { getLatestStoredValue: getLatestStoredCartValue, setValue: setCartValue } =
+    useSessionStorage('cartProducts');
+  const foundCartProduct = getLatestStoredCartValue('cartProducts').data?.find(
+    (e: ProductEntity) => e.id == id
+  );
 
   useEffect(() => {
     setSize(data.product.data.attributes?.size);
@@ -53,15 +62,71 @@ const ProductCartDetails = ({ id }: { id: string }) => {
   };
 
   const handleFavoriteProduct = (isLiked: boolean) => {
-    handleProduct(
-      data.product.data.id,
-      isLiked,
-      data.product.data.attributes!.isAddedToCart!,
-      size as string,
-      color as string,
-      count as number,
-      'wishlist'
-    );
+    if (activeUser) {
+      handleProduct(
+        data.product.data.id,
+        isLiked,
+        data.product.data.attributes!.isAddedToCart!,
+        size as string,
+        color as string,
+        count as number,
+        'wishlist'
+      );
+    } else {
+      setValue(data.product.data);
+    }
+  };
+
+  const handleCartProduct = () => {
+    if (activeUser) {
+      handleProduct(data.product.data.id, false, true, size!, color!, count!, 'cart');
+    } else {
+      const sessionProduct: ProductEntity = {
+        __typename: 'ProductEntity',
+        id: data.product.data.id,
+        attributes: {
+          ...data.product.data.attributes,
+          size,
+          color,
+          cartCounter: count,
+        },
+      };
+      setCartValue(sessionProduct);
+    }
+  };
+
+  const LikeButton = () => {
+    const renderIcon = (condition: boolean | null | undefined) => {
+      if (condition) {
+        return (
+          <FavoriteIcon
+            sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
+            onClick={() => handleFavoriteProduct(false)}
+            component={motion.svg}
+            whileTap={{ scale: 0.75 }}
+          />
+        );
+      } else {
+        return (
+          <FavoriteBorderIcon
+            sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
+            onClick={() => handleFavoriteProduct(true)}
+            component={motion.svg}
+            whileTap={{ scale: 0.75 }}
+          />
+        );
+      }
+    };
+
+    if (activeUser) {
+      if (!data.product.data.attributes?.isAddedToCart)
+        return renderIcon(data.product.data.attributes?.isLiked);
+    } else {
+      const foundProduct = getLatestStoredValue('wishlistProducts').data?.find(
+        (e: ProductEntity) => e.id == id
+      );
+      return renderIcon(Boolean(foundProduct));
+    }
   };
 
   if (loading) return <p>Loading...</p>;
@@ -145,30 +210,27 @@ const ProductCartDetails = ({ id }: { id: string }) => {
           bgcolor: 'primary.main',
           '&:hover': { bgcolor: 'black' },
         }}
-        onClick={() =>
-          handleProduct(data.product.data.id, false, true, size!, color!, count!, 'cart')
-        }
+        onClick={handleCartProduct}
       >
-        {data.product.data.attributes?.isAddedToCart ? 'UPDATE CART' : 'ADD TO CART'}
+        {activeUser
+          ? data.product.data.attributes?.isAddedToCart
+            ? 'UPDATE CART'
+            : 'ADD TO CART'
+          : foundCartProduct
+          ? 'UPDATE CART'
+          : 'ADD TO CART'}
       </StyledButton>
-      <Box>
-        {!data.product.data.attributes?.isAddedToCart &&
-          (data.product.data.attributes?.isLiked ? (
-            <FavoriteIcon
-              sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
-              onClick={() => handleFavoriteProduct(false)}
-              component={motion.svg}
-              whileTap={{ scale: 0.75 }}
-            />
-          ) : (
-            <FavoriteBorderIcon
-              sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
-              onClick={() => handleFavoriteProduct(true)}
-              component={motion.svg}
-              whileTap={{ scale: 0.75 }}
-            />
-          ))}
-      </Box>
+      {activeUser ? (
+        <Box>
+          <LikeButton />
+        </Box>
+      ) : (
+        !foundCartProduct && (
+          <Box>
+            <LikeButton />
+          </Box>
+        )
+      )}
     </Container>
   );
 };

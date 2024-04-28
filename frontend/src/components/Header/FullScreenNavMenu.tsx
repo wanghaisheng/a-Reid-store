@@ -7,13 +7,37 @@ import StyledIconButton from '../Buttons/StyledIconButton';
 import StyledButton from '../Buttons/StyledButton';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { openDrawer } from '../../app/features/drawerSlice';
+import { openDrawer, setSessionCounters } from '../../app/features/drawerSlice';
 import { useAppDispatch, useAppSelector } from '../../app/store';
+import useAuth from '../../hooks/useAuth';
+import { useEffect } from 'react';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 const FullScreenNavMenu = () => {
   const matchesFullScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up(1150));
-  const { wishlistCounter, cartCounter } = useAppSelector((store) => store.drawer);
+  const { wishlistCounter, sessionWishlistCounter, cartCounter, sessionCartCounter } =
+    useAppSelector((store) => store.drawer);
   const dispatch = useAppDispatch();
+  const { activeUser } = useAuth();
+  const { getLatestStoredValue } = useSessionStorage('wishlistProducts');
+  const { getLatestStoredValue: getLatestStoredCartValue } = useSessionStorage('cartProducts');
+
+  useEffect(() => {
+    if (!activeUser)
+      dispatch(
+        setSessionCounters({
+          key: 'wishlistProducts',
+          products: getLatestStoredValue('wishlistProducts'),
+        })
+      );
+    dispatch(
+      setSessionCounters({
+        key: 'cartProducts',
+        products: getLatestStoredCartValue('cartProducts'),
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -46,7 +70,7 @@ const FullScreenNavMenu = () => {
         color='inherit'
       >
         <Badge
-          badgeContent={cartCounter}
+          badgeContent={activeUser ? cartCounter : sessionCartCounter}
           showZero
           color='secondary'
           sx={{ span: { fontWeight: 'bold' } }}
@@ -61,7 +85,7 @@ const FullScreenNavMenu = () => {
         color='inherit'
       >
         <Badge
-          badgeContent={wishlistCounter}
+          badgeContent={activeUser ? wishlistCounter : sessionWishlistCounter}
           showZero
           color='secondary'
           sx={{ span: { fontWeight: 'bold' } }}

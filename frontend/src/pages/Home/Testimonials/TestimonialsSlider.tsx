@@ -79,7 +79,7 @@ const CardContent = styled('div')(({ theme }) => ({
 }));
 
 const TestimonialsSlider = () => {
-  const { parse } = new (Parser as any)();
+  const { parse } = new Parser();
 
   const settings = {
     dots: false,

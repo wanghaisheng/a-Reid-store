@@ -2,6 +2,8 @@ import { Box, styled } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { ProductEntity } from '../../gql/graphql';
+import useAuth from '../../hooks/useAuth';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 export const StyledImage = styled(Box)({
   width: '60px',
@@ -35,17 +37,23 @@ export const StyledImage = styled(Box)({
 
 const ItemImage = ({ product, target }: { product: ProductEntity; target: string }) => {
   const { handleProduct } = useAsideDrawer();
+  const { activeUser } = useAuth();
+  const { removeSessionProduct } = useSessionStorage('cartProducts');
 
   const handleRemoveProduct = (product: ProductEntity) => {
-    handleProduct(
-      product.id,
-      target == 'wishlist' ? false : product.attributes!.isLiked!,
-      target == 'cart' ? false : product.attributes!.isAddedToCart!,
-      product.attributes!.size!,
-      product.attributes!.color!,
-      product.attributes!.cartCounter!,
-      target
-    );
+    if (activeUser) {
+      handleProduct(
+        product.id,
+        target == 'wishlist' ? false : product.attributes!.isLiked!,
+        target == 'cart' ? false : product.attributes!.isAddedToCart!,
+        product.attributes!.size!,
+        product.attributes!.color!,
+        product.attributes!.cartCounter!,
+        target
+      );
+    } else {
+      removeSessionProduct(product, target == 'cart' ? 'cartProducts' : 'wishlistProducts');
+    }
   };
 
   return (

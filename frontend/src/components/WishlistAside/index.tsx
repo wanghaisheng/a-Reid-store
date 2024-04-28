@@ -12,6 +12,8 @@ import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../graphql/queries';
 import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { ProductEntity } from '../../gql/graphql';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import useAuth from '../../hooks/useAuth';
 
 const WishlistAside = () => {
   const { handleProduct } = useAsideDrawer();
@@ -20,40 +22,61 @@ const WishlistAside = () => {
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
     variables: { isLiked: true, isAddedToCart: false },
   });
+  const { activeUser } = useAuth();
+  const { getLatestStoredValue, removeSessionProduct } = useSessionStorage('wishlistProducts');
+  const { setValue } = useSessionStorage('cartProducts');
 
   useEffect(() => {
     if (open) refetch();
   });
 
   const handleRemoveProduct = (product: ProductEntity) => {
-    handleProduct(
-      product.id,
-      false,
-      product.attributes!.isAddedToCart!,
-      product.attributes!.size!,
-      product.attributes!.color!,
-      product.attributes!.cartCounter!,
-      'wishlist'
-    );
-  };
-
-  const handleOrder = () => {
-    data.products.data.forEach((product: ProductEntity) =>
+    if (activeUser) {
       handleProduct(
         product.id,
         false,
-        true,
+        product.attributes!.isAddedToCart!,
         product.attributes!.size!,
         product.attributes!.color!,
         product.attributes!.cartCounter!,
-        'cart'
-      )
-    );
+        'wishlist'
+      );
+    } else {
+      removeSessionProduct(product, 'wishlistProducts');
+    }
+  };
+
+  const handleOrder = () => {
+    if (activeUser) {
+      data.products.data.forEach((product: ProductEntity) =>
+        handleProduct(
+          product.id,
+          false,
+          true,
+          product.attributes!.size!,
+          product.attributes!.color!,
+          product.attributes!.cartCounter!,
+          'cart'
+        )
+      );
+    } else {
+      getLatestStoredValue('wishlistProducts').data.forEach((product: ProductEntity) => {
+        setValue(product);
+      });
+    }
     dispatch(closeDrawer());
   };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
+
+  const OrderButton = () => (
+    <Box sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
+      <Link to='shopping-cart'>
+        <Button onClick={handleOrder}>ORDER NOW</Button>
+      </Link>
+    </Box>
+  );
 
   return (
     data && (
@@ -61,17 +84,14 @@ const WishlistAside = () => {
         <Header title='YOUR WISHLIST' />
         <Body
           name='wishlist'
-          products={data.products.data}
+          products={activeUser ? data.products.data : getLatestStoredValue('wishlistProducts').data}
           handleRemoveProduct={handleRemoveProduct}
           cartIcon={true}
         />
         <Footer>
-          {data.products.data.length > 0 && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
-              <Link to='shopping-cart'>
-                <Button onClick={handleOrder}>ORDER NOW</Button>
-              </Link>
-            </Box>
+          {activeUser && data.products.data.length > 0 && <OrderButton />}
+          {!activeUser && getLatestStoredValue('wishlistProducts').data.length > 0 && (
+            <OrderButton />
           )}
         </Footer>
       </AsideDrawer>

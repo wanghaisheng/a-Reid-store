@@ -8,6 +8,8 @@ import Empty from './Empty';
 import { ProductEntity } from '../../gql/graphql';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import { useAsideDrawer } from '../../hooks/useAsideDrawer';
+import useAuth from '../../hooks/useAuth';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 type BodyProps = {
   name: string;
@@ -20,6 +22,24 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
   const dispatch = useAppDispatch();
   const { activeDrawer } = useAppSelector((store) => store.drawer);
   const { handleProduct } = useAsideDrawer();
+  const { activeUser } = useAuth();
+  const { setValue } = useSessionStorage('cartProducts');
+
+  const handleCartProduct = (product: ProductEntity) => {
+    if (activeUser) {
+      handleProduct(
+        product.id,
+        false,
+        true,
+        product.attributes!.size!,
+        product.attributes!.color!,
+        product.attributes!.cartCounter!,
+        'cart'
+      );
+    } else {
+      setValue(product);
+    }
+  };
 
   return (
     <StyledBody className='lenis lenis-smooth'>
@@ -59,17 +79,7 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
             {cartIcon && (
               <AddShoppingCartOutlinedIcon
                 sx={{ color: 'gray.dark', cursor: 'pointer' }}
-                onClick={() =>
-                  handleProduct(
-                    product.id,
-                    false,
-                    true,
-                    product.attributes!.size!,
-                    product.attributes!.color!,
-                    product.attributes!.cartCounter!,
-                    'cart'
-                  )
-                }
+                onClick={() => handleCartProduct(product)}
               />
             )}
           </Box>

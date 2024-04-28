@@ -9,6 +9,8 @@ import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../graphql/queries';
 import { useEffect } from 'react';
 import { ProductEntity } from '../../gql/graphql';
+import useAuth from '../../hooks/useAuth';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 const Cart = () => {
   const { handleProduct } = useAsideDrawer();
@@ -16,21 +18,27 @@ const Cart = () => {
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
     variables: { isAddedToCart: true, isLiked: false },
   });
+  const { activeUser } = useAuth();
+  const { getLatestStoredValue, removeSessionProduct } = useSessionStorage('cartProducts');
 
   useEffect(() => {
     if (open) refetch();
   });
 
   const handleRemoveProduct = (product: ProductEntity) => {
-    handleProduct(
-      product.id,
-      product.attributes!.isLiked!,
-      false,
-      product.attributes!.size!,
-      product.attributes!.color!,
-      product.attributes!.cartCounter!,
-      'wishlist'
-    );
+    if (activeUser) {
+      handleProduct(
+        product.id,
+        product.attributes!.isLiked!,
+        false,
+        product.attributes!.size!,
+        product.attributes!.color!,
+        product.attributes!.cartCounter!,
+        'wishlist'
+      );
+    } else {
+      removeSessionProduct(product, 'cartProducts');
+    }
   };
 
   if (loading) return <p>Loading...</p>;
@@ -41,10 +49,12 @@ const Cart = () => {
       <Header title='YOUR CART' />
       <Body
         name='shopping cart'
-        products={data.products.data}
+        products={activeUser ? data.products.data : getLatestStoredValue('cartProducts').data}
         handleRemoveProduct={handleRemoveProduct}
       />
-      <Footer>{data.products.data.length > 0 && <CartFooter />}</Footer>
+      <Footer>
+        <CartFooter />
+      </Footer>
     </AsideDrawer>
   );
 };

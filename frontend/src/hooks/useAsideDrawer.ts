@@ -3,12 +3,14 @@ import { useAppDispatch } from '../app/store';
 import { PRODUCTS_ITEMS_COUNT, UPDATE_PRODUCT } from '../graphql/queries';
 import { openToast } from '../app/features/toastSlice';
 import { Maybe } from '../gql/graphql';
+import useAuth from './useAuth';
 
 export const useAsideDrawer = () => {
   const dispatch = useAppDispatch();
   const [updateProduct] = useMutation(UPDATE_PRODUCT, {
     onCompleted: (data) => handleToastMessage(data),
   });
+  const { activeUser } = useAuth();
 
   const { data: wishlistCounter, refetch: getWishlistCounter } = useQuery(PRODUCTS_ITEMS_COUNT, {
     variables: { isLiked: { eq: true } },
@@ -59,7 +61,7 @@ export const useAsideDrawer = () => {
     getWishlistCounter();
   };
 
-  const handleProduct = (
+  const handleProduct = async (
     id: Maybe<string> | undefined,
     isLiked?: boolean,
     isAddedToCart?: boolean,
@@ -68,7 +70,18 @@ export const useAsideDrawer = () => {
     cartCounter?: number,
     target?: string
   ) => {
-    updateProduct({ variables: { id, isLiked, isAddedToCart, size, color, cartCounter, target } });
+    try {
+      await updateProduct({
+        variables: { id, isLiked, isAddedToCart, size, color, cartCounter, target },
+        context: {
+          headers: {
+            Authorization: `Bearer ${activeUser.jwt}`,
+          },
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return { handleProduct, wishlistCounter, cartCounter };

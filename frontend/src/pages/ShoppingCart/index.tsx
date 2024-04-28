@@ -11,6 +11,8 @@ import { useSearchParams } from 'react-router-dom';
 import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { ProductEntity } from '../../gql/graphql';
 import Toast from '../../components/Toasts/Toast';
+import useAuth from '../../hooks/useAuth';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 export const PageWrapper = styled('div')(({ theme }) => ({
   display: 'grid',
@@ -47,6 +49,8 @@ const ShoppingCart = () => {
   const [succeedPayment, setSucceedPayment] = useState(false);
   const [canceledPayment, setCanceledPayment] = useState(false);
   const [open, setOpen] = useState(true);
+  const { activeUser } = useAuth();
+  const { getLatestStoredValue } = useSessionStorage('cartProducts');
 
   const handleClose = () => {
     setOpen(false);
@@ -69,12 +73,16 @@ const ShoppingCart = () => {
   return (
     <PageContainer style={{ paddingTop: '4rem' }}>
       <PageWrapper>
-        {!data.products.data.length ? (
+        {(activeUser && !data.products.data.length) ||
+        (!activeUser && !getLatestStoredValue('cartProducts').data.length) ? (
           <Empty name='shopping cart' />
         ) : (
           <>
-            <CartTable products={data.products.data} target='cart' />
-            {<CartTotals data={data} target='cart' />}
+            <CartTable
+              products={activeUser ? data.products.data : getLatestStoredValue('cartProducts').data}
+              target='cart'
+            />
+            <CartTotals data={data} target='cart' />
           </>
         )}
         {succeedPayment && (

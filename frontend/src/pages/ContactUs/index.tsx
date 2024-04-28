@@ -1,121 +1,55 @@
-import { TextField, Typography, styled } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import StyledButton from '../../components/Buttons/StyledButton';
 import { motion } from 'framer-motion';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PageContainer from '../../components/PageContainer';
-
-const Container = styled('div')(({ theme }) => ({
-  '& .contact': {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    border: `2px solid white`,
-    borderRadius: '20px',
-    marginBottom: '8rem',
-    padding: '4rem',
-    gap: '4rem',
-    [theme.breakpoints.up('md')]: {
-      flexDirection: 'row',
-      justifyContent: 'space-evenly',
-    },
-  },
-
-  '& .formContainer': {
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '50%',
-    },
-
-    '& form': {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '3rem',
-      width: '100%',
-      padding: '0 2rem',
-      [theme.breakpoints.up('lg')]: {
-        padding: '0 6rem',
-      },
-
-      '& .MuiFormLabel-root': {
-        color: 'white',
-      },
-
-      '.MuiInputBase-input:focus': {
-        '& fieldset.MuiOutlinedInput-notchedOutline': {
-          borderColor: 'red !important',
-        },
-      },
-
-      '& fieldset.MuiOutlinedInput-notchedOutline': {
-        borderColor: 'white',
-      },
-
-      '& .submitBtn': {
-        color: 'black',
-        background: theme.palette.secondary.main,
-        width: '100%',
-        padding: '1rem 0',
-        '&:hover': {
-          background: theme.palette.secondary.light,
-        },
-      },
-    },
-  },
-
-  '& .contactInfo': {
-    width: '100%',
-    color: 'white',
-    [theme.breakpoints.up('md')]: {
-      width: '50%',
-    },
-
-    '& .title': {
-      display: 'flex',
-      alignItems: 'center',
-      fontSize: '2rem',
-      fontWeight: 'bold',
-      gap: '2rem',
-    },
-
-    '& .text': {
-      marginLeft: '4.5rem',
-      maxWidth: '250px',
-    },
-  },
-
-  '& .map': {
-    '& iframe': {
-      width: '100%',
-      height: '425px',
-      border: `4px solid white`,
-      borderRadius: '20px',
-    },
-
-    '& .mapBtn': {
-      display: 'block',
-      textAlign: 'center',
-
-      '& button': {
-        color: 'black',
-        background: theme.palette.secondary.main,
-        '&:hover': {
-          background: theme.palette.secondary.light,
-        },
-      },
-    },
-  },
-}));
+import emailjs from '@emailjs/browser';
+import { FormEvent, MutableRefObject, useRef } from 'react';
+import Toast from '../../components/Toasts/Toast';
+import { useAppDispatch } from '../../app/store';
+import { openToast } from '../../app/features/toastSlice';
+import StyledContactPage from './StyledContactPage';
 
 const ContactUs = () => {
+  const form: MutableRefObject<HTMLFormElement> | undefined = useRef(undefined!);
+  const dispatch = useAppDispatch();
+
+  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    emailjs.sendForm('contact_service', 'contact_form', form?.current, 'id3FMtC8zl1lcfPDr').then(
+      (result) => {
+        console.log(result.text);
+        if (result.status == 200) {
+          form.current.reset();
+          dispatch(
+            openToast({
+              type: 'success',
+              message: 'Your message sent successfully!',
+            })
+          );
+        }
+      },
+      (error) => {
+        console.log(error.text);
+        if (error)
+          dispatch(
+            openToast({
+              type: 'error',
+              message: 'Some error happened!',
+            })
+          );
+      }
+    );
+  };
+
   return (
     <PageContainer>
-      <Container>
+      <StyledContactPage>
         <div className='contact'>
           <div className='formContainer'>
-            <form>
+            <form ref={form} onSubmit={sendEmail}>
               <Typography
                 variant='h5'
                 sx={{ fontSize: '3rem !important', fontWeight: 'bold', color: 'white' }}
@@ -126,11 +60,15 @@ const ContactUs = () => {
                 required
                 id='outlined-required'
                 label='Your Email Address'
+                type='email'
+                name='user_email'
                 sx={{ width: '100%' }}
               />
               <TextField
                 id='outlined-multiline-static'
                 label='How Can We Help?'
+                type='text'
+                name='user_message'
                 multiline
                 rows={6}
                 required
@@ -181,7 +119,8 @@ const ContactUs = () => {
             </a>
           </small>
         </div>
-      </Container>
+        <Toast />
+      </StyledContactPage>
     </PageContainer>
   );
 };

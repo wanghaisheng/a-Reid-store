@@ -2,19 +2,29 @@ import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 import { ProductEntity } from '../gql/graphql';
 import { useState } from 'react';
+import { useCartInfo } from './useCartInfo';
+import useAuth from './useAuth';
+import { useSessionStorage } from './useSessionStorage';
 
 type dataType = {
   products: { data: ProductEntity[] };
 };
 
-export const useCheckout = () => {
+export const useCheckout = (data: dataType) => {
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const [loadingPayment, setLoadingPayment] = useState(false);
+  const { total } = useCartInfo(data, 'cart');
+  const { activeUser } = useAuth();
+  const { getLatestStoredValue } = useSessionStorage('cartProducts');
 
-  const handleCheckout = async (data: dataType) => {
+  const handleCheckout = async () => {
     setLoadingPayment(true);
 
-    const lineItems = data.products.data.map((item: ProductEntity) => {
+    let products;
+    if (activeUser) products = data.products.data;
+    if (!activeUser) products = getLatestStoredValue('cartProducts').data;
+
+    const lineItems = products.map((item: ProductEntity) => {
       return {
         price_data: {
           currency: 'usd',
@@ -28,7 +38,10 @@ export const useCheckout = () => {
     });
 
     const session = await axios.post(`${import.meta.env.VITE_APP_SERVER_URL}/api/orders`, {
+      total: +total.toFixed(2) + 10,
       lineItems,
+      userId: activeUser?.user?.id,
+      customOrderId: (Math.floor(Math.random() * (1000 - 1 + 1)) + 1).toString(),
     });
 
     const stripe = await stripePromise;

@@ -831,9 +831,11 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    amount: Attribute.Integer;
+    amount: Attribute.Decimal;
     items: Attribute.JSON;
     stripeId: Attribute.String;
+    userId: Attribute.String;
+    customOrderId: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

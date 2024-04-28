@@ -3,6 +3,11 @@ import backImg from '../../../assets/Honeycomb-Pattern-PNG-Clipart.png';
 import backImg3 from '../../../assets/standing.png';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import EastIcon from '@mui/icons-material/East';
+import emailjs from '@emailjs/browser';
+import { FormEvent, MutableRefObject, useRef } from 'react';
+import { useAppDispatch } from '../../../app/store';
+import { openToast } from '../../../app/features/toastSlice';
+import Toast from '../../../components/Toasts/Toast';
 
 const Card = styled('div')(({ theme }) => ({
   background: '#E9E8E6',
@@ -69,6 +74,37 @@ const Card = styled('div')(({ theme }) => ({
 }));
 
 const EmailCard = () => {
+  const form: MutableRefObject<HTMLFormElement> | undefined = useRef(undefined!);
+  const dispatch = useAppDispatch();
+
+  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    emailjs.sendForm('contact_service', 'newsletter', form?.current, 'id3FMtC8zl1lcfPDr').then(
+      (result) => {
+        console.log(result.text);
+        if (result.status == 200) {
+          form.current.reset();
+          dispatch(
+            openToast({
+              type: 'success',
+              message: 'You have subscribed successfully!',
+            })
+          );
+        }
+      },
+      (error) => {
+        console.log(error.text);
+        if (error)
+          dispatch(
+            openToast({
+              type: 'error',
+              message: 'Some error happened!',
+            })
+          );
+      }
+    );
+  };
+
   return (
     <Card>
       <div className='mailBox'>
@@ -78,7 +114,7 @@ const EmailCard = () => {
             <span className='grayTxt'>Join the</span> <br /> Newsletter
             <span className='grayTxt'>!</span>
           </Typography>
-          <div className='textField'>
+          <form className='textField' ref={form} onSubmit={sendEmail}>
             <IconButton
               disableRipple
               sx={{
@@ -95,11 +131,14 @@ const EmailCard = () => {
             </IconButton>
             <InputBase
               sx={{ ml: 1, flex: 1, background: 'white', width: '70%', mr: '10px' }}
+              required
               placeholder='Your E-mail Address'
+              type='email'
+              name='user_email'
               inputProps={{ 'aria-label': 'Your E-mail Address' }}
             />
             <IconButton
-              type='button'
+              type='submit'
               sx={{
                 p: '10px',
                 color: 'black',
@@ -110,7 +149,8 @@ const EmailCard = () => {
             >
               <EastIcon />
             </IconButton>
-          </div>
+            <Toast />
+          </form>
         </div>
       </div>
       <div className='cardImg'>
