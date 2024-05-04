@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/client';
 import { CategoryEntity, Maybe, ProductEntity } from '../../gql/graphql';
 import { GET_CATEGORIES, GET_CATEGORY, PAGINATION } from '../../graphql/queries';
 import { useState } from 'react';
+import { Spinner } from '../../components/Spinners';
 
 const StyledProductsGrid = styled('div')(({ theme }) => ({
   margin: '6rem auto',
@@ -41,12 +42,7 @@ const ProductsGrid = () => {
     variables: { id: categoryId, limit: PAGE_SIZE },
   });
 
-  const {
-    loading: loadingPagination,
-    error: errorPagination,
-    data: dataPagination,
-    refetch: refetchPagination,
-  } = useQuery(PAGINATION, {
+  const { data: dataPagination, refetch: refetchPagination } = useQuery(PAGINATION, {
     variables: { categoryId: categoryId, limit: PAGE_SIZE },
   });
 
@@ -74,12 +70,6 @@ const ProductsGrid = () => {
         dataPagination.products.meta.pagination.pageSize,
     });
   };
-
-  if (productsLoading) return <p>Loading...</p>;
-  if (productsError) return <p>Error : {productsError.message}</p>;
-
-  if (loadingPagination) return <p>Loading...</p>;
-  if (errorPagination) return <p>Error : {errorPagination.message}</p>;
 
   return (
     <>
@@ -116,14 +106,18 @@ const ProductsGrid = () => {
           />
         </Paper>
       </StyledProductsHeader>
+      {productsLoading && <Spinner place='productsPage' />}
+      {productsError && <p>Error : {productsError.message}</p>}
       <StyledProductsGrid>
-        {productsData.category.data.attributes.products.data.map((product: ProductEntity) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {productsData &&
+          productsData.category.data.attributes.products.data.map((product: ProductEntity) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
       </StyledProductsGrid>
-      {dataPagination.products.meta.pagination.pageCount > 1 &&
+      {dataPagination &&
+        dataPagination.products.meta.pagination.pageCount > 1 &&
         dataPagination.products.meta.pagination.total !=
-          productsData.category.data.attributes.products.data.length && (
+          productsData?.category.data.attributes.products.data.length && (
           <div style={{ textAlign: 'center' }}>
             <StyledButton
               sx={{

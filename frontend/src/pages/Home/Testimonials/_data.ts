@@ -9,7 +9,7 @@ export type Testimonial = {
 const testimonials = [
   {
     id: 1,
-    img: '../../../assets/p_1.png',
+    img: '/assets/testimonials/testimonial-1.jpg',
     name: 'Simin Pahlevaan',
     title: 'CEO of Reid',
     comment:
@@ -17,7 +17,7 @@ const testimonials = [
   },
   {
     id: 2,
-    img: '../../../assets/p_2.png',
+    img: '/assets/testimonials/testimonial-2.jpg',
     name: 'Anahita Mellatnejad',
     title: 'Sales strategist of Reid',
     comment:
@@ -25,7 +25,7 @@ const testimonials = [
   },
   {
     id: 3,
-    img: '../../../assets/p_3.png',
+    img: '/assets/testimonials/testimonial-3.jpg',
     name: 'Adam Najafi',
     title: 'Sales strategist of Reid',
     comment:
@@ -33,7 +33,7 @@ const testimonials = [
   },
   {
     id: 4,
-    img: '../../../assets/p_1.png',
+    img: '/assets/testimonials/testimonial-4.jpg',
     name: 'Simin Pahlevaan',
     title: 'CEO of Reid',
     comment:
@@ -41,7 +41,7 @@ const testimonials = [
   },
   {
     id: 5,
-    img: '../../../assets/p_2.png',
+    img: '/assets/testimonials/testimonial-5.jpg',
     name: 'Anahita Mellatnejad',
     title: 'Sales strategist of Reid',
     comment:
@@ -49,7 +49,7 @@ const testimonials = [
   },
   {
     id: 6,
-    img: '../../../assets/p_3.png',
+    img: '/assets/testimonials/testimonial-6.jpg',
     name: 'Adam Najafi',
     title: 'Sales strategist of Reid',
     comment:

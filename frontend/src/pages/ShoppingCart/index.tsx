@@ -13,6 +13,7 @@ import { ProductEntity } from '../../gql/graphql';
 import Toast from '../../components/Toasts/Toast';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { Spinner } from '../../components/Spinners';
 
 export const PageWrapper = styled('div')(({ theme }) => ({
   display: 'grid',
@@ -35,7 +36,16 @@ export const PageWrapper = styled('div')(({ theme }) => ({
 
   '& .emptyCart': {
     gridColumn: '1/13',
-    img: { width: '25%' },
+    img: { width: '65%' },
+    [theme.breakpoints.up('sm')]: {
+      img: { width: '50%' },
+    },
+    [theme.breakpoints.up('md')]: {
+      img: { width: '30%' },
+    },
+    [theme.breakpoints.up('lg')]: {
+      img: { width: '25%' },
+    },
   },
 }));
 
@@ -50,7 +60,7 @@ const ShoppingCart = () => {
   const [canceledPayment, setCanceledPayment] = useState(false);
   const [open, setOpen] = useState(true);
   const { activeUser } = useAuth();
-  const { getLatestStoredValue } = useSessionStorage('cartProducts');
+  const { getLatestStoredValue, removeSessionProduct } = useSessionStorage('cartProducts');
 
   const handleClose = () => {
     setOpen(false);
@@ -61,13 +71,29 @@ const ShoppingCart = () => {
     setSucceedPayment(JSON.parse(searchParams.get('success')!));
     setCanceledPayment(JSON.parse(searchParams.get('cancel')!));
     if (succeedPayment) {
-      data?.products.data.forEach((product: ProductEntity) => {
-        handleProduct(product.id, product.attributes!.isLiked!, false, '', '', 1, 'cart');
-      });
+      if (activeUser) {
+        data?.products.data.forEach((product: ProductEntity) => {
+          handleProduct(product.id, product.attributes!.isLiked!, false, '', '', 1, 'cart');
+        });
+      } else {
+        getLatestStoredValue('cartProducts').data.forEach((product: ProductEntity) => {
+          removeSessionProduct(product, 'cartProducts');
+        });
+      }
     }
-  }, [data, refetch, cartCounter, handleProduct, searchParams, succeedPayment]);
+  }, [
+    data,
+    refetch,
+    cartCounter,
+    handleProduct,
+    searchParams,
+    succeedPayment,
+    activeUser,
+    getLatestStoredValue,
+    removeSessionProduct,
+  ]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p>Error : {error.message}</p>;
 
   return (

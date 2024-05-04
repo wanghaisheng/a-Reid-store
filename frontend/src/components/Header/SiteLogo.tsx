@@ -1,5 +1,4 @@
 import { IconButton, Theme, useMediaQuery } from '@mui/material';
-import Logo from '../../assets/siteLogo.png';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -15,10 +14,10 @@ const SiteLogo = () => {
         aria-label='logo'
         style={{ backgroundColor: 'transparent' }}
         component={motion.button}
-        whileTap={{ scale: 0.90 }}
+        whileTap={{ scale: 0.9 }}
         disableRipple
       >
-        <img src={Logo} alt='Reid website logo' width={matches ? 75 : 90} />
+        <img src='/assets/home/siteLogo.png' alt='Reid website logo' width={matches ? 75 : 90} />
       </IconButton>
     </Link>
   );

@@ -1,5 +1,6 @@
 import { Card, Typography, styled } from '@mui/material';
 import PageContainer from '../../components/PageContainer';
+import { partners } from './_data';
 
 const Container = styled('div')(({ theme }) => ({
   '& .grid': {
@@ -51,36 +52,11 @@ const Partnership = () => {
           </Typography>
         </div>
         <div className='grid'>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p10.png' />
-          </Card>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p7.png' />
-          </Card>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p8.png' />
-          </Card>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p3.png' />
-          </Card>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p5.png' />
-          </Card>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p6.png' />
-          </Card>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p2.png' />
-          </Card>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p4.gif' />
-          </Card>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p9.png' />
-          </Card>
-          <Card className='gridItem' elevation={6}>
-            <img src='./assets/p1.png' />
-          </Card>
+          {partners.map((partner) => (
+            <Card key={partner.id} className='gridItem' elevation={6}>
+              <img src={partner.img} />
+            </Card>
+          ))}
         </div>
       </Container>
     </PageContainer>

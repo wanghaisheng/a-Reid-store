@@ -1,8 +1,4 @@
 import { styled } from '@mui/material';
-import Img1 from '../../../assets/pexels-photo-8928928.jpeg';
-import Img2 from '../../../assets/pexels-photo-8928928.jpeg';
-import Img3 from '../../../assets/pexels-photo-8928928.jpeg';
-import Img4 from '../../../assets/Screenshot_121.png';
 
 const StyledGridItemContainerOne = styled('div')(({ theme }) => ({
   textAlign: 'center',
@@ -195,10 +191,10 @@ export const GridItemContainerOne = () => {
     <StyledGridItemContainerOne>
       <p>Just dress and walk</p>
       <div className='ImagesContainer'>
-        <img src={Img1} className='Img1' />
-        <img src={Img2} className='Img2' />
-        <img src={Img3} className='Img3' />
-        <img src={Img4} className='Img4' />
+        <img src='/assets/home/thumb-1.jpg' className='Img1' />
+        <img src='/assets/home/thumb-2.jpg' className='Img2' />
+        <img src='/assets/home/thumb-3.jpg' className='Img3' />
+        <img src='/assets/home/icon-1.png' className='Img4' />
       </div>
     </StyledGridItemContainerOne>
   );
@@ -208,8 +204,8 @@ export const GridItemContainerTwo = () => {
   return (
     <StyledGridItemContainerTwo>
       <div className='ImagesContainer'>
-        <img src={Img1} className='Img1' />
-        <img src={Img2} className='Img2' />
+        <img src='/assets/home/thumb-4.jpg' className='Img1' />
+        <img src='/assets/home/thumb-5.jpg' className='Img2' />
       </div>
       <p>
         With all the best
@@ -217,8 +213,8 @@ export const GridItemContainerTwo = () => {
         for any mood.
       </p>
       <div className='ImagesContainer'>
-        <img src={Img3} className='Img3' />
-        <img src={Img4} className='Img4' />
+        <img src='/assets/home/thumb-6.jpg' className='Img3' />
+        <img src='/assets/home/icon-1.png' className='Img4' />
       </div>
     </StyledGridItemContainerTwo>
   );
@@ -228,8 +224,8 @@ export const GridItemContainerThree = () => {
   return (
     <StyledGridItemContainerThree>
       <div className='ImagesContainer'>
-        <img src={Img1} className='Img1' />
-        <img src={Img2} className='Img2' />
+        <img src='/assets/home/thumb-7.jpg' className='Img1' />
+        <img src='/assets/home/thumb-8.jpg' className='Img2' />
       </div>
       <p>
         With all the love for any
@@ -237,8 +233,8 @@ export const GridItemContainerThree = () => {
         dynamic lifestyle!
       </p>
       <div className='ImagesContainer'>
-        <img src={Img3} className='Img3' />
-        <img src={Img4} className='Img4' />
+        <img src='/assets/home/thumb-9.jpg' className='Img3' />
+        <img src='/assets/home/icon-2.png' className='Img4' />
       </div>
     </StyledGridItemContainerThree>
   );

@@ -60,7 +60,7 @@ const AboutUs = () => {
             </Typography>
           </div>
           <Card className='sectionImg' elevation={6}>
-            <CardMedia component='img' image='./assets/about-01.jpg' />
+            <CardMedia component='img' image='./assets/about/about-01.jpg' />
           </Card>
         </div>
         <div className='section'>
@@ -84,7 +84,7 @@ const AboutUs = () => {
             </Typography>
           </div>
           <Card className='sectionImg' elevation={6}>
-            <CardMedia component='img' image='./assets/about-02.jpg' />
+            <CardMedia component='img' image='./assets/about/about-02.jpg' />
           </Card>
         </div>
       </Container>

@@ -1,6 +1,4 @@
 import { IconButton, InputBase, Typography, styled } from '@mui/material';
-import backImg from '../../../assets/Honeycomb-Pattern-PNG-Clipart.png';
-import backImg3 from '../../../assets/standing.png';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import EastIcon from '@mui/icons-material/East';
 import emailjs from '@emailjs/browser';
@@ -108,7 +106,7 @@ const EmailCard = () => {
   return (
     <Card>
       <div className='mailBox'>
-        <img src={backImg} />
+        <img src='/assets/home/pattern.png' />
         <div className='mailForm'>
           <Typography variant='h2' sx={{ mb: '4rem' }}>
             <span className='grayTxt'>Join the</span> <br /> Newsletter
@@ -154,7 +152,7 @@ const EmailCard = () => {
         </div>
       </div>
       <div className='cardImg'>
-        <img src={backImg3} />
+        <img src='/assets/home/standing.png' />
       </div>
     </Card>
   );

@@ -26,6 +26,7 @@ import Toast from '../../components/Toasts/Toast';
 import { useAppDispatch } from '../../app/store';
 import { openToast } from '../../app/features/toastSlice';
 import Button from '../../components/AsideDrawer/Button';
+import { Spinner } from '../../components/Spinners';
 
 const Header = styled('div')({
   display: 'flex',
@@ -48,6 +49,7 @@ const MyAccount = () => {
     variables: { userId: activeUser?.user.id },
   });
   const [paymentIntents, setPaymentIntents] = useState<AxiosResponse>();
+  const [cancelLoading, setCancelLoading] = useState(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -78,6 +80,7 @@ const MyAccount = () => {
   };
 
   const cancelPayment = async (stripeId: string, id: string, customOrderId: string) => {
+    setCancelLoading(true);
     try {
       const paymentIntentsCancel = await axios.post(
         `${import.meta.env.VITE_APP_SERVER_URL}/api/orders`,
@@ -99,9 +102,10 @@ const MyAccount = () => {
       if (axios.isAxiosError(error))
         dispatch(openToast({ type: 'error', message: error.response?.data.error.message }));
     }
+    setCancelLoading(false);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading || !paymentIntents || cancelLoading) return <Spinner />;
   if (error) return <p>Error : {error.message}</p>;
 
   const filteredOrders = data.orders.data.filter((order: OrderEntity) => {

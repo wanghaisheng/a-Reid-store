@@ -1,21 +1,13 @@
 import { useAnimate } from 'framer-motion';
 import { Card, CardImg, CardStatus, CardText } from './StyledProductCard';
+import { ProductEntity } from '../../../gql/graphql';
 
-export type Product = {
-  id: number;
-  img: string;
-  title: string;
-  price: number;
-  isNew: boolean;
-  category: string;
-};
-
-type GoTo = {
+type ProductCardProps = {
+  product: ProductEntity;
   onGoTo: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
-const ProductCard = (props: Product & GoTo) => {
-  const { img, title, price, onGoTo, isNew } = props;
+const ProductCard = ({ product, onGoTo }: ProductCardProps) => {
   const [scope, animate] = useAnimate();
 
   const handleAnimate = async (e: React.MouseEvent<HTMLElement>) => {
@@ -26,13 +18,17 @@ const ProductCard = (props: Product & GoTo) => {
 
   return (
     <div ref={scope} onClick={handleAnimate}>
-      <Card className='product-card'>
-        <CardImg src={img} />
+      <Card className='product-card' id={product.id!}>
+        <CardImg src={product.attributes?.img} />
         <CardText className='CardText'>
-          <h4>{title}</h4>
-          <p>$ {price}</p>
+          <h4>
+            {product.attributes!.name.length > 20
+              ? product.attributes?.name.substring(0, 20) + '...'
+              : product.attributes?.name}
+          </h4>
+          <p>$ {product.attributes?.price}</p>
         </CardText>
-        {isNew && <CardStatus>new</CardStatus>}
+        <CardStatus>new</CardStatus>
       </Card>
     </div>
   );

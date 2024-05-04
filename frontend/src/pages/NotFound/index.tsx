@@ -1,6 +1,5 @@
 import { Grid, Theme, Typography, useMediaQuery } from '@mui/material';
 import { Link } from 'react-router-dom';
-import NotFoundImage from '../../assets/404.png';
 import StyledButton from '../../components/Buttons/StyledButton';
 import PageContainer from '../../components/PageContainer';
 
@@ -59,7 +58,7 @@ const NotFound = () => {
         </Grid>
         <Grid item xs={matches ? 12 : 6}>
           <img
-            src={NotFoundImage}
+            src={window.origin + '/assets/notFound/404.png'}
             alt='Not Found Image'
             style={{ maxWidth: matches ? 400 : 550 }}
           />

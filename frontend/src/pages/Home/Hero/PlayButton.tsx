@@ -1,6 +1,9 @@
-import { styled } from '@mui/material';
+import { Modal, styled } from '@mui/material';
 import PlayCircleRoundedIcon from '@mui/icons-material/PlayCircleRounded';
 import { motion } from 'framer-motion';
+import ReactPlayer from 'react-player';
+import { useState } from 'react';
+import { Spinner } from '../../../components/Spinners';
 
 const PlayIcon = styled(PlayCircleRoundedIcon)(({ theme }) => ({
   width: 75,
@@ -56,15 +59,50 @@ const StyledPlayButton = styled(motion.div)(({ theme }) => ({
 }));
 
 const PlayButton = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
-    <StyledPlayButton
-      initial={{ backgroundImage: 'linear-gradient(90deg, white 5%, #664982 100%)' }}
-      whileHover={{ backgroundImage: 'linear-gradient(270deg, white 5%, #664982 50%)' }}
-      whileTap={{ scale: 0.9 }}
-      transition={{ duration: 0.5 }}
-    >
-      <PlayIcon />
-    </StyledPlayButton>
+    <>
+      <StyledPlayButton
+        initial={{ backgroundImage: 'linear-gradient(90deg, white 5%, #664982 100%)' }}
+        whileHover={{ backgroundImage: 'linear-gradient(270deg, white 5%, #664982 50%)' }}
+        whileTap={{ scale: 0.9 }}
+        transition={{ duration: 0.5 }}
+        onClick={handleOpen}
+      >
+        <PlayIcon />
+      </StyledPlayButton>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
+      >
+        <div
+          className='player-wrapper'
+          onClick={handleClose}
+          style={{
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ReactPlayer
+            className='react-player'
+            url='https://youtu.be/Okjz1CmhLSw'
+            width='70%'
+            height='75%'
+            controls={true}
+            playing={true}
+            fallback={<Spinner />}
+          />
+        </div>
+      </Modal>
+    </>
   );
 };
 

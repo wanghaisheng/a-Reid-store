@@ -10,6 +10,7 @@ import CartTable from '../ShoppingCart/CartTable';
 import CartTotals from '../ShoppingCart/CartTotals';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { Spinner } from '../../components/Spinners';
 
 const Wishlist = () => {
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
@@ -23,7 +24,7 @@ const Wishlist = () => {
     refetch();
   }, [data, refetch, wishlistCounter]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p>Error : {error.message}</p>;
 
   return (

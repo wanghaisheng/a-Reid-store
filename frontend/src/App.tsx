@@ -48,6 +48,16 @@ function App() {
     }
   }, [wishlistCounter, cartCounter, dispatch]);
 
+  useEffect(() => {
+    // to prevent opening images in a new tap
+    const allImages = document.querySelectorAll('img');
+    for (const img of allImages) {
+      ['contextmenu', 'dragstart'].forEach((event) => {
+        img.addEventListener(event, (event) => event.preventDefault());
+      });
+    }
+  });
+
   return (
     <ThemeContextProvider>
       <LocaleContextProvider>

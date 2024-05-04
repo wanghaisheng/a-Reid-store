@@ -8,20 +8,31 @@ import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
 import { motion, stagger, useAnimate } from 'framer-motion';
 import StyledIconButton from '../../../components/Buttons/StyledIconButton';
-import ProductCard, { Product } from './ProductCard';
+import ProductCard from './ProductCard';
 import SliderFooter from './SliderFooter';
 import StyledSlider from './StyledSlider';
+import { CategoryEntityResponse, ProductEntity } from '../../../gql/graphql';
+import { useNavigate } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
+import { useAsideDrawer } from '../../../hooks/useAsideDrawer';
+import { useSessionStorage } from '../../../hooks/useSessionStorage';
 
-type ProductsSliderProps = {
-  products: Product[];
+type ProductSliderProps = {
+  productsData: {
+    category: CategoryEntityResponse;
+  };
 };
 
-const ProductsSlider = ({ products }: ProductsSliderProps) => {
+const ProductsSlider = ({ productsData }: ProductSliderProps) => {
   const sliderRef = useRef<Slider>(null!);
   const nextRef = useRef<HTMLButtonElement>(null!);
   const prevRef = useRef<HTMLButtonElement>(null!);
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const [scope, animate] = useAnimate();
+  const navigate = useNavigate();
+  const { activeUser } = useAuth();
+  const { handleProduct } = useAsideDrawer();
+  const { setValue } = useSessionStorage('cartProducts');
 
   const handleSlickGoTo = (e: React.MouseEvent<HTMLElement>) => {
     const index = (e.target as HTMLElement).closest('.slick-slide')?.getAttribute('data-index');
@@ -48,9 +59,38 @@ const ProductsSlider = ({ products }: ProductsSliderProps) => {
 
   const handleAnimate = async () => {
     if (matches) {
-      await animate('.product-card', { scale: 0.5 });
+      await animate('.product-card', { scale: 0.9 });
       await animate('.product-card', { scale: 1.1 });
       await animate('.product-card', { scale: 1 }, { delay: stagger(0.0025) });
+    }
+  };
+
+  const navigateToProductPage = () => {
+    const productId = document.querySelector(
+      '.slick-active.slick-center.slick-current .product-card'
+    )?.id;
+    navigate(`/products/${productId}`);
+  };
+
+  const handleCartProduct = () => {
+    const productId = document.querySelector(
+      '.slick-active.slick-center.slick-current .product-card'
+    )?.id;
+    const product = productsData.category.data?.attributes?.products?.data.find(
+      (p) => p.id == productId
+    );
+    if (activeUser) {
+      handleProduct(
+        product!.id,
+        false,
+        true,
+        product!.attributes!.size!,
+        product!.attributes!.color!,
+        1,
+        'cart'
+      );
+    } else {
+      setValue(product!);
     }
   };
 
@@ -94,8 +134,8 @@ const ProductsSlider = ({ products }: ProductsSliderProps) => {
   return (
     <div ref={scope}>
       <StyledSlider ref={sliderRef} {...settings}>
-        {products.map((product) => (
-          <ProductCard key={product.id} {...product} onGoTo={handleSlickGoTo} />
+        {productsData.category.data!.attributes!.products!.data.map((product: ProductEntity) => (
+          <ProductCard key={product.id} product={product} onGoTo={handleSlickGoTo} />
         ))}
       </StyledSlider>
       <SliderFooter className='SliderFooter'>
@@ -104,6 +144,7 @@ const ProductsSlider = ({ products }: ProductsSliderProps) => {
             className='ProductBagBtn'
             component={motion.button}
             whileTap={{ scale: 0.95 }}
+            onClick={() => handleCartProduct()}
           >
             <LocalMallOutlinedIcon sx={{ fontSize: '1.8rem' }} />
           </StyledIconButton>
@@ -111,6 +152,7 @@ const ProductsSlider = ({ products }: ProductsSliderProps) => {
             className='ProductDetailsBtn'
             component={motion.button}
             whileTap={{ scale: 0.95 }}
+            onClick={navigateToProductPage}
           >
             Product Details
           </Button>

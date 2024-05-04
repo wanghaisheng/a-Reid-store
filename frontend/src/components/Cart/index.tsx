@@ -34,7 +34,7 @@ const Cart = () => {
         product.attributes!.size!,
         product.attributes!.color!,
         product.attributes!.cartCounter!,
-        'wishlist'
+        'cart'
       );
     } else {
       removeSessionProduct(product, 'cartProducts');

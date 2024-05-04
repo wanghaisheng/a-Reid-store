@@ -8,6 +8,7 @@ import PageContainer from '../../components/PageContainer';
 import StyledButton from '../../components/Buttons/StyledButton';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import { Spinner } from '../../components/Spinners';
 
 export const StyledForm = styled('form')(({ theme }) => ({
   width: '350px',
@@ -76,7 +77,7 @@ const SignUp = () => {
     registerUser(user);
   };
 
-  if (registerLoading) return <p>Loading...</p>;
+  if (registerLoading) return <Spinner />;
 
   return (
     <PageContainer style={{ paddingTop: '4rem', display: 'flex', alignItems: 'center' }}>

@@ -105,6 +105,15 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
     valueToDelete.data.splice(index, 1);
     window.sessionStorage.setItem(key, JSON.stringify(valueToDelete));
     dispatch(fireTrigger());
+    dispatch(
+      openToast({
+        type: 'success',
+        iconName: 'HighlightOffOutlinedIcon',
+        message: `${sessionProduct.attributes?.name} is removed from ${
+          key == 'wishlistProducts' ? 'wishlist' : 'cart'
+        }!`,
+      })
+    );
   };
 
   return { getLatestStoredValue, setValue, setProductCounter, removeSessionProduct };

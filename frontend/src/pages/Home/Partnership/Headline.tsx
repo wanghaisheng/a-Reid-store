@@ -1,6 +1,5 @@
 import { Typography, styled } from '@mui/material';
 import StyledButton from '../../../components/Buttons/StyledButton';
-import shakeHands from '../../../assets/shakeHands.png';
 import { Link } from 'react-router-dom';
 
 const StyledHeadline = styled('div')(({ theme }) => ({
@@ -39,7 +38,7 @@ const Headline = () => {
         </StyledButton>
       </Link>
       <div className='title'>
-        <img src={shakeHands} />
+        <img src='/assets/home/shakeHands.png' />
         <Typography variant='h3' sx={{ textAlign: 'left', color: 'primary.light' }}>
           WE ARE EAGER TO
           <br />

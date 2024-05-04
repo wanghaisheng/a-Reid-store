@@ -8,6 +8,7 @@ import { Suspense } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './app/store.ts';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { Spinner } from './components/Spinners/index.tsx';
 
 const client = new ApolloClient({
   uri: import.meta.env.VITE_APP_API_URL,
@@ -19,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <ApolloProvider client={client}>
       <Provider store={store}>
         <BrowserRouter>
-          <Suspense fallback='...loading'>
+          <Suspense fallback={<Spinner />}>
             <App />
           </Suspense>
         </BrowserRouter>

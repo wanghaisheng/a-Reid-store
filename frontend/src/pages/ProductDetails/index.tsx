@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/client';
 import { GET_PRODUCT } from '../../graphql/queries';
 import { productThumbs } from './_data';
 import Toast from '../../components/Toasts/Toast';
+import { Spinner } from '../../components/Spinners';
 
 const Container = styled(ModalContainer)(({ theme }) => ({
   width: '100%',
@@ -26,13 +27,13 @@ const ProductDetails = () => {
   });
   const thumbs = productThumbs.find((p) => p.id == id)?.thumbs;
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p>Error : {error.message}</p>;
 
   return (
     <PageContainer>
       <Container>
-        <ProductGalleryBox thumbs={thumbs!} img={data.product.data.attributes.img} />
+        <ProductGalleryBox thumbs={thumbs!} img={data?.product.data.attributes.img} />
         <ProductCartDetails id={id!} />
         <Toast />
       </Container>

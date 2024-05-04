@@ -11,7 +11,7 @@ export const StyledHeadLine = styled('div')(({ theme }) => ({
     top: '4vh',
   },
   [theme.breakpoints.up('lg')]: {
-    top: '13vh',
+    top: '8vh',
     left: '-7vw',
   },
 }));

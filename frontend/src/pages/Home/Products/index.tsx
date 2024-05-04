@@ -1,7 +1,11 @@
 import { Box, Typography, styled } from '@mui/material';
 import StyledButton from '../../../components/Buttons/StyledButton';
 import ProductsSlider from './ProductsSlider';
-import products from './_data';
+import { useQuery } from '@apollo/client';
+import { GET_CATEGORIES, GET_CATEGORY } from '../../../graphql/queries';
+import { MouseEvent, useState } from 'react';
+import { CategoryEntity, Maybe } from '../../../gql/graphql';
+import { Spinner } from '../../../components/Spinners';
 
 const StyledContainer = styled('div')(({ theme }) => ({
   overflow: 'hidden',
@@ -28,6 +32,35 @@ const FilterButton = styled(StyledButton)({
 });
 
 const Products = () => {
+  const { loading, error, data: categoriesData } = useQuery(GET_CATEGORIES);
+  const [categoryId, setCategoryId] = useState('1');
+
+  const PAGE_SIZE = 100;
+
+  const {
+    loading: productsLoading,
+    error: productsError,
+    data: productsData,
+    refetch: getCategoryProducts,
+  } = useQuery(GET_CATEGORY, {
+    variables: { id: categoryId, limit: PAGE_SIZE },
+  });
+
+  const handleFilter = (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
+    categoryId: Maybe<string> | undefined
+  ) => {
+    const filterItems = document.querySelectorAll('.filterButtons .filterItem');
+    for (const item of filterItems) item.classList.remove('active');
+    const activeItem = (e.target as HTMLSpanElement).closest('.filterItem')!;
+    activeItem.classList.add('active');
+    setCategoryId(categoryId!);
+    getCategoryProducts({ id: categoryId, limit: PAGE_SIZE });
+  };
+
+  if (loading) return false;
+  if (error) return false;
+
   return (
     <StyledContainer>
       <div className='content'>
@@ -46,14 +79,19 @@ const Products = () => {
             maxWidth: '850px',
           }}
         >
-          <FilterButton className='active'>All Products</FilterButton>
-          <FilterButton>Women</FilterButton>
-          <FilterButton>Men</FilterButton>
-          <FilterButton>Bag</FilterButton>
-          <FilterButton>Shoes</FilterButton>
-          <FilterButton>Watches</FilterButton>
+          {categoriesData.categories.data.map((category: CategoryEntity) => (
+            <FilterButton
+              key={category.id}
+              className={`filterItem ${category.id == categoryId ? 'active' : null}`}
+              onClick={(e) => handleFilter(e, category.id)}
+            >
+              <span>{category.attributes?.categoryName}</span>
+            </FilterButton>
+          ))}
         </Box>
-        <ProductsSlider products={products} />
+        {productsLoading && <Spinner place='productsSlider' />}
+        {productsError && <p>Error : {productsError.message}</p>}
+        {productsData && <ProductsSlider productsData={productsData} />}
       </div>
     </StyledContainer>
   );

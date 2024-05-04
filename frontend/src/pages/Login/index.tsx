@@ -9,6 +9,7 @@ import StyledButton from '../../components/Buttons/StyledButton';
 import { motion } from 'framer-motion';
 import { StyledForm } from '../SignUp';
 import PageContainer from '../../components/PageContainer';
+import { Spinner } from '../../components/Spinners';
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -36,7 +37,7 @@ const Login = () => {
     loginUser(user);
   };
 
-  if (loginLoading) return <p>Loading...</p>;
+  if (loginLoading) return <Spinner />;
 
   return (
     <PageContainer style={{ paddingTop: '4rem', display: 'flex', alignItems: 'center' }}>

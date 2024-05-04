@@ -10,6 +10,7 @@ const StyledSlider = styled(Slider)(({ theme }) => ({
     cursor: 'default',
   },
   '& .slick-slide': {
+    maxWidth: '252px',
     margin: '0 auto',
     padding: '0 1rem',
     cursor: 'pointer',

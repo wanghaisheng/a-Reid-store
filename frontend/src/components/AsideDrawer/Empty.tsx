@@ -35,7 +35,7 @@ const Empty = ({ name }: { name: string }) => {
   return (
     <StyledEmpty className='emptyCart'>
       <Box>
-        <img src={window.origin + '/assets/pngwing.com.png'} />
+        <img src={window.origin + '/assets/drawer/empty.png'} />
         <Typography variant='h5' sx={{ textAlign: 'center', mb: '2rem' }}>
           Your {name} is empty!
         </Typography>

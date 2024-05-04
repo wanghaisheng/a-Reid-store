@@ -5,10 +5,13 @@ export const Card = styled('div')({
   flexDirection: 'column',
   alignItems: 'center',
   position: 'relative',
+  maxHeight: '370px',
+  overflow: 'hidden',
 });
 
 export const CardImg = styled('img')({
   width: '100%',
+  maxHeight: '300px',
   borderRadius: '20px',
   filter: 'blur(1.5px) opacity(50%)',
   boxShadow: 'rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px',

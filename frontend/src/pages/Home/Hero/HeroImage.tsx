@@ -1,6 +1,5 @@
 import { styled } from '@mui/material';
 import PlayButton from './PlayButton';
-import heroImage from '../../../assets/pexels-photo-8928928.jpeg';
 
 const StyledHeroImage = styled('div')(({ theme }) => ({
   maxWidth: '60%',
@@ -37,7 +36,7 @@ const StyledHeroImage = styled('div')(({ theme }) => ({
 const HeroImage = () => {
   return (
     <StyledHeroImage>
-      <img src={heroImage} alt='hero image' />
+      <img src='/assets/home/mainHero.jpeg' alt='hero image' />
       <PlayButton />
     </StyledHeroImage>
   );

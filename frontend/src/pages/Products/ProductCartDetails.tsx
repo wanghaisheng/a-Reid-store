@@ -23,6 +23,7 @@ import { motion } from 'framer-motion';
 import { GET_PRODUCT } from '../../graphql/queries';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { Spinner } from '../../components/Spinners';
 
 const Container = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -129,7 +130,7 @@ const ProductCartDetails = ({ id }: { id: string }) => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p>Error : {error.message}</p>;
 
   return (

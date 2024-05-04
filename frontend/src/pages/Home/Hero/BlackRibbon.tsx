@@ -1,11 +1,10 @@
 import { styled } from '@mui/material';
-import Logo from '../../../assets/siteLogo2.png';
 
 const StyledBlackRibbon = styled('div')(({ theme }) => ({
   height: 0,
   '& .skewed': {
     backgroundColor: 'black',
-    backgroundImage: `url(${Logo})`,
+    backgroundImage: 'url(/assets/home/siteLogo2.png)',
     backgroundRepeat: 'repeat-x',
     backgroundPosition: 'center',
     backgroundSize: '14%',
