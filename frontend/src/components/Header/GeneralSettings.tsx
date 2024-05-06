@@ -28,7 +28,7 @@ const GeneralSettings = () => {
   const theme = useTheme();
   const { mode, toggleColorMode } = useContext(ColorModeContext);
   const { lang, handleSetLang } = useContext(LocaleContext);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -85,7 +85,7 @@ const GeneralSettings = () => {
             control={
               <Switch color='secondary' checked={mode === 'light'} onChange={toggleColorMode} />
             }
-            label='Light'
+            label={t('Light')}
           />
         </MenuItem>
         <MenuItem disableRipple sx={{ color: 'white', '&:hover': { color: 'secondary.main' } }}>
@@ -93,7 +93,7 @@ const GeneralSettings = () => {
             control={
               <Switch color='secondary' checked={mode === 'dark'} onChange={toggleColorMode} />
             }
-            label='Dark'
+            label={t('Dark')}
           />
         </MenuItem>
         <Divider />
@@ -106,7 +106,7 @@ const GeneralSettings = () => {
                 onChange={() => handleLocalization('ar')}
               />
             }
-            label='Arabic'
+            label={t('ar')}
           />
         </MenuItem>
         <MenuItem disableRipple sx={{ color: 'white', '&:hover': { color: 'secondary.main' } }}>
@@ -119,7 +119,7 @@ const GeneralSettings = () => {
                 onChange={() => handleLocalization('en')}
               />
             }
-            label='English'
+            label={t('en')}
           />
         </MenuItem>
       </Menu>

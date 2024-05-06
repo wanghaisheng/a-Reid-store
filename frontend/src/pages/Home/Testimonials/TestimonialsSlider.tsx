@@ -5,7 +5,9 @@ import { styled } from '@mui/material';
 import ShortcutIcon from '@mui/icons-material/Shortcut';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import { Parser } from 'html-to-react';
-import testimonials, { Testimonial } from './_data';
+import testimonials from './_data';
+import { useContext } from 'react';
+import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const StyledSlider = styled('div')({
   maxWidth: '475px',
@@ -80,6 +82,7 @@ const CardContent = styled('div')(({ theme }) => ({
 
 const TestimonialsSlider = () => {
   const { parse } = new Parser();
+  const { lang } = useContext(LocaleContext);
 
   const settings = {
     dots: false,
@@ -94,18 +97,20 @@ const TestimonialsSlider = () => {
   return (
     <StyledSlider>
       <Slider {...settings}>
-        {testimonials.map((testimonial: Testimonial, index: number) => (
+        {testimonials.map((testimonial, index: number) => (
           <SliderCard key={testimonial.id} className={index % 2 == 0 ? 'whiteCard' : ''}>
             <ShortcutIcon className='arrowIcon' />
-            <CardContent>
+            <CardContent style={lang == 'ar' ? { textAlign: 'right' } : {}}>
               <div className='header'>
                 <img src={testimonial.img} />
                 <div className='header-title'>
                   <h3>{testimonial.name}</h3>
-                  <p>{testimonial.title}</p>
+                  <p>{lang == 'ar' ? testimonial.title2 : testimonial.title}</p>
                 </div>
               </div>
-              <p className='body'>{parse(testimonial.comment)}</p>
+              <p className='body'>
+                {lang == 'ar' ? parse(testimonial.comment2) : parse(testimonial.comment)}
+              </p>
             </CardContent>
             <FormatQuoteIcon className='quoteIcon' />
           </SliderCard>

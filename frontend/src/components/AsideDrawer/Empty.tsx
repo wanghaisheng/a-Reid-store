@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import StyledButton from '../Buttons/StyledButton';
 import { closeDrawer } from '../../app/features/drawerSlice';
 import { useAppDispatch } from '../../app/store';
+import { useTranslation } from 'react-i18next';
 
 const StyledEmpty = styled(Box)(({ theme }) => ({
   height: '100%',
@@ -31,21 +32,22 @@ const StyledEmpty = styled(Box)(({ theme }) => ({
 
 const Empty = ({ name }: { name: string }) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   return (
     <StyledEmpty className='emptyCart'>
       <Box>
         <img src={window.origin + '/assets/drawer/empty.png'} />
         <Typography variant='h5' sx={{ textAlign: 'center', mb: '2rem' }}>
-          Your {name} is empty!
+          {t('Your2')} {name} {t('IsEmpty')}!
         </Typography>
         <Typography variant='body1' sx={{ textAlign: 'center', mb: '2rem' }}>
-          You have no items in your {name}.
-          <br /> Let's go buy something!
+          {t('YouHaveNoItemsInYour')} {name}.
+          <br /> {t('LetsGoBuySomething')}!
         </Typography>
         <Link to={`${window.origin}/products`}>
           <StyledButton className='button' onClick={() => dispatch(closeDrawer())}>
-            SHOP NOW
+            {t('SHOP_NOW')}
           </StyledButton>
         </Link>
       </Box>

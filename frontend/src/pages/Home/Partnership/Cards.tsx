@@ -1,6 +1,9 @@
 import { Grid, Theme, styled, useMediaQuery } from '@mui/material';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import { quotes } from './_data';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const GridItem = styled('div')(({ theme }) => ({
   background: 'white',
@@ -83,6 +86,8 @@ const Cards = () => {
   const matchesXS = useMediaQuery((theme: Theme) => theme.breakpoints.up(0));
   const matchesSM = useMediaQuery((theme: Theme) => theme.breakpoints.up(600));
   const matchesMD = useMediaQuery((theme: Theme) => theme.breakpoints.up(900));
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   let cols: number;
   if (matchesXS) cols = 12;
@@ -96,16 +101,16 @@ const Cards = () => {
           <GridItem>
             <img src={q.img} />
             <div className='content'>
-              <p className='title'>{q.title}</p>
+              <p className='title'>{t(`${q.title}`)}</p>
               <div className='quote'>
                 <p>
                   <FormatQuoteIcon className='quoteIcon' />
-                  {q.quote}
+                  {lang == 'ar' ? q.quote2 : q.quote}
                   <br /> <span className='saidBy'>{q.saidBy}</span>
                 </p>
               </div>
             </div>
-            <p className='footer'>{q.title}</p>
+            <p className='footer'>{t(`${q.title}`)}</p>
           </GridItem>
         </Grid>
       ))}

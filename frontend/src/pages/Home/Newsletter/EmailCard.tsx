@@ -2,10 +2,12 @@ import { IconButton, InputBase, Typography, styled } from '@mui/material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import EastIcon from '@mui/icons-material/East';
 import emailjs from '@emailjs/browser';
-import { FormEvent, MutableRefObject, useRef } from 'react';
+import { FormEvent, MutableRefObject, useContext, useRef } from 'react';
 import { useAppDispatch } from '../../../app/store';
 import { openToast } from '../../../app/features/toastSlice';
 import Toast from '../../../components/Toasts/Toast';
+import { useTranslation } from 'react-i18next';
+import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const Card = styled('div')(({ theme }) => ({
   background: '#E9E8E6',
@@ -74,6 +76,8 @@ const Card = styled('div')(({ theme }) => ({
 const EmailCard = () => {
   const form: MutableRefObject<HTMLFormElement> | undefined = useRef(undefined!);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -85,7 +89,7 @@ const EmailCard = () => {
           dispatch(
             openToast({
               type: 'success',
-              message: 'You have subscribed successfully!',
+              message: t('YouHaveSubscribedSuccessfully'),
             })
           );
         }
@@ -96,7 +100,7 @@ const EmailCard = () => {
           dispatch(
             openToast({
               type: 'error',
-              message: 'Some error happened!',
+              message: t('SomeErrorHappened'),
             })
           );
       }
@@ -108,8 +112,8 @@ const EmailCard = () => {
       <div className='mailBox'>
         <img src='/assets/home/pattern.png' />
         <div className='mailForm'>
-          <Typography variant='h2' sx={{ mb: '4rem' }}>
-            <span className='grayTxt'>Join the</span> <br /> Newsletter
+          <Typography variant='h2' sx={{ mb: '4rem', textAlign: lang == 'ar' ? 'right' : 'auto' }}>
+            <span className='grayTxt'>{t('JoinThe')}</span> <br /> {t('Newsletter')}
             <span className='grayTxt'>!</span>
           </Typography>
           <form className='textField' ref={form} onSubmit={sendEmail}>
@@ -130,7 +134,7 @@ const EmailCard = () => {
             <InputBase
               sx={{ ml: 1, flex: 1, background: 'white', width: '70%', mr: '10px' }}
               required
-              placeholder='Your E-mail Address'
+              placeholder={t('YourEmailAddress')}
               type='email'
               name='user_email'
               inputProps={{ 'aria-label': 'Your E-mail Address' }}

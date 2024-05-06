@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PageContainer from '../../components/PageContainer';
 import useAuth from '../../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
@@ -27,6 +27,8 @@ import { useAppDispatch } from '../../app/store';
 import { openToast } from '../../app/features/toastSlice';
 import Button from '../../components/AsideDrawer/Button';
 import { Spinner } from '../../components/Spinners';
+import { useTranslation } from 'react-i18next';
+import { LocaleContext } from '../../contexts/locale/LocaleContext';
 
 const Header = styled('div')({
   display: 'flex',
@@ -51,6 +53,8 @@ const MyAccount = () => {
   const [paymentIntents, setPaymentIntents] = useState<AxiosResponse>();
   const [cancelLoading, setCancelLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   useEffect(() => {
     if (!activeUser) navigate('/login', { replace: true });
@@ -96,7 +100,7 @@ const MyAccount = () => {
       );
       refetch();
       if (paymentIntentsCancel.data.status == 'succeeded')
-        dispatch(openToast({ type: 'success', message: 'The order has been canceled!' }));
+        dispatch(openToast({ type: 'success', message: t('CanceledOrder') }));
     } catch (error) {
       console.error('Error canceling PaymentIntent:', error);
       if (axios.isAxiosError(error))
@@ -120,11 +124,11 @@ const MyAccount = () => {
 
   return (
     <PageContainer>
-      <Header>
+      <Header style={lang == 'ar' ? { flexDirection: 'row-reverse' } : {}}>
         <Typography variant='h5' className='welcome'>
-          Welcome, {activeUser && activeUser?.user.username} 👋
+          {t('Welcome')}, {activeUser && activeUser?.user.username} 👋
         </Typography>
-        <Tooltip title='Logout'>
+        <Tooltip title={t('Logout')}>
           <IconButton sx={{ border: '2px solid white' }} onClick={handleLogout}>
             <LogoutIcon className='logoutIcon' />
           </IconButton>
@@ -139,22 +143,25 @@ const MyAccount = () => {
               marginBottom: '2rem',
               display: 'flex',
               justifyContent: 'space-between',
+              flexDirection: lang == 'ar' ? 'row-reverse' : 'row',
             }}
           >
-            <span>my orders</span>
-            <span>{filteredOrders.length} orders</span>
+            <span>{t('MyOrders')}</span>
+            <span>
+              {filteredOrders.length} {t('Orders')}
+            </span>
           </Typography>
           {
             <TableContainer component={Paper}>
               <Table aria-label='customized table'>
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell align='center'>ORDER ID</StyledTableCell>
-                    <StyledTableCell align='center'>ITEMS</StyledTableCell>
-                    <StyledTableCell align='center'>STATUS</StyledTableCell>
-                    <StyledTableCell align='center'>AMOUNT</StyledTableCell>
-                    <StyledTableCell align='center'>CREATED AT</StyledTableCell>
-                    <StyledTableCell align='center'>CANCELATION</StyledTableCell>
+                    <StyledTableCell align='center'>{t('ORDER_ID')}</StyledTableCell>
+                    <StyledTableCell align='center'>{t('ITEMS')}</StyledTableCell>
+                    <StyledTableCell align='center'>{t('STATUS')}</StyledTableCell>
+                    <StyledTableCell align='center'>{t('AMOUNT')}</StyledTableCell>
+                    <StyledTableCell align='center'>{t('CREATED_AT')}</StyledTableCell>
+                    <StyledTableCell align='center'>{t('CANCELATION')}</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -178,7 +185,7 @@ const MyAccount = () => {
                         {new Date(order.attributes?.createdAt).toLocaleString()}
                       </StyledTableCell>
                       <StyledTableCell align='center'>
-                        <Tooltip title='Cancel order'>
+                        <Tooltip title={t('CancelOrder')}>
                           <IconButton
                             sx={{ border: '2px solid white' }}
                             onClick={() =>
@@ -203,11 +210,11 @@ const MyAccount = () => {
       ) : (
         <>
           <Typography variant='h4' sx={{ color: 'white', marginTop: '8rem', textAlign: 'center' }}>
-            no orders yet!
+            {t('NoOrdersYet')}
           </Typography>
           <Link to={`${window.origin}/products`} style={{ textDecoration: 'none' }}>
             <Button className='button' sx={{ margin: '4rem auto', display: 'block' }}>
-              START SHOPPING
+              {t('START_SHOPPING')}
             </Button>
           </Link>
         </>

@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../app/store';
 import useAuth from '../../hooks/useAuth';
 import { useEffect } from 'react';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useTranslation } from 'react-i18next';
 
 const FullScreenNavMenu = () => {
   const matchesFullScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up(1150));
@@ -21,6 +22,7 @@ const FullScreenNavMenu = () => {
   const { activeUser } = useAuth();
   const { getLatestStoredValue } = useSessionStorage('wishlistProducts');
   const { getLatestStoredValue: getLatestStoredCartValue } = useSessionStorage('cartProducts');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!activeUser)
@@ -47,6 +49,7 @@ const FullScreenNavMenu = () => {
         <Link to='/account'>
           <StyledButton
             sx={{
+              width: '112px',
               p: '0.3rem 1.8rem',
               ml: 2,
               mr: 2,
@@ -59,7 +62,7 @@ const FullScreenNavMenu = () => {
             component={motion.button}
             whileTap={{ scale: 0.95 }}
           >
-            My Account
+            {t('MyAccount')}
           </StyledButton>
         </Link>
       )}

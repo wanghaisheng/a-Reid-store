@@ -1,6 +1,7 @@
 import { Typography, styled } from '@mui/material';
 import AccessAlarmTwoToneIcon from '@mui/icons-material/AccessAlarmTwoTone';
 import AutoAwesomeTwoToneIcon from '@mui/icons-material/AutoAwesomeTwoTone';
+import { useTranslation } from 'react-i18next';
 
 const StyledHeadline = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -75,23 +76,25 @@ const StyledHeadline = styled('div')(({ theme }) => ({
 }));
 
 const Headline = () => {
+  const { t } = useTranslation();
+
   return (
     <StyledHeadline>
       <AccessAlarmTwoToneIcon className='alarmIcon' sx={{ color: '#df3a3a' }} />
       <Typography variant='body1' className='label'>
-        We wanna tell you that
+        {t('WeWannaTellYouThat')}
       </Typography>
       <Typography variant='h3' className='subTitle1'>
-        It's time
+        {t('ItIsTime')}
       </Typography>
       <Typography variant='h3' className='subTitle2'>
-        to love
+        {t('toLove')}
       </Typography>
       <Typography variant='h2' className='title1'>
-        Your
+        {t('Your')}
       </Typography>
       <Typography variant='h2' className='title2'>
-        style!
+        {t('style')}!
       </Typography>
       <AutoAwesomeTwoToneIcon className='autoAwesome' sx={{ color: 'secondary.main' }} />
     </StyledHeadline>

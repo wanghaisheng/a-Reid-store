@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { styled } from '@mui/material';
 import StyledButton from '../../../components/Buttons/StyledButton';
 import StyledNavButton from './StyledNavButton';
+import { useTranslation } from 'react-i18next';
 
 const StyledContainer = styled('div')({
   display: 'flex',
@@ -14,6 +15,8 @@ const StyledContainer = styled('div')({
 });
 
 const HeroNavLinks = () => {
+  const { t } = useTranslation();
+
   return (
     <StyledContainer>
       <Link to='/'>
@@ -29,27 +32,27 @@ const HeroNavLinks = () => {
           }}
           variant='contained'
         >
-          Home
+          {t('Home')}
         </StyledButton>
       </Link>
       <Link to='/products'>
         <StyledNavButton zIndex={4} x={25} rotate={5}>
-          Products
+          {t('Products')}
         </StyledNavButton>
       </Link>
       <Link to='/partnership'>
         <StyledNavButton zIndex={3} x={0} rotate={-3}>
-          Partnership
+          {t('Partnership')}
         </StyledNavButton>
       </Link>
       <Link to='/about'>
         <StyledNavButton zIndex={2} x={25} rotate={-10}>
-          About us
+          {t('AboutUs')}
         </StyledNavButton>
       </Link>
       <Link to='/contact'>
         <StyledNavButton zIndex={1} x={0} rotate={3}>
-          Contact us
+          {t('ContactUs')}
         </StyledNavButton>
       </Link>
     </StyledContainer>

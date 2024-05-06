@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import { useAsideDrawer } from '../../../hooks/useAsideDrawer';
 import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useTranslation } from 'react-i18next';
 
 type ProductSliderProps = {
   productsData: {
@@ -33,6 +34,7 @@ const ProductsSlider = ({ productsData }: ProductSliderProps) => {
   const { activeUser } = useAuth();
   const { handleProduct } = useAsideDrawer();
   const { setValue } = useSessionStorage('cartProducts');
+  const { t } = useTranslation();
 
   const handleSlickGoTo = (e: React.MouseEvent<HTMLElement>) => {
     const index = (e.target as HTMLElement).closest('.slick-slide')?.getAttribute('data-index');
@@ -154,7 +156,7 @@ const ProductsSlider = ({ productsData }: ProductSliderProps) => {
             whileTap={{ scale: 0.95 }}
             onClick={navigateToProductPage}
           >
-            Product Details
+            {t('ProductDetails')}
           </Button>
         </div>
         <div className='SlideButtons'>

@@ -3,9 +3,11 @@ import { useAppDispatch } from '../app/store';
 import { openToast } from '../app/features/toastSlice';
 import { useCallback, useEffect } from 'react';
 import { setSessionCounters, fireTrigger } from '../app/features/drawerSlice';
+import { useTranslation } from 'react-i18next';
 
 export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const getLatestStoredValue = useCallback(
     (key: string) => {
@@ -53,8 +55,8 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
           openToast({
             type: 'success',
             iconName: undefined,
-            message: `${sessionProduct.attributes?.name} is added to ${
-              key == 'wishlistProducts' ? 'wishlist' : 'cart'
+            message: `${sessionProduct.attributes?.name} ${t('Is')} ${t('AddedTo')} ${
+              key == 'wishlistProducts' ? t('wishlist') : t('cart')
             }!`,
           })
         );
@@ -66,7 +68,9 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
             openToast({
               type: 'success',
               iconName: undefined,
-              message: `${sessionProduct.attributes?.name} is added to cart!`,
+              message: `${sessionProduct.attributes?.name} ${t('Is')} ${t('AddedTo')} ${t(
+                'cart'
+              )}!`,
             })
           );
         } else {
@@ -75,8 +79,8 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
             openToast({
               type: 'success',
               iconName: 'HighlightOffOutlinedIcon',
-              message: `${sessionProduct.attributes?.name} is removed from ${
-                key == 'wishlistProducts' ? 'wishlist' : 'cart'
+              message: `${sessionProduct.attributes?.name} ${t('Is')} ${t('RemovedFrom')} ${
+                key == 'wishlistProducts' ? t('wishlist') : t('cart')
               }!`,
             })
           );
@@ -109,8 +113,8 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
       openToast({
         type: 'success',
         iconName: 'HighlightOffOutlinedIcon',
-        message: `${sessionProduct.attributes?.name} is removed from ${
-          key == 'wishlistProducts' ? 'wishlist' : 'cart'
+        message: `${sessionProduct.attributes?.name} ${t('Is')} ${t('RemovedFrom')} ${
+          key == 'wishlistProducts' ? t('wishlist') : t('cart')
         }!`,
       })
     );

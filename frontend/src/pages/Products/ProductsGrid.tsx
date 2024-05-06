@@ -6,8 +6,10 @@ import StyledButton from '../../components/Buttons/StyledButton';
 import { useQuery } from '@apollo/client';
 import { CategoryEntity, Maybe, ProductEntity } from '../../gql/graphql';
 import { GET_CATEGORIES, GET_CATEGORY, PAGINATION } from '../../graphql/queries';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Spinner } from '../../components/Spinners';
+import { useTranslation } from 'react-i18next';
+import { LocaleContext } from '../../contexts/locale/LocaleContext';
 
 const StyledProductsGrid = styled('div')(({ theme }) => ({
   margin: '6rem auto',
@@ -30,6 +32,8 @@ const StyledProductsGrid = styled('div')(({ theme }) => ({
 const ProductsGrid = () => {
   const { loading, error, data: categoriesData } = useQuery(GET_CATEGORIES);
   const [categoryId, setCategoryId] = useState('1');
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   const PAGE_SIZE = 16;
 
@@ -74,14 +78,14 @@ const ProductsGrid = () => {
   return (
     <>
       <StyledProductsHeader>
-        <ul className='filterButtons'>
+        <ul className='filterButtons' style={lang == 'ar' ? { flexDirection: 'row-reverse' } : {}}>
           {categoriesData.categories.data.map((category: CategoryEntity) => (
             <li
               key={category.id}
               className={`filterItem ${category.id == categoryId ? 'active' : null}`}
               onClick={(e) => handleFilter(e, category.id)}
             >
-              <span>{category.attributes?.categoryName}</span>
+              <span>{t(`${category.attributes?.categoryName}`)}</span>
             </li>
           ))}
         </ul>
@@ -100,7 +104,7 @@ const ProductsGrid = () => {
           </IconButton>
           <InputBase
             sx={{ ml: 1, flex: 1, pr: '2rem' }}
-            placeholder='Search'
+            placeholder={t('Search')}
             inputProps={{ 'aria-label': 'search' }}
             onChange={(e) => getCategoryProducts({ name: e.target.value })}
           />
@@ -128,7 +132,7 @@ const ProductsGrid = () => {
               }}
               onClick={handleLoadMore}
             >
-              LOAD MORE
+              {t('LOAD_MORE')}
             </StyledButton>
           </div>
         )}

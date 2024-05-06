@@ -3,9 +3,11 @@ import StyledButton from '../../../components/Buttons/StyledButton';
 import ProductsSlider from './ProductsSlider';
 import { useQuery } from '@apollo/client';
 import { GET_CATEGORIES, GET_CATEGORY } from '../../../graphql/queries';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useState, useContext } from 'react';
 import { CategoryEntity, Maybe } from '../../../gql/graphql';
 import { Spinner } from '../../../components/Spinners';
+import { useTranslation } from 'react-i18next';
+import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const StyledContainer = styled('div')(({ theme }) => ({
   overflow: 'hidden',
@@ -34,6 +36,8 @@ const FilterButton = styled(StyledButton)({
 const Products = () => {
   const { loading, error, data: categoriesData } = useQuery(GET_CATEGORIES);
   const [categoryId, setCategoryId] = useState('1');
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   const PAGE_SIZE = 100;
 
@@ -65,16 +69,16 @@ const Products = () => {
     <StyledContainer>
       <div className='content'>
         <Typography variant='h3' color='black' sx={{ textAlign: 'center', lineHeight: 1 }}>
-          Our Lovely
+          {t('OurLovely')}
           <br />
-          Products
+          {t('Products')}
         </Typography>
         <Box
           sx={{
             margin: '4rem auto 0',
             padding: '1rem',
             display: 'flex',
-            flexFlow: 'row wrap',
+            flexFlow: lang == 'ar' ? 'row-reverse wrap' : 'row wrap',
             justifyContent: 'space-evenly',
             maxWidth: '850px',
           }}
@@ -84,8 +88,9 @@ const Products = () => {
               key={category.id}
               className={`filterItem ${category.id == categoryId ? 'active' : null}`}
               onClick={(e) => handleFilter(e, category.id)}
+              style={{ width: lang == 'ar' ? 'auto' : '13.1rem' }}
             >
-              <span>{category.attributes?.categoryName}</span>
+              <span>{t(`${category.attributes?.categoryName}`)}</span>
             </FilterButton>
           ))}
         </Box>

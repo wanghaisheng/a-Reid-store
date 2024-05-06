@@ -1,6 +1,9 @@
 import { Container, Theme, styled, useMediaQuery } from '@mui/material';
 import { NavLink, useLocation } from 'react-router-dom';
 import useAppBarStyleOnScroll from './useAppBarStyleOnScroll';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../contexts/locale/LocaleContext';
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
   color: 'white',
@@ -58,29 +61,31 @@ const FullScreenNavLinks = () => {
   // Don't show when seeing the home page hero section,
   // and display the alternative nav instead.
   const ShowInCaseNotHomePage = !(pathname == '/' && scrollPosition == 0);
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   return (
     ShowInCaseNotHomePage && (
-      <Container maxWidth='sm' sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
+      <Container maxWidth='sm' sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexDirection: lang == 'ar'? 'row-reverse': 'row' }}>
         <StyledNavLink to='/'>
-          <span>Home</span>
+          <span>{t('Home')}</span>
         </StyledNavLink>
         {!matchesFullScreen && (
           <StyledNavLink to='/account'>
-            <span>My account</span>
+            <span>{t('MyAccount')}</span>
           </StyledNavLink>
         )}
         <StyledNavLink to='/products'>
-          <span>Products</span>
+          <span>{t('Products')}</span>
         </StyledNavLink>
         <StyledNavLink to='/partnership'>
-          <span>Partnership</span>
+          <span>{t('Partnership')}</span>
         </StyledNavLink>
         <StyledNavLink to='/about'>
-          <span>About us</span>
+          <span>{t('AboutUs')}</span>
         </StyledNavLink>
         <StyledNavLink to='/contact'>
-          <span>Contact us</span>
+          <span>{t('ContactUs')}</span>
         </StyledNavLink>
       </Container>
     )

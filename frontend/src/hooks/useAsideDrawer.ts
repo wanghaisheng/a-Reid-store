@@ -4,6 +4,7 @@ import { PRODUCTS_ITEMS_COUNT, UPDATE_PRODUCT } from '../graphql/queries';
 import { openToast } from '../app/features/toastSlice';
 import { Maybe } from '../gql/graphql';
 import useAuth from './useAuth';
+import { useTranslation } from 'react-i18next';
 
 export const useAsideDrawer = () => {
   const dispatch = useAppDispatch();
@@ -11,6 +12,7 @@ export const useAsideDrawer = () => {
     onCompleted: (data) => handleToastMessage(data),
   });
   const { activeUser } = useAuth();
+  const { t } = useTranslation();
 
   const { data: wishlistCounter, refetch: getWishlistCounter } = useQuery(PRODUCTS_ITEMS_COUNT, {
     variables: { isLiked: { eq: true } },
@@ -38,9 +40,13 @@ export const useAsideDrawer = () => {
     if (dataExists) {
       let message = '';
       if (target == 'wishlist')
-        message = `${productName} is ${isLiked ? 'added to' : 'removed from'} ${target}!`;
+        message = `${productName} ${t('Is')} ${isLiked ? t('AddedTo') : t('RemovedFrom')} ${t(
+          target
+        )}!`;
       if (target == 'cart')
-        message = `${productName} is ${isAddedToCart ? 'added to' : 'removed from'} ${target}!`;
+        message = `${productName} ${t('Is')} ${isAddedToCart ? t('AddedTo') : t('RemovedFrom')} ${t(
+          target
+        )}!`;
 
       dispatch(
         openToast({
@@ -52,9 +58,7 @@ export const useAsideDrawer = () => {
     }
 
     if (!dataExists) {
-      dispatch(
-        openToast({ type: 'error', message: 'Product does not exist, or some error happens!' })
-      );
+      dispatch(openToast({ type: 'error', message: t('ProductDoesNotExist') }));
     }
 
     getCartCounter();

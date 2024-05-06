@@ -11,10 +11,12 @@ import Toast from '../../components/Toasts/Toast';
 import { useAppDispatch } from '../../app/store';
 import { openToast } from '../../app/features/toastSlice';
 import StyledContactPage from './StyledContactPage';
+import { useTranslation } from 'react-i18next';
 
 const ContactUs = () => {
   const form: MutableRefObject<HTMLFormElement> | undefined = useRef(undefined!);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ const ContactUs = () => {
           dispatch(
             openToast({
               type: 'success',
-              message: 'Your message sent successfully!',
+              message: t('YourMessageSentSuccessfully'),
             })
           );
         }
@@ -37,7 +39,7 @@ const ContactUs = () => {
           dispatch(
             openToast({
               type: 'error',
-              message: 'Some error happened!',
+              message: t('SomeErrorHappened'),
             })
           );
       }
@@ -54,19 +56,19 @@ const ContactUs = () => {
                 variant='h5'
                 sx={{ fontSize: '3rem !important', fontWeight: 'bold', color: 'white' }}
               >
-                Send Us A Message
+                {t('SendUsAMessage')}
               </Typography>
               <TextField
                 required
                 id='outlined-required'
-                label='Your Email Address'
+                label={t('YourEmailAddress')}
                 type='email'
                 name='user_email'
                 sx={{ width: '100%' }}
               />
               <TextField
                 id='outlined-multiline-static'
-                label='How Can We Help?'
+                label={t('HowCanWeHelp')}
                 type='text'
                 name='user_message'
                 multiline
@@ -80,7 +82,7 @@ const ContactUs = () => {
                 component={motion.button}
                 whileTap={{ scale: 0.95 }}
               >
-                Submit
+                {t('Submit')}
               </StyledButton>
             </form>
           </div>
@@ -88,7 +90,7 @@ const ContactUs = () => {
             <div className='address'>
               <div className='title'>
                 <LocationOnOutlinedIcon />
-                <p>Address</p>
+                <p>{t('Address')}</p>
               </div>
               <p className='text'>
                 Coza Store Center 8th floor, 379 Hudson St, New York, NY 10018 US
@@ -97,14 +99,14 @@ const ContactUs = () => {
             <div className='talk'>
               <div className='title'>
                 <LocalPhoneOutlinedIcon />
-                <p>Lets Talk</p>
+                <p>{t('LetsTalk')}</p>
               </div>
               <p className='text'>+1 800 1236879</p>
             </div>
             <div className='support'>
               <div className='title'>
                 <EmailOutlinedIcon />
-                <p>Sale Support</p>
+                <p>{t('SaleSupport')}</p>
               </div>
               <p className='text'>contact@example.com</p>
             </div>
@@ -115,7 +117,7 @@ const ContactUs = () => {
           <br />
           <small className='mapBtn'>
             <a href='https://www.openstreetmap.org/#map=10/30.0346/31.3934' target='_blank'>
-              <StyledButton>View Larger Map</StyledButton>
+              <StyledButton>{t('ViewLargerMap')}</StyledButton>
             </a>
           </small>
         </div>

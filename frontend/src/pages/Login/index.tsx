@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { StyledForm } from '../SignUp';
 import PageContainer from '../../components/PageContainer';
 import { Spinner } from '../../components/Spinners';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -19,6 +20,7 @@ const Login = () => {
   const { activeUser, loginUser, loginLoading, loginError } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (loginError) dispatch(openToast({ type: 'error', message: loginError.message }));
@@ -46,12 +48,12 @@ const Login = () => {
           variant='h5'
           sx={{ fontSize: '3rem !important', fontWeight: 'bold', color: 'white' }}
         >
-          Login
+          {t('Login')}
         </Typography>
         <TextField
           required
           id='outlined-required'
-          label='Email'
+          label={t('Email')}
           type='email'
           name='identifier'
           value={user.identifier}
@@ -61,7 +63,7 @@ const Login = () => {
         <TextField
           required
           id='outlined-required'
-          label='Password'
+          label={t('Password')}
           type='password'
           name='password'
           value={user.password}
@@ -74,10 +76,10 @@ const Login = () => {
           component={motion.button}
           whileTap={{ scale: 0.95 }}
         >
-          Login
+          {t('Login')}
         </StyledButton>
         <span className='question'>
-          Don't have an account? <Link to='/sign-up'>Sign Up</Link>
+          {t('DoNotHaveAnAccount')} <Link to='/sign-up'>{t('SignUp')}</Link>
         </span>
       </StyledForm>
       <Toast />

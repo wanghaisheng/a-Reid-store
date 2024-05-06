@@ -1,6 +1,9 @@
 import { Container, styled } from '@mui/material';
 import { Link } from 'react-router-dom';
 import SiteLogo from '../Header/SiteLogo';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../contexts/locale/LocaleContext';
 
 const TopFooter = styled('div')(({ theme }) => ({
   width: '85%',
@@ -51,6 +54,9 @@ const BottomFooterContainer = styled(TopFooter)(({ theme }) => ({
 }));
 
 const Footer = () => {
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
+
   return (
     <div style={{ marginTop: 'auto' }}>
       <Container maxWidth='lg' disableGutters>
@@ -58,25 +64,28 @@ const Footer = () => {
           <div onClick={() => window.scrollTo(0, 0)}>
             <SiteLogo />
           </div>
-          <NavLinks>
+          <NavLinks style={lang == 'ar' ? { flexDirection: 'row-reverse' } : {}}>
             <Link to='/' onClick={() => window.scrollTo(0, 0)}>
-              Home
+              {t('Home')}
             </Link>
-            <Link to='/products'>Products</Link>
-            <Link to='/partnership'>Partnership</Link>
-            <Link to='/about'>About us</Link>
-            <Link to='/contact'>Contact us</Link>
+            <Link to='/products'>{t('Products')}</Link>
+            <Link to='/partnership'>{t('Partnership')}</Link>
+            <Link to='/about'>{t('AboutUs')}</Link>
+            <Link to='/contact'>{t('ContactUs')}</Link>
           </NavLinks>
         </TopFooter>
       </Container>
       <BottomFooter>
         <BottomFooterContainer>
-          <NavLinks className='terms'>
+          <NavLinks
+            className='terms'
+            style={lang == 'ar' ? { flexDirection: 'row-reverse', justifyContent: 'flex-end' } : {}}
+          >
             <Link to='/' onClick={() => window.scrollTo(0, 0)}>
-              Terms & Conditions
+              {t('Terms&Conditions')}
             </Link>
             <Link to='/' onClick={() => window.scrollTo(0, 0)}>
-              Privacy Policy
+              {t('PrivacyPolicy')}
             </Link>
           </NavLinks>
           <div>&copy; 2024, Shaher Ashraf</div>

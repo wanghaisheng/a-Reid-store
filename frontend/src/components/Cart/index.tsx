@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { ProductEntity } from '../../gql/graphql';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useTranslation } from 'react-i18next';
 
 const Cart = () => {
   const { handleProduct } = useAsideDrawer();
@@ -20,6 +21,7 @@ const Cart = () => {
   });
   const { activeUser } = useAuth();
   const { getLatestStoredValue, removeSessionProduct } = useSessionStorage('cartProducts');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (open) refetch();
@@ -41,14 +43,14 @@ const Cart = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return false;
   if (error) return <p>Error : {error.message}</p>;
 
   return (
     <AsideDrawer>
-      <Header title='YOUR CART' />
+      <Header title={t('YOUR_CART')} />
       <Body
-        name='shopping cart'
+        name={t('ShoppingCart2')}
         products={activeUser ? data.products.data : getLatestStoredValue('cartProducts').data}
         handleRemoveProduct={handleRemoveProduct}
       />

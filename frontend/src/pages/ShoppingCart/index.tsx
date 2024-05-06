@@ -14,6 +14,7 @@ import Toast from '../../components/Toasts/Toast';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { Spinner } from '../../components/Spinners';
+import { useTranslation } from 'react-i18next';
 
 export const PageWrapper = styled('div')(({ theme }) => ({
   display: 'grid',
@@ -61,6 +62,7 @@ const ShoppingCart = () => {
   const [open, setOpen] = useState(true);
   const { activeUser } = useAuth();
   const { getLatestStoredValue, removeSessionProduct } = useSessionStorage('cartProducts');
+  const { t } = useTranslation();
 
   const handleClose = () => {
     setOpen(false);
@@ -101,7 +103,7 @@ const ShoppingCart = () => {
       <PageWrapper>
         {(activeUser && !data.products.data.length) ||
         (!activeUser && !getLatestStoredValue('cartProducts').data.length) ? (
-          <Empty name='shopping cart' />
+          <Empty name={t('ShoppingCart2')} />
         ) : (
           <>
             <CartTable
@@ -118,8 +120,8 @@ const ShoppingCart = () => {
             onClick={handleClose}
           >
             <Alert severity='success'>
-              <AlertTitle>Success</AlertTitle>
-              The payment has been Succeed! 🎉🤗
+              <AlertTitle>{t('Success')}</AlertTitle>
+              {t('ThePaymentHasBeenSucceed')} 🎉🤗
             </Alert>
           </Backdrop>
         )}
@@ -130,8 +132,8 @@ const ShoppingCart = () => {
             onClick={handleClose}
           >
             <Alert severity='error'>
-              <AlertTitle>Error</AlertTitle>
-              The payment has been Canceled! 😒
+              <AlertTitle>{t('Error')}</AlertTitle>
+              {t('ThePaymentHasBeenCanceled')} 😒
             </Alert>
           </Backdrop>
         )}

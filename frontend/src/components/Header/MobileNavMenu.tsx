@@ -4,6 +4,7 @@ import MenuItemEl from './MenuItemEl';
 import { motion } from 'framer-motion';
 import MenuToggleIcon from './MenuToggleIcon';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 type StyledNavLinkProps = {
   path: string;
@@ -28,6 +29,7 @@ const StyledNavLink = ({ path, targetName, onClose }: StyledNavLinkProps) => {
 const MobileNavMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { t } = useTranslation();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -83,14 +85,14 @@ const MobileNavMenu = () => {
           },
         }}
       >
-        <StyledNavLink path='/' targetName='Home' onClose={handleClose} />
-        <StyledNavLink path='/account' targetName='My account' onClose={handleClose} />
-        <StyledNavLink path='/products' targetName='Products' onClose={handleClose} />
-        <StyledNavLink path='/shopping-cart' targetName='Shopping cart' onClose={handleClose} />
-        <StyledNavLink path='/wishlist' targetName='Wishlist' onClose={handleClose} />
-        <StyledNavLink path='/partnership' targetName='Partnership' onClose={handleClose} />
-        <StyledNavLink path='/about' targetName='About us' onClose={handleClose} />
-        <StyledNavLink path='/contact' targetName='Contact us' onClose={handleClose} />
+        <StyledNavLink path='/' targetName={t('Home')} onClose={handleClose} />
+        <StyledNavLink path='/account' targetName={t('MyAccount')} onClose={handleClose} />
+        <StyledNavLink path='/products' targetName={t('Products')} onClose={handleClose} />
+        <StyledNavLink path='/shopping-cart' targetName={t('ShoppingCart')} onClose={handleClose} />
+        <StyledNavLink path='/wishlist' targetName={t('Wishlist')} onClose={handleClose} />
+        <StyledNavLink path='/partnership' targetName={t('Partnership')} onClose={handleClose} />
+        <StyledNavLink path='/about' targetName={t('AboutUs')} onClose={handleClose} />
+        <StyledNavLink path='/contact' targetName={t('ContactUs')} onClose={handleClose} />
       </Menu>
     </>
   );

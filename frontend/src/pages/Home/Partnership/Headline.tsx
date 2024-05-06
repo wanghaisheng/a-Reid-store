@@ -1,6 +1,9 @@
 import { Typography, styled } from '@mui/material';
 import StyledButton from '../../../components/Buttons/StyledButton';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const StyledHeadline = styled('div')(({ theme }) => ({
   textAlign: 'center',
@@ -24,6 +27,9 @@ const StyledHeadline = styled('div')(({ theme }) => ({
 }));
 
 const Headline = () => {
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
+
   return (
     <StyledHeadline>
       <Link to='/partnership'>
@@ -34,15 +40,18 @@ const Headline = () => {
             '&:hover': { outline: '2px solid white' },
           }}
         >
-          Become A Partner
+          {t('BecomeAPartner')}
         </StyledButton>
       </Link>
       <div className='title'>
         <img src='/assets/home/shakeHands.png' />
-        <Typography variant='h3' sx={{ textAlign: 'left', color: 'primary.light' }}>
-          WE ARE EAGER TO
+        <Typography
+          variant='h3'
+          sx={{ textAlign: lang == 'ar' ? 'right' : 'left', color: 'primary.light' }}
+        >
+          {t('WE_ARE_EAGER_TO')}
           <br />
-          SHAKE YOUR <span className='handsWord'>HANDS</span>!
+          {t('SHAKE_YOUR')} <span className='handsWord'>{t('HANDS')}</span>!
         </Typography>
       </div>
     </StyledHeadline>

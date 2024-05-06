@@ -14,6 +14,7 @@ import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { ProductEntity } from '../../gql/graphql';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import useAuth from '../../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
 
 const WishlistAside = () => {
   const { handleProduct } = useAsideDrawer();
@@ -25,6 +26,7 @@ const WishlistAside = () => {
   const { activeUser } = useAuth();
   const { getLatestStoredValue, removeSessionProduct } = useSessionStorage('wishlistProducts');
   const { setValue } = useSessionStorage('cartProducts');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (open) refetch();
@@ -67,13 +69,13 @@ const WishlistAside = () => {
     dispatch(closeDrawer());
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return false;
   if (error) return <p>Error : {error.message}</p>;
 
   const OrderButton = () => (
     <Box sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
       <Link to='shopping-cart'>
-        <Button onClick={handleOrder}>ORDER NOW</Button>
+        <Button onClick={handleOrder}>{t('ORDER_NOW')}</Button>
       </Link>
     </Box>
   );
@@ -81,9 +83,9 @@ const WishlistAside = () => {
   return (
     data && (
       <AsideDrawer>
-        <Header title='YOUR WISHLIST' />
+        <Header title={t('YOUR_WISHLIST')} />
         <Body
-          name='wishlist'
+          name={t('wishlist')}
           products={activeUser ? data.products.data : getLatestStoredValue('wishlistProducts').data}
           handleRemoveProduct={handleRemoveProduct}
           cartIcon={true}

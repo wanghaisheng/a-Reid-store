@@ -1,4 +1,7 @@
 import { styled } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const StyledGridItemContainerOne = styled('div')(({ theme }) => ({
   textAlign: 'center',
@@ -153,20 +156,20 @@ const StyledGridItemContainerThree = styled(StyledGridItemContainerTwo)(({ theme
   '& p': {
     textAlign: 'left',
     position: 'relative',
-    top: '-64rem',
+    top: '-60rem',
     left: '-5rem',
     [theme.breakpoints.up('sm')]: {
       left: '-25rem',
     },
     [theme.breakpoints.up('md')]: {
       left: '-15rem',
-      top: '12rem',
+      top: '14rem',
     },
   },
   '& .Img3': {
     rotate: '-45deg',
     left: '-5rem',
-    top: '-64rem',
+    top: '-55rem',
     [theme.breakpoints.up('md')]: {
       left: '0rem',
       top: '12rem',
@@ -187,9 +190,11 @@ const StyledGridItemContainerThree = styled(StyledGridItemContainerTwo)(({ theme
 }));
 
 export const GridItemContainerOne = () => {
+  const { t } = useTranslation();
+
   return (
     <StyledGridItemContainerOne>
-      <p>Just dress and walk</p>
+      <p>{t('JustDress&Walk')}</p>
       <div className='ImagesContainer'>
         <img src='/assets/home/thumb-1.jpg' className='Img1' />
         <img src='/assets/home/thumb-2.jpg' className='Img2' />
@@ -201,6 +206,8 @@ export const GridItemContainerOne = () => {
 };
 
 export const GridItemContainerTwo = () => {
+  const { t } = useTranslation();
+
   return (
     <StyledGridItemContainerTwo>
       <div className='ImagesContainer'>
@@ -208,9 +215,9 @@ export const GridItemContainerTwo = () => {
         <img src='/assets/home/thumb-5.jpg' className='Img2' />
       </div>
       <p>
-        With all the best
+        {t('WithAllTheBest')}
         <br />
-        for any mood.
+        {t('ForAnyMood')}.
       </p>
       <div className='ImagesContainer'>
         <img src='/assets/home/thumb-6.jpg' className='Img3' />
@@ -221,16 +228,19 @@ export const GridItemContainerTwo = () => {
 };
 
 export const GridItemContainerThree = () => {
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
+
   return (
     <StyledGridItemContainerThree>
       <div className='ImagesContainer'>
         <img src='/assets/home/thumb-7.jpg' className='Img1' />
         <img src='/assets/home/thumb-8.jpg' className='Img2' />
       </div>
-      <p>
-        With all the love for any
+      <p style={lang == 'ar' ? { textAlign: 'right' } : {}}>
+        {t('WithAllTheLoveForAny')}
         <br />
-        dynamic lifestyle!
+        {t('DynamicLifestyle')}
       </p>
       <div className='ImagesContainer'>
         <img src='/assets/home/thumb-9.jpg' className='Img3' />

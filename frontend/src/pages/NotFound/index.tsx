@@ -2,9 +2,11 @@ import { Grid, Theme, Typography, useMediaQuery } from '@mui/material';
 import { Link } from 'react-router-dom';
 import StyledButton from '../../components/Buttons/StyledButton';
 import PageContainer from '../../components/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 const NotFound = () => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down(640));
+  const { t } = useTranslation();
 
   return (
     <PageContainer>
@@ -27,7 +29,7 @@ const NotFound = () => {
           }}
         >
           <Typography variant='h1' sx={{ color: 'white' }}>
-            Oops!
+            {t('Oops')}
           </Typography>
           <Typography
             variant='body1'
@@ -39,8 +41,7 @@ const NotFound = () => {
               fontSize: matches ? '1.8rem' : 'inherit',
             }}
           >
-            The page you are looking for might have been removed, had its name changed, or is
-            temporarily unavailable.
+            {t('NotFound')}
           </Typography>
           <Link to='/'>
             <StyledButton
@@ -52,7 +53,7 @@ const NotFound = () => {
                 },
               }}
             >
-              Home Page
+              {t('HomePage')}
             </StyledButton>
           </Link>
         </Grid>

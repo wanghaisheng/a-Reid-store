@@ -1,6 +1,7 @@
 import { useAnimate } from 'framer-motion';
 import { Card, CardImg, CardStatus, CardText } from './StyledProductCard';
 import { ProductEntity } from '../../../gql/graphql';
+import { useTranslation } from 'react-i18next';
 
 type ProductCardProps = {
   product: ProductEntity;
@@ -9,6 +10,7 @@ type ProductCardProps = {
 
 const ProductCard = ({ product, onGoTo }: ProductCardProps) => {
   const [scope, animate] = useAnimate();
+  const { t } = useTranslation();
 
   const handleAnimate = async (e: React.MouseEvent<HTMLElement>) => {
     await animate('.product-card', { scale: 0.9 });
@@ -28,7 +30,7 @@ const ProductCard = ({ product, onGoTo }: ProductCardProps) => {
           </h4>
           <p>$ {product.attributes?.price}</p>
         </CardText>
-        <CardStatus>new</CardStatus>
+        <CardStatus>{t('new')}</CardStatus>
       </Card>
     </div>
   );

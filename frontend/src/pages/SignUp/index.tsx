@@ -9,6 +9,7 @@ import StyledButton from '../../components/Buttons/StyledButton';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Spinner } from '../../components/Spinners';
+import { useTranslation } from 'react-i18next';
 
 export const StyledForm = styled('form')(({ theme }) => ({
   width: '350px',
@@ -59,6 +60,7 @@ const SignUp = () => {
   const { activeUser, registerUser, registerLoading, registerError } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (registerError) dispatch(openToast({ type: 'error', message: registerError.message }));
@@ -86,12 +88,12 @@ const SignUp = () => {
           variant='h5'
           sx={{ fontSize: '3rem !important', fontWeight: 'bold', color: 'white' }}
         >
-          Sign Up
+          {t('SignUp')}
         </Typography>
         <TextField
           required
           id='outlined-required'
-          label='Username'
+          label={t('Username')}
           type='username'
           name='username'
           value={user.username}
@@ -101,7 +103,7 @@ const SignUp = () => {
         <TextField
           required
           id='outlined-required'
-          label='Email'
+          label={t('Email')}
           type='email'
           name='email'
           value={user.email}
@@ -111,7 +113,7 @@ const SignUp = () => {
         <TextField
           required
           id='outlined-required'
-          label='Password'
+          label={t('Password')}
           type='password'
           name='password'
           value={user.password}
@@ -124,10 +126,10 @@ const SignUp = () => {
           component={motion.button}
           whileTap={{ scale: 0.95 }}
         >
-          Sign Up
+          {t('SignUp')}
         </StyledButton>
         <span className='question'>
-          Already have an account? <Link to='/login'>Login</Link>
+          {t('AlreadyHaveAnAccount')} <Link to='/login'>{t('Login')}</Link>
         </span>
       </StyledForm>
       <Toast />

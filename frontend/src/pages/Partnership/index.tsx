@@ -1,6 +1,9 @@
 import { Card, Typography, styled } from '@mui/material';
 import PageContainer from '../../components/PageContainer';
 import { partners } from './_data';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../contexts/locale/LocaleContext';
 
 const Container = styled('div')(({ theme }) => ({
   '& .grid': {
@@ -31,24 +34,41 @@ const Container = styled('div')(({ theme }) => ({
 }));
 
 const Partnership = () => {
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
+
   return (
     <PageContainer>
       <Container>
         <div className='text'>
-          <Typography variant='h2' sx={{ color: 'white', marginBottom: '2rem' }}>
-            Partners & Team
+          <Typography
+            variant='h2'
+            sx={{
+              color: 'white',
+              marginBottom: '2rem',
+              textAlign: lang == 'ar' ? 'right' : 'auto',
+            }}
+          >
+            {t('Partners&Team')}
           </Typography>
-          <Typography variant='h4' sx={{ color: 'white' }}>
-            Collaborative Excellence:
-            <br /> Building Bridges, Driving Success
+          <Typography
+            variant='h4'
+            sx={{ color: 'white', textAlign: lang == 'ar' ? 'right' : 'auto' }}
+          >
+            {t('CollaborativeExcellence')}
+            <br /> {t('BuildingBridgesDrivingSuccess')}
           </Typography>
           <Typography
             variant='body1'
-            sx={{ color: 'white', maxWidth: '600px', margin: '4rem 0', lineHeight: '2.8rem' }}
+            sx={{
+              color: 'white',
+              maxWidth: '600px',
+              margin: '4rem 0',
+              lineHeight: '2.8rem',
+              textAlign: lang == 'ar' ? 'right' : 'auto',
+            }}
           >
-            Empowering partnerships and fostering teamwork to achieve unparalleled excellence. Our
-            dedicated approach and shared vision create a synergy that fuels innovation and drives
-            sustainable success for all.
+            {t('EmpoweringPartnerships')}
           </Typography>
         </div>
         <div className='grid'>

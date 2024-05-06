@@ -2,6 +2,9 @@ import { Theme, styled, useMediaQuery } from '@mui/material';
 import Face4OutlinedIcon from '@mui/icons-material/Face4Outlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const Container = styled('div')(({ theme }) => ({
   margin: '2rem auto',
@@ -39,34 +42,36 @@ const Container = styled('div')(({ theme }) => ({
 
 const WhiteCards = () => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   return (
     <Container>
-      <div className='card'>
+      <div className='card' style={lang == 'ar' ? { textAlign: 'right' } : {}}>
         <div className='icon'>
           <Face4OutlinedIcon />
         </div>
         <p className='text'>
-          Communicate {matches && <br />}
-          with 100+ supporters.
+          {t('Communicate')} {matches && <br />}
+          {t('WithSupporters')}
         </p>
       </div>
-      <div className='card'>
+      <div className='card' style={lang == 'ar' ? { textAlign: 'right' } : {}}>
         <div className='icon'>
           <FavoriteBorderOutlinedIcon />
         </div>
         <p className='text'>
-          Entering the community of the
-          {matches && <br />} supporting fashioned people.
+          {t('EnteringTheCommunityOfThe')}
+          {matches && <br />} {t('FashionedPeople')}
         </p>
       </div>
-      <div className='card'>
+      <div className='card' style={lang == 'ar' ? { textAlign: 'right' } : {}}>
         <div className='icon'>
           <TipsAndUpdatesOutlinedIcon />
         </div>
         <p className='text'>
-          Information about the latest {matches && <br />}
-          achievements, ideas & products.
+          {t('InformationAboutTheLatest')} {matches && <br />}
+          {t('AchievementsIdeas&products')}
         </p>
       </div>
     </Container>

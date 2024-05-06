@@ -11,6 +11,7 @@ import CartTotals from '../ShoppingCart/CartTotals';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { Spinner } from '../../components/Spinners';
+import { useTranslation } from 'react-i18next';
 
 const Wishlist = () => {
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
@@ -19,6 +20,7 @@ const Wishlist = () => {
   const { wishlistCounter } = useAppSelector((store) => store.drawer);
   const { activeUser } = useAuth();
   const { getLatestStoredValue } = useSessionStorage('wishlistProducts');
+  const { t } = useTranslation();
 
   useEffect(() => {
     refetch();
@@ -32,7 +34,7 @@ const Wishlist = () => {
       <PageWrapper>
         {(activeUser && !data.products.data.length) ||
         (!activeUser && !getLatestStoredValue('wishlistProducts').data.length) ? (
-          <Empty name='wishlist' />
+          <Empty name={t('wishlist')} />
         ) : (
           <>
             <CartTable

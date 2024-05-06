@@ -1,5 +1,7 @@
 import { Container, Typography, styled } from '@mui/material';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const StyledSubHeadline = styled('div')(({ theme }) => ({
   color: 'white',
@@ -27,11 +29,14 @@ const StyledSubHeadline = styled('div')(({ theme }) => ({
 
 const SubHeadline = () => {
   const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   return (
     <Container maxWidth='md'>
       <StyledSubHeadline>
-        <Typography variant='body1'>{t('homePage.heroDesc')}</Typography>
+        <Typography variant='body1' sx={{ textAlign: lang == 'ar' ? 'right' : 'auto' }}>
+          {t('SubHeadline')}
+        </Typography>
       </StyledSubHeadline>
     </Container>
   );

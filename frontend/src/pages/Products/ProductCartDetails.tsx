@@ -24,6 +24,7 @@ import { GET_PRODUCT } from '../../graphql/queries';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { Spinner } from '../../components/Spinners';
+import { useTranslation } from 'react-i18next';
 
 const Container = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -48,6 +49,7 @@ const ProductCartDetails = ({ id }: { id: string }) => {
   const foundCartProduct = getLatestStoredCartValue('cartProducts').data?.find(
     (e: ProductEntity) => e.id == id
   );
+  const { t } = useTranslation();
 
   useEffect(() => {
     setSize(data.product.data.attributes?.size);
@@ -153,13 +155,13 @@ const ProductCartDetails = ({ id }: { id: string }) => {
             labelId='demo-simple-select-label'
             id='demo-simple-select'
             value={size!}
-            label='Size'
+            label={t('Size')}
             onChange={handleChangeSize}
           >
-            <MenuItem value='S'>Size S</MenuItem>
-            <MenuItem value='M'>Size M</MenuItem>
-            <MenuItem value='L'>Size L</MenuItem>
-            <MenuItem value='XL'>Size XL</MenuItem>
+            <MenuItem value='S'>{t('Size')} S</MenuItem>
+            <MenuItem value='M'>{t('Size')} M</MenuItem>
+            <MenuItem value='L'>{t('Size')} L</MenuItem>
+            <MenuItem value='XL'>{t('Size')} XL</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -170,13 +172,13 @@ const ProductCartDetails = ({ id }: { id: string }) => {
             labelId='demo-simple-select-label'
             id='demo-simple-select'
             value={color!}
-            label='Color'
+            label={t('Color')}
             onChange={handleChangeColor}
           >
-            <MenuItem value='Red'>Red</MenuItem>
-            <MenuItem value='Blue'>Blue</MenuItem>
-            <MenuItem value='White'>White</MenuItem>
-            <MenuItem value='Grey'>Grey</MenuItem>
+            <MenuItem value='Red'>{t('Red')}</MenuItem>
+            <MenuItem value='Blue'>{t('Blue')}</MenuItem>
+            <MenuItem value='White'>{t('White')}</MenuItem>
+            <MenuItem value='Grey'>{t('Grey')}</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -215,11 +217,11 @@ const ProductCartDetails = ({ id }: { id: string }) => {
       >
         {activeUser
           ? data.product.data.attributes?.isAddedToCart
-            ? 'UPDATE CART'
-            : 'ADD TO CART'
+            ? t('UPDATE_CART')
+            : t('ADD_TO_CART')
           : foundCartProduct
-          ? 'UPDATE CART'
-          : 'ADD TO CART'}
+          ? t('UPDATE_CART')
+          : t('ADD_TO_CART')}
       </StyledButton>
       {activeUser ? (
         <Box>

@@ -9,6 +9,7 @@ import { useCartInfo } from '../../hooks/useCartInfo';
 import { useCheckout } from '../../hooks/useCheckout';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useTranslation } from 'react-i18next';
 
 const CartFooter = () => {
   const dispatch = useAppDispatch();
@@ -19,18 +20,19 @@ const CartFooter = () => {
   const { handleCheckout } = useCheckout(data);
   const { activeUser } = useAuth();
   const { getLatestStoredValue } = useSessionStorage('cartProducts');
+  const { t } = useTranslation();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return false;
   if (error) return <p>Error : {error.message}</p>;
 
   const CartFooter = () => (
     <div className='cartFooter'>
       <Typography variant='h6' sx={{ fontWeight: 'bold', mb: '2rem' }}>
-        Total: ${total.toFixed(2)}
+        {t('Total')}: ${total.toFixed(2)}
       </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
         <Link to='shopping-cart'>
-          <Button onClick={() => dispatch(closeDrawer())}>VIEW CART</Button>
+          <Button onClick={() => dispatch(closeDrawer())}>{t('VIEW_CART')}</Button>
         </Link>
         <Button
           onClick={() => {
@@ -38,7 +40,7 @@ const CartFooter = () => {
             dispatch(closeDrawer());
           }}
         >
-          CHECKOUT
+          {t('CHECKOUT')}
         </Button>
       </Box>
     </div>

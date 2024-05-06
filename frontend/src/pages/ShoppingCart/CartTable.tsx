@@ -21,6 +21,9 @@ import { UPDATE_PRODUCT } from '../../graphql/queries';
 import ItemImage from './ItemImage';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../contexts/locale/LocaleContext';
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -50,6 +53,8 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
   const { getLatestStoredValue, setProductCounter } = useSessionStorage('cartProducts');
   const { getLatestStoredValue: getLatestStoredWishlistValue } =
     useSessionStorage('wishlistProducts');
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   let tableProducts;
   if (activeUser) tableProducts = products;
@@ -102,25 +107,34 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
           marginBottom: '2rem',
           display: 'flex',
           justifyContent: 'space-between',
+          flexDirection: lang == 'ar' ? 'row-reverse' : 'row',
         }}
       >
-        <span>Your {target == 'cart' ? 'shopping cart' : 'wishlist'}</span>
-        {activeUser && <span>{target == 'cart' ? cartCounter : wishlistCounter} items</span>}
+        <span>
+          {t('Your2')} {target == 'cart' ? t('ShoppingCart2') : t('wishlist')}
+        </span>
+        {activeUser && (
+          <span>
+            {target == 'cart' ? cartCounter : wishlistCounter} {t('Items')}
+          </span>
+        )}
         {!activeUser && (
-          <span>{target == 'cart' ? sessionCartCounter : sessionWishlistCounter} items</span>
+          <span>
+            {target == 'cart' ? sessionCartCounter : sessionWishlistCounter} {t('Items')}
+          </span>
         )}
       </Typography>
       <TableContainer component={Paper}>
         <Table aria-label='customized table'>
           <TableHead>
             <TableRow>
-              <StyledTableCell>PRODUCT</StyledTableCell>
-              <StyledTableCell align='center'>DESCRIPTION</StyledTableCell>
-              <StyledTableCell align='center'>SIZE</StyledTableCell>
-              <StyledTableCell align='center'>COLOR</StyledTableCell>
-              <StyledTableCell align='center'>QUANTITY</StyledTableCell>
-              <StyledTableCell align='center'>PRICE</StyledTableCell>
-              <StyledTableCell align='center'>TOTAL</StyledTableCell>
+              <StyledTableCell>{t('PRODUCT')}</StyledTableCell>
+              <StyledTableCell align='center'>{t('DESCRIPTION')}</StyledTableCell>
+              <StyledTableCell align='center'>{t('SIZE')}</StyledTableCell>
+              <StyledTableCell align='center'>{t('COLOR')}</StyledTableCell>
+              <StyledTableCell align='center'>{t('QUANTITY')}</StyledTableCell>
+              <StyledTableCell align='center'>{t('PRICE')}</StyledTableCell>
+              <StyledTableCell align='center'>{t('TOTAL')}</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>

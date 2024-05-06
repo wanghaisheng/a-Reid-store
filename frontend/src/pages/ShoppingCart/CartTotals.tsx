@@ -7,6 +7,9 @@ import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../contexts/locale/LocaleContext';
 
 export const StyledCartTotals = styled(Paper)({
   padding: '4rem',
@@ -37,6 +40,8 @@ const CartTotals = ({ data, target }: CartTotalsProps) => {
   const { activeUser } = useAuth();
   const { getLatestStoredValue } = useSessionStorage('wishlistProducts');
   const { setValue } = useSessionStorage('cartProducts');
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   const handleOrder = () => {
     if (activeUser) {
@@ -65,31 +70,32 @@ const CartTotals = ({ data, target }: CartTotalsProps) => {
         sx={{
           color: 'white',
           marginBottom: '2rem',
+          textAlign: lang == 'ar' ? 'right' : 'auto',
         }}
       >
-        {target == 'cart' ? 'cart totals' : 'totals'}
+        {target == 'cart' ? t('CartTotals') : t('Totals')}
       </Typography>
       <StyledCartTotals>
-        <div className='totalRow'>
-          <Typography variant='h4'>Subtotal:</Typography>
+        <div className='totalRow' style={{ flexDirection: lang == 'ar' ? 'row-reverse' : 'row' }}>
+          <Typography variant='h4'>{t('Subtotal')}:</Typography>
           <Typography variant='h5'>${total.toFixed(2)}</Typography>
         </div>
-        <div className='totalRow'>
-          <Typography variant='h4'>Shipping:</Typography>
+        <div className='totalRow' style={{ flexDirection: lang == 'ar' ? 'row-reverse' : 'row' }}>
+          <Typography variant='h4'>{t('Shipping')}:</Typography>
           <Typography variant='h5'>$10.00</Typography>
         </div>
-        <div className='totalRow'>
-          <Typography variant='h4'>Total:</Typography>
+        <div className='totalRow' style={{ flexDirection: lang == 'ar' ? 'row-reverse' : 'row' }}>
+          <Typography variant='h4'>{t('Total')}:</Typography>
           <Typography variant='h5'>${(total + 10.0).toFixed(2)}</Typography>
         </div>
         <Box sx={{ textAlign: 'center', width: '230px' }}>
           {target == 'cart' ? (
             <Button onClick={handleCheckout}>
-              {loadingPayment ? 'LOADING...' : 'PROCEED TO CHECKOUT'}
+              {loadingPayment ? t('LOADING') : t('PROCEED_TO_CHECKOUT')}
             </Button>
           ) : (
             <Link to={`${window.origin}/shopping-cart`}>
-              <Button onClick={handleOrder}>ORDER NOW</Button>
+              <Button onClick={handleOrder}>{t('ORDER_NOW')}</Button>
             </Link>
           )}
         </Box>

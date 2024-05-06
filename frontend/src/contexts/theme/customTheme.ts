@@ -44,16 +44,16 @@ const getDesignTokens = (mode: PaletteMode) => ({
     htmlFontSize: 10,
     fontFamily: ['Causten Regular', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto'].join(','),
     h1: {
-      fontFamily: ['Integral CF Demi Bold', 'Roboto'].join(','),
+      fontFamily: ['Integral CF Demi Bold', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto'].join(','),
     },
     h2: {
-      fontFamily: ['Integral CF Demi Bold', 'Roboto'].join(','),
+      fontFamily: ['Integral CF Demi Bold', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto'].join(','),
     },
     h3: {
-      fontFamily: ['Integral CF Demi Bold', 'Roboto'].join(','),
+      fontFamily: ['Integral CF Demi Bold', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto'].join(','),
     },
     h4: {
-      fontFamily: ['Integral CF Demi Bold', 'Roboto'].join(','),
+      fontFamily: ['Integral CF Demi Bold', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto'].join(','),
     },
   },
   components: {

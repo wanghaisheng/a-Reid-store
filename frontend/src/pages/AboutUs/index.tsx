@@ -1,5 +1,8 @@
 import { Card, CardMedia, Typography, styled } from '@mui/material';
 import PageContainer from '../../components/PageContainer';
+import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { LocaleContext } from '../../contexts/locale/LocaleContext';
 
 const Container = styled('div')(({ theme }) => ({
   '& .section': {
@@ -36,17 +39,33 @@ const Container = styled('div')(({ theme }) => ({
 }));
 
 const AboutUs = () => {
+  const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
+
   return (
     <PageContainer>
       <Container>
         <div className='section'>
           <div className='sectionText'>
-            <Typography variant='h2' sx={{ color: 'white', marginBottom: '2rem' }}>
-              Our Story
+            <Typography
+              variant='h2'
+              sx={{
+                color: 'white',
+                marginBottom: '2rem',
+                textAlign: lang == 'ar' ? 'right' : 'auto',
+              }}
+            >
+              {t('OurStory')}
             </Typography>
             <Typography
               variant='body1'
-              sx={{ color: 'white', maxWidth: '600px', margin: '4rem 0', lineHeight: '2.8rem' }}
+              sx={{
+                color: 'white',
+                maxWidth: '600px',
+                margin: '4rem 0',
+                lineHeight: '2.8rem',
+                textAlign: lang == 'ar' ? 'right' : 'auto',
+              }}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat consequat
               enim, non auctor massa ultrices non. Morbi sed odio massa. Quisque at vehicula tellus,
@@ -65,12 +84,25 @@ const AboutUs = () => {
         </div>
         <div className='section'>
           <div className='sectionText'>
-            <Typography variant='h2' sx={{ color: 'white', marginBottom: '2rem' }}>
-              Our Mission
+            <Typography
+              variant='h2'
+              sx={{
+                color: 'white',
+                marginBottom: '2rem',
+                textAlign: lang == 'ar' ? 'right' : 'auto',
+              }}
+            >
+              {t('OurMission')}
             </Typography>
             <Typography
               variant='body1'
-              sx={{ color: 'white', maxWidth: '600px', margin: '4rem 0', lineHeight: '2.8rem' }}
+              sx={{
+                color: 'white',
+                maxWidth: '600px',
+                margin: '4rem 0',
+                lineHeight: '2.8rem',
+                textAlign: lang == 'ar' ? 'right' : 'auto',
+              }}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat consequat
               enim, non auctor massa ultrices non. Morbi sed odio massa. Quisque at vehicula tellus,
