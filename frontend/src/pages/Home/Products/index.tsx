@@ -1,4 +1,4 @@
-import { Box, Typography, styled } from '@mui/material';
+import { Box, Typography, styled, useTheme } from '@mui/material';
 import StyledButton from '../../../components/Buttons/StyledButton';
 import ProductsSlider from './ProductsSlider';
 import { useQuery } from '@apollo/client';
@@ -12,7 +12,7 @@ import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 const StyledContainer = styled('div')(({ theme }) => ({
   overflow: 'hidden',
   minHeight: '100vh',
-  background: theme.palette.gray.main,
+  background: theme.palette.mode == 'light' ? theme.palette.gray.main : '#09090B',
   display: 'flex',
   alignItems: 'center',
   '& .content': {
@@ -23,21 +23,23 @@ const StyledContainer = styled('div')(({ theme }) => ({
   },
 }));
 
-const FilterButton = styled(StyledButton)({
-  color: 'black',
+const FilterButton = styled(StyledButton)(({ theme }) => ({
+  color: theme.palette.mode == 'dark' ? 'white' : 'black',
   border: '2px solid white',
   width: '13.1rem',
   margin: '0.5rem 0',
   '&:hover, &.active': {
+    color: 'black',
     background: 'white',
   },
-});
+}));
 
 const Products = () => {
   const { loading, error, data: categoriesData } = useQuery(GET_CATEGORIES);
   const [categoryId, setCategoryId] = useState('1');
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
+  const theme = useTheme();
 
   const PAGE_SIZE = 100;
 
@@ -68,7 +70,15 @@ const Products = () => {
   return (
     <StyledContainer>
       <div className='content'>
-        <Typography variant='h3' color='black' sx={{ textAlign: 'center', lineHeight: 1 }}>
+        <Typography
+          variant='h3'
+          color='black'
+          sx={{
+            textAlign: 'center',
+            lineHeight: 1,
+            color: theme.palette.mode == 'dark' ? 'white' : 'auto',
+          }}
+        >
           {t('OurLovely')}
           <br />
           {t('Products')}
@@ -88,7 +98,9 @@ const Products = () => {
               key={category.id}
               className={`filterItem ${category.id == categoryId ? 'active' : null}`}
               onClick={(e) => handleFilter(e, category.id)}
-              style={{ width: lang == 'ar' ? 'auto' : '13.1rem' }}
+              style={{
+                width: lang == 'ar' ? 'auto' : '13.1rem',
+              }}
             >
               <span>{t(`${category.attributes?.categoryName}`)}</span>
             </FilterButton>

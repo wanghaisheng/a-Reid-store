@@ -9,6 +9,9 @@ const StyledSlider = styled(Slider)(({ theme }) => ({
     pointerEvents: 'none',
     cursor: 'default',
   },
+  '.slick-dots li button::before': {
+    color: theme.palette.mode == 'light' ? 'black' : 'white',
+  },
   '& .slick-slide': {
     maxWidth: '252px',
     margin: '0 auto',

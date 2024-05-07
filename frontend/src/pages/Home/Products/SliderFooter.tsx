@@ -38,17 +38,21 @@ const SliderFooter = styled('div')(({ theme }) => ({
     color: 'black',
     padding: '1.4rem',
     marginRight: '1rem',
+    '&:hover': {
+      background: theme.palette.mode == 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'auto',
+    },
   },
 
   '& .SlideButtons': {
     minWidth: '170px',
     '& .ArrowBtn': {
-      color: 'black',
+      color: theme.palette.mode == 'light' ? 'black' : 'white',
       width: '100px',
       height: '50px',
       borderRadius: '50px',
       border: '2px solid white',
       '&:hover': {
+        color: 'black',
         backgroundColor: 'white',
       },
     },

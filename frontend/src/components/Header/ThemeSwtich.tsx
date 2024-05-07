@@ -10,7 +10,11 @@ const ThemeSwitch = () => {
 
   return (
     <IconButton sx={{ m: '1.2rem' }} onClick={toggleColorMode}>
-      {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      {theme.palette.mode === 'dark' ? (
+        <Brightness7Icon />
+      ) : (
+        <Brightness4Icon sx={{ color: 'white' }} />
+      )}
     </IconButton>
   );
 };

@@ -1,4 +1,4 @@
-import { IconButton, InputBase, Typography, styled } from '@mui/material';
+import { IconButton, InputBase, Typography, styled, useTheme } from '@mui/material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import EastIcon from '@mui/icons-material/East';
 import emailjs from '@emailjs/browser';
@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const Card = styled('div')(({ theme }) => ({
-  background: '#E9E8E6',
+  background: theme.palette.mode == 'light' ? '#E9E8E6' : '#09090B',
   borderRadius: '50px',
   overflow: 'hidden',
   display: 'flex',
@@ -78,6 +78,7 @@ const EmailCard = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
+  const theme = useTheme();
 
   const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -132,7 +133,14 @@ const EmailCard = () => {
               <EmailOutlinedIcon />
             </IconButton>
             <InputBase
-              sx={{ ml: 1, flex: 1, background: 'white', width: '70%', mr: '10px' }}
+              sx={{
+                ml: 1,
+                flex: 1,
+                background: 'white',
+                width: '70%',
+                mr: '10px',
+                color: theme.palette.mode == 'dark' ? 'black' : 'auto',
+              }}
               required
               placeholder={t('YourEmailAddress')}
               type='email'

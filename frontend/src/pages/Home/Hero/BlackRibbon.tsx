@@ -3,6 +3,8 @@ import { styled } from '@mui/material';
 const StyledBlackRibbon = styled('div')(({ theme }) => ({
   height: 0,
   '& .skewed': {
+    borderTop: theme.palette.mode == 'light' ? 'none' : '2px solid white',
+    borderBottom: theme.palette.mode == 'light' ? 'none' : '2px solid white',
     backgroundColor: 'black',
     backgroundImage: 'url(/assets/home/siteLogo2.png)',
     backgroundRepeat: 'repeat-x',
@@ -25,7 +27,7 @@ const StyledBlackRibbon = styled('div')(({ theme }) => ({
     content: '""',
     display: 'block',
     paddingBottom: '12vh',
-    background: theme.palette.gray.main,
+    background: theme.palette.mode == 'light' ? theme.palette.gray.main : '#09090B',
     position: 'relative',
     bottom: '5vh',
     transform: 'skewY(-4deg)',

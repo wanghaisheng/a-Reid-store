@@ -1,7 +1,7 @@
 import { Grid, styled } from '@mui/material';
 
 export const StyledGrid = styled(Grid)(({ theme }) => ({
-  background: 'white',
+  background: theme.palette.mode == 'light' ? 'white' : '#2F1C40',
   overflow: 'hidden',
   height: '150vh',
   paddingTop: '5rem',

@@ -5,7 +5,7 @@ const StyledBody = styled('div')(() => {
   const { activeDrawer } = useAppSelector((store) => store.drawer);
   return {
     height: '100%',
-    overflow: 'scroll',
+    overflow: 'auto',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

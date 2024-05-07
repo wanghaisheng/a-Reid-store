@@ -9,6 +9,7 @@ import {
   SelectChangeEvent,
   Typography,
   styled,
+  useTheme,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -30,6 +31,25 @@ const Container = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     width: '40%',
   },
+  '& .styledButton': {
+    color: theme.palette.mode == 'light' ? 'primary.main' : 'white',
+    borderColor: theme.palette.mode == 'light' ? 'primary.main' : 'white',
+    '&:hover': {
+      borderColor: theme.palette.mode == 'light' ? 'primary.main' : 'white',
+    },
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset, &:hover fieldset, &.Mui-focused fieldset': {
+      color: theme.palette.mode == 'light' ? 'auto' : 'white',
+      borderColor: theme.palette.mode == 'light' ? 'auto' : 'white',
+    },
+  },
+  '& .label': {
+    color: theme.palette.mode == 'light' ? 'auto' : 'white',
+    '&.Mui-focused': {
+      color: theme.palette.mode == 'light' ? 'auto' : 'white',
+    },
+  },
 }));
 
 const ProductCartDetails = ({ id }: { id: string }) => {
@@ -50,6 +70,7 @@ const ProductCartDetails = ({ id }: { id: string }) => {
     (e: ProductEntity) => e.id == id
   );
   const { t } = useTranslation();
+  const theme = useTheme();
 
   useEffect(() => {
     setSize(data.product.data.attributes?.size);
@@ -103,7 +124,12 @@ const ProductCartDetails = ({ id }: { id: string }) => {
       if (condition) {
         return (
           <FavoriteIcon
-            sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
+            sx={{
+              fontSize: '3rem',
+              color: theme.palette.mode == 'light' ? 'primary.main' : 'white',
+              cursor: 'pointer',
+              outline: 0,
+            }}
             onClick={() => handleFavoriteProduct(false)}
             component={motion.svg}
             whileTap={{ scale: 0.75 }}
@@ -112,7 +138,12 @@ const ProductCartDetails = ({ id }: { id: string }) => {
       } else {
         return (
           <FavoriteBorderIcon
-            sx={{ fontSize: '3rem', color: 'primary.main', cursor: 'pointer', outline: 0 }}
+            sx={{
+              fontSize: '3rem',
+              color: theme.palette.mode == 'light' ? 'primary.main' : 'white',
+              cursor: 'pointer',
+              outline: 0,
+            }}
             onClick={() => handleFavoriteProduct(true)}
             component={motion.svg}
             whileTap={{ scale: 0.75 }}
@@ -150,7 +181,9 @@ const ProductCartDetails = ({ id }: { id: string }) => {
       </Typography>
       <Box sx={{ mb: '2rem' }}>
         <FormControl fullWidth>
-          <InputLabel id='demo-simple-select-label'>Size</InputLabel>
+          <InputLabel id='demo-simple-select-label' className='label'>
+            Size
+          </InputLabel>
           <Select
             labelId='demo-simple-select-label'
             id='demo-simple-select'
@@ -167,7 +200,9 @@ const ProductCartDetails = ({ id }: { id: string }) => {
       </Box>
       <Box sx={{ mb: '2rem' }}>
         <FormControl fullWidth>
-          <InputLabel id='demo-simple-select-label'>Color</InputLabel>
+          <InputLabel id='demo-simple-select-label' className='label'>
+            Color
+          </InputLabel>
           <Select
             labelId='demo-simple-select-label'
             id='demo-simple-select'
@@ -190,15 +225,24 @@ const ProductCartDetails = ({ id }: { id: string }) => {
               onClick={() => {
                 setCount(Math.max(count! - 1, 1));
               }}
+              className='styledButton'
             >
               <RemoveIcon fontSize='small' />
             </Button>
-            <Button sx={{ fontSize: '1.8rem !important' }}>{count}</Button>
+            <Button
+              sx={{
+                fontSize: '1.8rem !important',
+              }}
+              className='styledButton'
+            >
+              {count}
+            </Button>
             <Button
               aria-label='increase'
               onClick={() => {
                 setCount(count! + 1);
               }}
+              className='styledButton'
             >
               <AddIcon fontSize='small' />
             </Button>
@@ -210,7 +254,7 @@ const ProductCartDetails = ({ id }: { id: string }) => {
           p: '1rem 3rem',
           mb: '2rem',
           color: 'white',
-          bgcolor: 'primary.main',
+          bgcolor: theme.palette.mode == 'light' ? 'primary.main' : '#2F1C40',
           '&:hover': { bgcolor: 'black' },
         }}
         onClick={handleCartProduct}

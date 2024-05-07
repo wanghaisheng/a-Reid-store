@@ -1,4 +1,4 @@
-import { Typography, styled } from '@mui/material';
+import { Typography, styled, useTheme } from '@mui/material';
 import StyledButton from '../../../components/Buttons/StyledButton';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ const StyledHeadline = styled('div')(({ theme }) => ({
     '& img': {
       width: '75px',
       height: '75px',
+      borderRadius: '50%',
       [theme.breakpoints.up('sm')]: { width: '85px', height: '85px' },
       [theme.breakpoints.up('md')]: { width: '100px', height: '100px' },
       [theme.breakpoints.up('lg')]: { width: 'auto', height: 'auto' },
@@ -29,6 +30,7 @@ const StyledHeadline = styled('div')(({ theme }) => ({
 const Headline = () => {
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
+  const theme = useTheme();
 
   return (
     <StyledHeadline>
@@ -37,7 +39,10 @@ const Headline = () => {
           sx={{
             bgcolor: 'white',
             color: 'black',
-            '&:hover': { outline: '2px solid white' },
+            '&:hover': {
+              outline: '2px solid white',
+              color: theme.palette.mode == 'dark' ? 'white' : 'auto',
+            },
           }}
         >
           {t('BecomeAPartner')}

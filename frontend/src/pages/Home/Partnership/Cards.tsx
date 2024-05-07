@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const GridItem = styled('div')(({ theme }) => ({
-  background: 'white',
+  background: theme.palette.mode == 'light' ? 'white' : '#1B1025',
   width: '80%',
   margin: '0 auto',
   height: '400px',
@@ -55,17 +55,19 @@ const GridItem = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     transition: 'opacity 0.3s ease-in-out 0s',
+    color: theme.palette.mode == 'light' ? 'black' : 'white',
   },
 
   '& .content': {
     position: 'absolute',
-    background: 'white',
     width: '100%',
     height: '100%',
     borderRadius: 35,
     textAlign: 'center',
     top: '100%',
     transition: 'top 0.3s ease-in-out 0s',
+    background: theme.palette.mode == 'light' ? 'white' : '#1B1025',
+    color: theme.palette.mode == 'light' ? 'black' : 'white',
     '& .title': { fontSize: '1.8rem', fontWeight: 'bold' },
     '& .quote': { padding: '2rem' },
     '& .quoteIcon': {

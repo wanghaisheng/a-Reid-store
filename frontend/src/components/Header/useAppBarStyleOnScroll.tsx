@@ -26,7 +26,12 @@ const useAppBarStyleOnScroll = () => {
 
   const appBarStyleOnScroll = {
     backdropFilter: scrollPosition > 0 ? 'blur(6px)' : 'none',
-    backgroundColor: scrollPosition > 0 ? 'rgba(165, 129, 199, 0.5)' : 'default',
+    backgroundColor:
+      scrollPosition > 0
+        ? theme.palette.mode == 'light'
+          ? 'rgba(165, 129, 199, 0.5)'
+          : 'rgb(27, 16, 37, 0.5)'
+        : 'transparent',
     width: !matchBugFix && isDownScroll ? '90%' : '100%',
     m: !matchBugFix && isDownScroll ? '0 5% 0  5%' : 0,
     borderBottomLeftRadius: isDownScroll ? 25 : 0,

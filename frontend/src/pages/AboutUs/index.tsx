@@ -29,6 +29,7 @@ const Container = styled('div')(({ theme }) => ({
       width: '80%',
       padding: '2rem',
       borderRadius: '2rem',
+      background: 'white',
       [theme.breakpoints.up('sm')]: { width: '60%' },
       [theme.breakpoints.up('md')]: { width: '355px', height: '355px' },
       [theme.breakpoints.up('lg')]: { width: '460px', height: '460px' },

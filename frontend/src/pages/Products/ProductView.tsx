@@ -10,7 +10,7 @@ import { GET_PRODUCT } from '../../graphql/queries.ts';
 import { Maybe } from '../../gql/graphql.ts';
 
 export const ModalContainer = styled('div')(({ theme }) => ({
-  background: 'white',
+  background: theme.palette.mode == 'light' ? 'white' : '#121212',
   width: '95%',
   borderTopLeftRadius: '2rem',
   borderBottomLeftRadius: '2rem',

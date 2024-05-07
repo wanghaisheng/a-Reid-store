@@ -43,6 +43,13 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:last-child td, &:last-child th': {
     border: 0,
   },
+  '& .styledButton': {
+    color: theme.palette.mode == 'light' ? 'primary.main' : 'white',
+    borderColor: theme.palette.mode == 'light' ? 'primary.main' : 'white',
+    '&:hover': {
+      borderColor: theme.palette.mode == 'light' ? 'primary.main' : 'white',
+    },
+  },
 }));
 
 const CartTable = ({ products, target }: { products: ProductEntity[]; target: string }) => {
@@ -151,15 +158,17 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
                     <Button
                       aria-label='reduce'
                       onClick={() => handleProductCounter(product, false)}
+                      className='styledButton'
                     >
                       <RemoveIcon fontSize='small' />
                     </Button>
-                    <Button sx={{ fontSize: '1.8rem !important' }}>
+                    <Button sx={{ fontSize: '1.8rem !important' }} className='styledButton'>
                       {product.attributes?.cartCounter}
                     </Button>
                     <Button
                       aria-label='increase'
                       onClick={() => handleProductCounter(product, true)}
+                      className='styledButton'
                     >
                       <AddIcon fontSize='small' />
                     </Button>

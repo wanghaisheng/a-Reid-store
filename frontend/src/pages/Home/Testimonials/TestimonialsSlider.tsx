@@ -36,7 +36,7 @@ const SliderCard = styled('div')(({ theme }) => ({
     },
 
     '& .brandName': {
-      color: theme.palette.primary.main,
+      color: '#A581C7',
     },
   },
 
@@ -65,11 +65,12 @@ const CardContent = styled('div')(({ theme }) => ({
     alignItems: 'center',
     gap: '1.5rem',
     '& img': { width: 50, height: 50, borderRadius: '100%' },
-    '& h3, p': { fontSize: '2rem', lineHeight: 0 },
+    '& h3, p': { color: 'rgba(0, 0, 0, 0.87)', fontSize: '2rem', lineHeight: 0 },
     '& p': { color: theme.palette.gray.dark, fontSize: '1.4rem' },
   },
 
   '& .body': {
+    color: 'black',
     fontSize: '2.2rem',
     margin: '4rem 0',
     '& .brandName': {

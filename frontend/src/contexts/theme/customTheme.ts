@@ -34,10 +34,10 @@ const getDesignTokens = (mode: PaletteMode) => ({
         }
       : {
           // palette values for dark mode
-          primary: { main: '#020617', light: '#020617', dark: '#020617' },
-          secondary: { main: '#020617', light: '#020617', dark: '#020617' },
+          primary: { main: '#1B1025', light: '#251633', dark: '#2F1C40' },
+          secondary: { main: '#FFDA55', light: '#fff771', dark: '#FFB500' },
           gray: { main: '#F1EDEA', light: '#f4f1ee', dark: '#9B9792' },
-          background: { default: '#020617' },
+          background: { default: '#1B1025' },
         }),
   },
   typography: {

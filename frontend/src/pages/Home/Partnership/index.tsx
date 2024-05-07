@@ -2,9 +2,9 @@ import { styled } from '@mui/material';
 import Headline from './Headline';
 import Cards from './Cards';
 
-export const Container = styled('div')({
+export const Container = styled('div')(({ theme }) => ({
   minHeight: '100vh',
-  background: '#F3F0F7',
+  background: theme.palette.mode == 'light' ? '#F3F0F7' : '#09090B',
   padding: '8rem 0',
   color: 'black',
 
@@ -13,7 +13,7 @@ export const Container = styled('div')({
     maxWidth: '1200px',
     margin: '0 auto',
   },
-});
+}));
 
 const Partnership = () => {
   return (

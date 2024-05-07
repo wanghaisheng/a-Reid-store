@@ -66,7 +66,15 @@ const FullScreenNavLinks = () => {
 
   return (
     ShowInCaseNotHomePage && (
-      <Container maxWidth='sm' sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexDirection: lang == 'ar'? 'row-reverse': 'row' }}>
+      <Container
+        maxWidth='sm'
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '1.5rem',
+          flexDirection: lang == 'ar' ? 'row-reverse' : 'row',
+        }}
+      >
         <StyledNavLink to='/'>
           <span>{t('Home')}</span>
         </StyledNavLink>
