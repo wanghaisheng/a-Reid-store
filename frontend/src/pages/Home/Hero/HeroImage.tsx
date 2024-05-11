@@ -1,5 +1,6 @@
 import { styled } from '@mui/material';
 import PlayButton from './PlayButton';
+import { motion } from 'framer-motion';
 
 const StyledHeroImage = styled('div')(({ theme }) => ({
   maxWidth: '60%',
@@ -36,7 +37,18 @@ const StyledHeroImage = styled('div')(({ theme }) => ({
 const HeroImage = () => {
   return (
     <StyledHeroImage>
-      <img src='/assets/home/mainHero.jpeg' alt='hero image' />
+      <motion.img
+        src='/assets/home/mainHero.jpeg'
+        alt='hero image'
+        initial={{
+          opacity: 0.5,
+          scale: 0.5,
+          y: '50rem',
+          rotate: -60,
+        }}
+        animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+        transition={{ duration: 0.8, ease: 'linear' }}
+      />
       <PlayButton />
     </StyledHeroImage>
   );

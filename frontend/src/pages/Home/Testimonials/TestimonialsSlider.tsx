@@ -8,8 +8,9 @@ import { Parser } from 'html-to-react';
 import testimonials from './_data';
 import { useContext } from 'react';
 import { LocaleContext } from '../../../contexts/locale/LocaleContext';
+import { motion } from 'framer-motion';
 
-const StyledSlider = styled('div')({
+const StyledSlider = styled(motion.div)({
   maxWidth: '475px',
   maxHeight: '350px',
   '& .slick-arrow': { display: 'none !important' },
@@ -96,7 +97,18 @@ const TestimonialsSlider = () => {
   };
 
   return (
-    <StyledSlider>
+    <StyledSlider
+      initial={{
+        opacity: 0,
+        y: '25rem',
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+      }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
       <Slider {...settings}>
         {testimonials.map((testimonial, index: number) => (
           <SliderCard key={testimonial.id} className={index % 2 == 0 ? 'whiteCard' : ''}>

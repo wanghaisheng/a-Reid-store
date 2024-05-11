@@ -2,6 +2,7 @@ import { useAnimate } from 'framer-motion';
 import { Card, CardImg, CardStatus, CardText } from './StyledProductCard';
 import { ProductEntity } from '../../../gql/graphql';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 
 type ProductCardProps = {
   product: ProductEntity;
@@ -19,7 +20,23 @@ const ProductCard = ({ product, onGoTo }: ProductCardProps) => {
   };
 
   return (
-    <div ref={scope} onClick={handleAnimate}>
+    <motion.div
+      ref={scope}
+      onClick={handleAnimate}
+      initial={{
+        opacity: 0,
+        scale: 0,
+        rotateY: 180,
+      }}
+      whileInView={{
+        opacity: 1,
+        scale: 1,
+        rotateY: 0,
+        transformOrigin: 'center',
+      }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+    >
       <Card className='product-card' id={product.id!}>
         <CardImg src={product.attributes?.img} />
         <CardText className='CardText'>
@@ -32,7 +49,7 @@ const ProductCard = ({ product, onGoTo }: ProductCardProps) => {
         </CardText>
         <CardStatus>{t('new')}</CardStatus>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 

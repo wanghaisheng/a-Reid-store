@@ -3,6 +3,7 @@ import PageContainer from '../../components/PageContainer';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { LocaleContext } from '../../contexts/locale/LocaleContext';
+import { motion } from 'framer-motion';
 
 const Container = styled('div')(({ theme }) => ({
   '& .section': {
@@ -43,6 +44,17 @@ const AboutUs = () => {
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
 
+  const titleVariants = {
+    initial: {
+      opacity: 0,
+      y: '10rem',
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   return (
     <PageContainer>
       <Container>
@@ -55,6 +67,12 @@ const AboutUs = () => {
                 marginBottom: '2rem',
                 textAlign: lang == 'ar' ? 'right' : 'auto',
               }}
+              component={motion.h2}
+              variants={titleVariants}
+              initial='initial'
+              animate='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
             >
               {t('OurStory')}
             </Typography>
@@ -67,6 +85,12 @@ const AboutUs = () => {
                 lineHeight: '2.8rem',
                 textAlign: lang == 'ar' ? 'right' : 'auto',
               }}
+              component={motion.p}
+              variants={titleVariants}
+              initial='initial'
+              animate='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat consequat
               enim, non auctor massa ultrices non. Morbi sed odio massa. Quisque at vehicula tellus,
@@ -79,7 +103,16 @@ const AboutUs = () => {
               tortor, eget facilisis diam faucibus et. Morbi a tempor elit.
             </Typography>
           </div>
-          <Card className='sectionImg' elevation={6}>
+          <Card
+            className='sectionImg'
+            elevation={6}
+            component={motion.div}
+            variants={titleVariants}
+            initial='initial'
+            animate='animate'
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             <CardMedia component='img' image='./assets/about/about-01.jpg' />
           </Card>
         </div>
@@ -92,6 +125,12 @@ const AboutUs = () => {
                 marginBottom: '2rem',
                 textAlign: lang == 'ar' ? 'right' : 'auto',
               }}
+              component={motion.h2}
+              variants={titleVariants}
+              initial='initial'
+              animate='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
             >
               {t('OurMission')}
             </Typography>
@@ -104,6 +143,12 @@ const AboutUs = () => {
                 lineHeight: '2.8rem',
                 textAlign: lang == 'ar' ? 'right' : 'auto',
               }}
+              component={motion.p}
+              variants={titleVariants}
+              initial='initial'
+              animate='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat consequat
               enim, non auctor massa ultrices non. Morbi sed odio massa. Quisque at vehicula tellus,
@@ -116,7 +161,16 @@ const AboutUs = () => {
               tortor, eget facilisis diam faucibus et. Morbi a tempor elit.
             </Typography>
           </div>
-          <Card className='sectionImg' elevation={6}>
+          <Card
+            className='sectionImg'
+            elevation={6}
+            component={motion.div}
+            variants={titleVariants}
+            initial='initial'
+            animate='animate'
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             <CardMedia component='img' image='./assets/about/about-02.jpg' />
           </Card>
         </div>

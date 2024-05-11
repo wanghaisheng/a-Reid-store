@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Link } from 'react-router-dom';
 import { closeDrawer } from '../../app/features/drawerSlice';
@@ -24,7 +24,6 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
   const { handleProduct } = useAsideDrawer();
   const { activeUser } = useAuth();
   const { setValue } = useSessionStorage('cartProducts');
-  const theme = useTheme();
 
   const handleCartProduct = (product: ProductEntity) => {
     if (activeUser) {
@@ -61,13 +60,13 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
             <div className='cartDetails'>
               <Typography
                 variant='body1'
-                sx={{
+                sx={(theme) => ({
                   mb: '1.5rem',
                   '& a': {
                     color: theme.palette.mode == 'light' ? 'black' : 'white',
                     textDecoration: 'none',
                   },
-                }}
+                })}
               >
                 <Link to={`products/${product.id}`} onClick={() => dispatch(closeDrawer())}>
                   {product.attributes!.name.length > 15

@@ -1,9 +1,10 @@
-import { Typography, styled, useTheme } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import StyledButton from '../../../components/Buttons/StyledButton';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { LocaleContext } from '../../../contexts/locale/LocaleContext';
+import { motion } from 'framer-motion';
 
 const StyledHeadline = styled('div')(({ theme }) => ({
   textAlign: 'center',
@@ -30,33 +31,85 @@ const StyledHeadline = styled('div')(({ theme }) => ({
 const Headline = () => {
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
-  const theme = useTheme();
+
+  const titleVariants = {
+    initial: {
+      opacity: 0,
+      y: '10rem',
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+    },
+  };
 
   return (
     <StyledHeadline>
       <Link to='/partnership'>
         <StyledButton
-          sx={{
+          sx={(theme) => ({
             bgcolor: 'white',
             color: 'black',
             '&:hover': {
               outline: '2px solid white',
               color: theme.palette.mode == 'dark' ? 'white' : 'auto',
             },
+          })}
+          component={motion.button}
+          initial={{
+            opacity: 0,
+            scaleX: 0,
+            transformOrigin: 'left',
           }}
+          whileInView={{
+            opacity: 1,
+            scaleX: 1,
+          }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
         >
           {t('BecomeAPartner')}
         </StyledButton>
       </Link>
       <div className='title'>
-        <img src='/assets/home/shakeHands.png' />
+        <motion.img
+          src='/assets/home/shakeHands.png'
+          initial={{
+            opacity: 0,
+            scale: 0,
+          }}
+          whileInView={{
+            opacity: 1,
+            scale: 1,
+          }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        />
         <Typography
           variant='h3'
           sx={{ textAlign: lang == 'ar' ? 'right' : 'left', color: 'primary.light' }}
         >
-          {t('WE_ARE_EAGER_TO')}
+          <motion.span
+            style={{ display: 'inline-block' }}
+            variants={titleVariants}
+            initial='initial'
+            whileInView='animate'
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            {t('WE_ARE_EAGER_TO')}
+          </motion.span>
           <br />
-          {t('SHAKE_YOUR')} <span className='handsWord'>{t('HANDS')}</span>!
+          <motion.span
+            style={{ display: 'inline-block' }}
+            variants={titleVariants}
+            initial='initial'
+            whileInView='animate'
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            {t('SHAKE_YOUR')} <span className='handsWord'>{t('HANDS')}</span>!
+          </motion.span>
         </Typography>
       </div>
     </StyledHeadline>

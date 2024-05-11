@@ -17,6 +17,7 @@ const ContactUs = () => {
   const form: MutableRefObject<HTMLFormElement> | undefined = useRef(undefined!);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const MotionTextField = motion(TextField);
 
   const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,6 +47,17 @@ const ContactUs = () => {
     );
   };
 
+  const titleVariants = {
+    initial: {
+      opacity: 0,
+      y: '10rem',
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   return (
     <PageContainer>
       <StyledContactPage>
@@ -55,18 +67,29 @@ const ContactUs = () => {
               <Typography
                 variant='h5'
                 sx={{ fontSize: '3rem !important', fontWeight: 'bold', color: 'white' }}
+                component={motion.h5}
+                variants={titleVariants}
+                initial='initial'
+                animate='animate'
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
               >
                 {t('SendUsAMessage')}
               </Typography>
-              <TextField
+              <MotionTextField
                 required
                 id='outlined-required'
                 label={t('YourEmailAddress')}
                 type='email'
                 name='user_email'
                 sx={{ width: '100%' }}
+                variants={titleVariants}
+                initial='initial'
+                animate='animate'
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
               />
-              <TextField
+              <MotionTextField
                 id='outlined-multiline-static'
                 label={t('HowCanWeHelp')}
                 type='text'
@@ -75,19 +98,36 @@ const ContactUs = () => {
                 rows={6}
                 required
                 sx={{ width: '100%' }}
+                variants={titleVariants}
+                initial='initial'
+                animate='animate'
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
               />
               <StyledButton
                 type='submit'
                 className='submitBtn'
                 component={motion.button}
                 whileTap={{ scale: 0.95 }}
+                variants={titleVariants}
+                initial='initial'
+                animate='animate'
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
               >
                 {t('Submit')}
               </StyledButton>
             </form>
           </div>
           <div className='contactInfo'>
-            <div className='address'>
+            <motion.div
+              className='address'
+              variants={titleVariants}
+              initial='initial'
+              animate='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
               <div className='title'>
                 <LocationOnOutlinedIcon />
                 <p>{t('Address')}</p>
@@ -95,21 +135,35 @@ const ContactUs = () => {
               <p className='text'>
                 Coza Store Center 8th floor, 379 Hudson St, New York, NY 10018 US
               </p>
-            </div>
-            <div className='talk'>
+            </motion.div>
+            <motion.div
+              className='talk'
+              variants={titleVariants}
+              initial='initial'
+              animate='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
               <div className='title'>
                 <LocalPhoneOutlinedIcon />
                 <p>{t('LetsTalk')}</p>
               </div>
               <p className='text'>+1 800 1236879</p>
-            </div>
-            <div className='support'>
+            </motion.div>
+            <motion.div
+              className='support'
+              variants={titleVariants}
+              initial='initial'
+              animate='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
               <div className='title'>
                 <EmailOutlinedIcon />
                 <p>{t('SaleSupport')}</p>
               </div>
               <p className='text'>contact@example.com</p>
-            </div>
+            </motion.div>
           </div>
         </div>
         <div className='map'>

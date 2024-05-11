@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import PageContainer from '../../components/PageContainer';
 import useAuth from '../../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import {
   IconButton,
   Paper,
@@ -45,7 +44,7 @@ const Header = styled('div')({
 });
 
 const MyAccount = () => {
-  const { activeUser } = useAuth();
+  const { activeUser, logoutUser } = useAuth();
   const navigate = useNavigate();
   const { loading, error, data, refetch } = useQuery(GET_ORDERS, {
     variables: { userId: activeUser?.user.id },
@@ -78,35 +77,45 @@ const MyAccount = () => {
     })();
   }, []);
 
-  const handleLogout = () => {
-    Cookies.remove('userData');
-    navigate('/', { replace: true });
-  };
+  useEffect(() => {
+    // to logout the user & end the session after closing the browser window
+    const handleBeforeUnload = () => {
+      logoutUser();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const cancelPayment = async (stripeId: string, id: string, customOrderId: string) => {
-    setCancelLoading(true);
-    try {
-      const paymentIntentsCancel = await axios.post(
-        `${import.meta.env.VITE_APP_SERVER_URL}/api/orders`,
-        {
-          stripeId,
-          id,
-          flag: 'post',
-          paymentIntentId: paymentIntents?.data.data.find(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (PI: any) => PI.metadata.customOrderId == customOrderId
-          ).id,
-        }
-      );
-      refetch();
-      if (paymentIntentsCancel.data.status == 'succeeded')
-        dispatch(openToast({ type: 'success', message: t('CanceledOrder') }));
-    } catch (error) {
-      console.error('Error canceling PaymentIntent:', error);
-      if (axios.isAxiosError(error))
-        dispatch(openToast({ type: 'error', message: error.response?.data.error.message }));
+    if (activeUser) {
+      setCancelLoading(true);
+      try {
+        const paymentIntentsCancel = await axios.post(
+          `${import.meta.env.VITE_APP_SERVER_URL}/api/orders`,
+          {
+            stripeId,
+            id,
+            flag: 'post',
+            paymentIntentId: paymentIntents?.data.data.find(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (PI: any) => PI.metadata.customOrderId == customOrderId
+            ).id,
+          }
+        );
+        refetch();
+        if (paymentIntentsCancel.data.status == 'succeeded')
+          dispatch(openToast({ type: 'success', message: t('CanceledOrder') }));
+      } catch (error) {
+        console.error('Error canceling PaymentIntent:', error);
+        if (axios.isAxiosError(error))
+          dispatch(openToast({ type: 'error', message: error.response?.data.error.message }));
+      }
+      setCancelLoading(false);
     }
-    setCancelLoading(false);
   };
 
   if (loading || !paymentIntents || cancelLoading) return <Spinner />;
@@ -129,7 +138,7 @@ const MyAccount = () => {
           {t('Welcome')}, {activeUser && activeUser?.user.username} 👋
         </Typography>
         <Tooltip title={t('Logout')}>
-          <IconButton sx={{ border: '2px solid white' }} onClick={handleLogout}>
+          <IconButton sx={{ border: '2px solid white' }} onClick={logoutUser}>
             <LogoutIcon className='logoutIcon' />
           </IconButton>
         </Tooltip>
@@ -213,7 +222,17 @@ const MyAccount = () => {
             {t('NoOrdersYet')}
           </Typography>
           <Link to={`${window.origin}/products`} style={{ textDecoration: 'none' }}>
-            <Button className='button' sx={{ margin: '4rem auto', display: 'block' }}>
+            <Button
+              className='button'
+              sx={(theme) => ({
+                margin: '4rem auto',
+                display: 'block',
+                '&:hover': {
+                  background: theme.palette.mode == 'light' ? 'black' : 'white',
+                  color: theme.palette.mode == 'light' ? 'white' : 'black',
+                },
+              })}
+            >
               {t('START_SHOPPING')}
             </Button>
           </Link>

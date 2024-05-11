@@ -1,4 +1,4 @@
-import { IconButton, InputBase, Typography, styled, useTheme } from '@mui/material';
+import { IconButton, InputBase, Typography, styled } from '@mui/material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import EastIcon from '@mui/icons-material/East';
 import emailjs from '@emailjs/browser';
@@ -8,8 +8,9 @@ import { openToast } from '../../../app/features/toastSlice';
 import Toast from '../../../components/Toasts/Toast';
 import { useTranslation } from 'react-i18next';
 import { LocaleContext } from '../../../contexts/locale/LocaleContext';
+import { motion } from 'framer-motion';
 
-const Card = styled('div')(({ theme }) => ({
+const Card = styled(motion.div)(({ theme }) => ({
   background: theme.palette.mode == 'light' ? '#E9E8E6' : '#09090B',
   borderRadius: '50px',
   overflow: 'hidden',
@@ -78,7 +79,6 @@ const EmailCard = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
-  const theme = useTheme();
 
   const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -108,16 +108,73 @@ const EmailCard = () => {
     );
   };
 
+  const titleVariants = {
+    initial: {
+      opacity: 0,
+      y: '10rem',
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   return (
-    <Card>
+    <Card
+      initial={{
+        opacity: 0,
+        y: '20rem',
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+      }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
       <div className='mailBox'>
         <img src='/assets/home/pattern.png' />
         <div className='mailForm'>
           <Typography variant='h2' sx={{ mb: '4rem', textAlign: lang == 'ar' ? 'right' : 'auto' }}>
-            <span className='grayTxt'>{t('JoinThe')}</span> <br /> {t('Newsletter')}
-            <span className='grayTxt'>!</span>
+            <motion.span
+              className='grayTxt'
+              style={{ display: 'inline-block' }}
+              variants={titleVariants}
+              initial='initial'
+              whileInView='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              {t('JoinThe')}
+            </motion.span>{' '}
+            <br />
+            <motion.span
+              style={{ display: 'inline-block' }}
+              variants={titleVariants}
+              initial='initial'
+              whileInView='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              {t('Newsletter')}
+              <span className='grayTxt'>!</span>
+            </motion.span>
           </Typography>
-          <form className='textField' ref={form} onSubmit={sendEmail}>
+          <motion.form
+            className='textField'
+            ref={form}
+            onSubmit={sendEmail}
+            initial={{
+              opacity: 0,
+              scaleX: 0,
+            }}
+            whileInView={{
+              opacity: 1,
+              scaleX: 1,
+            }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             <IconButton
               disableRipple
               sx={{
@@ -133,14 +190,14 @@ const EmailCard = () => {
               <EmailOutlinedIcon />
             </IconButton>
             <InputBase
-              sx={{
+              sx={(theme) => ({
                 ml: 1,
                 flex: 1,
                 background: 'white',
                 width: '70%',
                 mr: '10px',
                 color: theme.palette.mode == 'dark' ? 'black' : 'auto',
-              }}
+              })}
               required
               placeholder={t('YourEmailAddress')}
               type='email'
@@ -159,13 +216,13 @@ const EmailCard = () => {
             >
               <EastIcon />
             </IconButton>
-            <Toast />
-          </form>
+          </motion.form>
         </div>
       </div>
       <div className='cardImg'>
         <img src='/assets/home/standing.png' />
       </div>
+      <Toast />
     </Card>
   );
 };

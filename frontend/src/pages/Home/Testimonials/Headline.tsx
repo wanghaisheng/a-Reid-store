@@ -2,6 +2,7 @@ import { Typography, styled } from '@mui/material';
 import AccessAlarmTwoToneIcon from '@mui/icons-material/AccessAlarmTwoTone';
 import AutoAwesomeTwoToneIcon from '@mui/icons-material/AutoAwesomeTwoTone';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 
 const StyledHeadline = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -78,25 +79,114 @@ const StyledHeadline = styled('div')(({ theme }) => ({
 const Headline = () => {
   const { t } = useTranslation();
 
+  const titleVariants = {
+    initial: {
+      opacity: 0,
+      y: '10rem',
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   return (
     <StyledHeadline>
-      <AccessAlarmTwoToneIcon className='alarmIcon' sx={{ color: '#df3a3a' }} />
-      <Typography variant='body1' className='label'>
+      <AccessAlarmTwoToneIcon
+        className='alarmIcon'
+        sx={{ color: '#df3a3a' }}
+        component={motion.svg}
+        initial={{
+          opacity: 0,
+          scale: 0,
+        }}
+        whileInView={{
+          opacity: 1,
+          scale: 1,
+        }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+      />
+      <Typography
+        variant='body1'
+        className='label'
+        component={motion.p}
+        initial={{
+          opacity: 0,
+          scaleX: 0,
+        }}
+        whileInView={{
+          opacity: 1,
+          scaleX: 1,
+        }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
         {t('WeWannaTellYouThat')}
       </Typography>
-      <Typography variant='h3' className='subTitle1'>
+      <Typography
+        variant='h3'
+        className='subTitle1'
+        component={motion.h3}
+        variants={titleVariants}
+        initial='initial'
+        whileInView='animate'
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
         {t('ItIsTime')}
       </Typography>
-      <Typography variant='h3' className='subTitle2'>
+      <Typography
+        variant='h3'
+        className='subTitle2'
+        component={motion.h3}
+        variants={titleVariants}
+        initial='initial'
+        whileInView='animate'
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         {t('toLove')}
       </Typography>
-      <Typography variant='h2' className='title1'>
+      <Typography
+        variant='h2'
+        className='title1'
+        component={motion.h2}
+        variants={titleVariants}
+        initial='initial'
+        whileInView='animate'
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
         {t('Your')}
       </Typography>
-      <Typography variant='h2' className='title2'>
+      <Typography
+        variant='h2'
+        className='title2'
+        component={motion.h2}
+        variants={titleVariants}
+        initial='initial'
+        whileInView='animate'
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
         {t('style')}!
       </Typography>
-      <AutoAwesomeTwoToneIcon className='autoAwesome' sx={{ color: 'secondary.main' }} />
+      <AutoAwesomeTwoToneIcon
+        className='autoAwesome'
+        sx={{ color: 'secondary.main' }}
+        component={motion.svg}
+        initial={{
+          opacity: 0,
+          scale: 0,
+        }}
+        whileInView={{
+          opacity: 1,
+          scale: 1,
+        }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      />
     </StyledHeadline>
   );
 };

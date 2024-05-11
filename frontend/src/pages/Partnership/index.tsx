@@ -4,6 +4,7 @@ import { partners } from './_data';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { LocaleContext } from '../../contexts/locale/LocaleContext';
+import { motion } from 'framer-motion';
 
 const Container = styled('div')(({ theme }) => ({
   '& .grid': {
@@ -38,6 +39,28 @@ const Partnership = () => {
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
 
+  const titleVariants = {
+    initial: {
+      opacity: 0,
+      y: '10rem',
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
+  const cardVariants = {
+    initial: {
+      opacity: 0,
+      rotateY: 90,
+    },
+    animate: {
+      opacity: 1,
+      rotateY: 0,
+    },
+  };
+
   return (
     <PageContainer>
       <Container>
@@ -49,12 +72,24 @@ const Partnership = () => {
               marginBottom: '2rem',
               textAlign: lang == 'ar' ? 'right' : 'auto',
             }}
+            component={motion.h2}
+            variants={titleVariants}
+            initial='initial'
+            animate='animate'
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
           >
             {t('Partners&Team')}
           </Typography>
           <Typography
             variant='h4'
             sx={{ color: 'white', textAlign: lang == 'ar' ? 'right' : 'auto' }}
+            component={motion.h4}
+            variants={titleVariants}
+            initial='initial'
+            animate='animate'
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
             {t('CollaborativeExcellence')}
             <br /> {t('BuildingBridgesDrivingSuccess')}
@@ -68,13 +103,29 @@ const Partnership = () => {
               lineHeight: '2.8rem',
               textAlign: lang == 'ar' ? 'right' : 'auto',
             }}
+            component={motion.p}
+            variants={titleVariants}
+            initial='initial'
+            animate='animate'
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
             {t('EmpoweringPartnerships')}
           </Typography>
         </div>
         <div className='grid'>
-          {partners.map((partner) => (
-            <Card key={partner.id} className='gridItem' elevation={6}>
+          {partners.map((partner, index: number) => (
+            <Card
+              key={partner.id}
+              className='gridItem'
+              elevation={6}
+              component={motion.div}
+              variants={cardVariants}
+              initial='initial'
+              animate='animate'
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
               <img src={partner.img} />
             </Card>
           ))}

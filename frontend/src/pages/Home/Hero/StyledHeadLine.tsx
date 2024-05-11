@@ -1,5 +1,6 @@
 import { styled } from '@mui/material';
 import ShortcutOutlinedIcon from '@mui/icons-material/ShortcutOutlined';
+import { motion } from 'framer-motion';
 
 export const StyledHeadLine = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -16,7 +17,7 @@ export const StyledHeadLine = styled('div')(({ theme }) => ({
   },
 }));
 
-export const ArrowIcon = styled(ShortcutOutlinedIcon)(({ theme }) => ({
+export const ArrowIcon = styled(motion(ShortcutOutlinedIcon))(({ theme }) => ({
   color: theme.palette.secondary.main,
   fontSize: '5rem',
   transform: 'rotateX(180deg)',
@@ -48,6 +49,7 @@ export const TopText = styled('div')(({ theme }) => ({
 }));
 
 export const BottomText = styled('div')(({ theme }) => ({
+  width: '100%',
   display: 'flex',
   alignItems: 'center',
   [theme.breakpoints.up('sm')]: {

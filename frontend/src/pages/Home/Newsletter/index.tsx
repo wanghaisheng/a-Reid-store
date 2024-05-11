@@ -14,6 +14,16 @@ const Newsletter = () => {
         borderBottomLeftRadius: '40px',
         borderBottomRightRadius: '40px',
       }}
+      initial={{
+        opacity: 0,
+        y: '25rem',
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+      }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
     >
       <div className='wrapper'>
         <EmailCard />

@@ -4,6 +4,7 @@ import { quotes } from './_data';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { LocaleContext } from '../../../contexts/locale/LocaleContext';
+import { motion } from 'framer-motion';
 
 const GridItem = styled('div')(({ theme }) => ({
   background: theme.palette.mode == 'light' ? 'white' : '#1B1025',
@@ -98,8 +99,26 @@ const Cards = () => {
 
   return (
     <Grid container spacing={2}>
-      {quotes.map((q) => (
-        <Grid item xs={cols} key={q.id}>
+      {quotes.map((q, index: number) => (
+        <Grid
+          item
+          xs={cols}
+          key={q.id}
+          component={motion.div}
+          initial={{
+            opacity: 0,
+            scale: 0,
+            transformOrigin: 'center',
+            rotateY: 270,
+          }}
+          whileInView={{
+            opacity: 1,
+            scale: 1,
+            rotateY: 0,
+          }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+        >
           <GridItem>
             <img src={q.img} />
             <div className='content'>

@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { TextField, Typography } from '@mui/material';
 import StyledButton from '../../components/Buttons/StyledButton';
 import { motion } from 'framer-motion';
-import { StyledForm } from '../SignUp';
+import { StyledForm, titleVariants } from '../SignUp';
 import PageContainer from '../../components/PageContainer';
 import { Spinner } from '../../components/Spinners';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +21,7 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const MotionTextField = motion(TextField);
 
   useEffect(() => {
     if (loginError) dispatch(openToast({ type: 'error', message: loginError.message }));
@@ -47,10 +48,16 @@ const Login = () => {
         <Typography
           variant='h5'
           sx={{ fontSize: '3rem !important', fontWeight: 'bold', color: 'white' }}
+          component={motion.h5}
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
         >
           {t('Login')}
         </Typography>
-        <TextField
+        <MotionTextField
           required
           id='outlined-required'
           label={t('Email')}
@@ -59,8 +66,13 @@ const Login = () => {
           value={user.identifier}
           onChange={handleChange}
           sx={{ width: '100%' }}
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         />
-        <TextField
+        <MotionTextField
           required
           id='outlined-required'
           label={t('Password')}
@@ -69,18 +81,35 @@ const Login = () => {
           value={user.password}
           onChange={handleChange}
           sx={{ width: '100%' }}
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         />
         <StyledButton
           type='submit'
           className='submitBtn'
           component={motion.button}
           whileTap={{ scale: 0.95 }}
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
         >
           {t('Login')}
         </StyledButton>
-        <span className='question'>
+        <motion.span
+          className='question'
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
           {t('DoNotHaveAnAccount')} <Link to='/sign-up'>{t('SignUp')}</Link>
-        </span>
+        </motion.span>
       </StyledForm>
       <Toast />
     </PageContainer>

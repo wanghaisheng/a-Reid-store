@@ -60,13 +60,14 @@ const StyledGridItemContainerOne = styled('div')(({ theme }) => ({
     top: '-20rem',
     [theme.breakpoints.up('md')]: {
       left: '10rem',
-      top: '15rem',
+      top: '12.5rem',
     },
   },
   '& .Img4': {
     rotate: '5deg',
     left: '-5rem',
     top: '-30rem',
+    borderRadius: '50%',
     [theme.breakpoints.up('md')]: {
       left: '-10rem',
       top: '-15rem',

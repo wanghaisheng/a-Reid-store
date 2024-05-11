@@ -5,7 +5,7 @@ import ReactPlayer from 'react-player';
 import { useState } from 'react';
 import { Spinner } from '../../../components/Spinners';
 
-const PlayIcon = styled(PlayCircleRoundedIcon)(({ theme }) => ({
+const PlayIcon = styled(motion(PlayCircleRoundedIcon))(({ theme }) => ({
   width: 75,
   height: 75,
   padding: '1rem',
@@ -67,13 +67,18 @@ const PlayButton = () => {
   return (
     <>
       <StyledPlayButton
-        initial={{ backgroundImage: 'linear-gradient(90deg, white 5%, #664982 100%)' }}
+        initial={{
+          opacity: 0,
+          scale: 0,
+          backgroundImage: 'linear-gradient(90deg, white 5%, #664982 100%)',
+        }}
+        animate={{ opacity: 1, scale: 1 }}
         whileHover={{ backgroundImage: 'linear-gradient(270deg, white 5%, #664982 50%)' }}
         whileTap={{ scale: 0.9 }}
-        transition={{ duration: 0.5 }}
+        transition={{ scale: { duration: 0.5, delay: 0.8 } }}
         onClick={handleOpen}
       >
-        <PlayIcon />
+        <PlayIcon whileTap={{ scale: 0.8, outline: 0 }} transition={{ duration: 0.5 }} />
       </StyledPlayButton>
       <Modal
         open={open}

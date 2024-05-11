@@ -1,6 +1,7 @@
 import { styled } from '@mui/material';
+import { motion } from 'framer-motion';
 
-const StyledProductCard = styled('div')({
+const StyledProductCard = styled(motion.div)({
   height: '400px',
   width: '275px',
   color: 'white',

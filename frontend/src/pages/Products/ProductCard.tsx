@@ -77,32 +77,44 @@ const ProductCard = ({ product }: { product: ProductEntity }) => {
   };
 
   return (
-    <>
-      <StyledProductCard key={product.id}>
-        <Paper elevation={6} className='picture'>
-          <img src={product.attributes?.img} />
-          <div className='quickView'>
-            <StyledButton
-              sx={{
-                bgcolor: 'gray.main',
-                color: 'black',
-                '&:hover': { bgcolor: 'black', color: 'gray.main' },
-              }}
-              onClick={() => handleOpenModal(product.id!)}
-            >
-              Quick View
-            </StyledButton>
-          </div>
-        </Paper>
-        <div className='footer'>
-          <div className='title'>
-            <Link to={`${product.id}`}>{product.attributes?.name}</Link>
-            {activeUser ? <LikeButton /> : !foundCartProduct && <LikeButton />}
-          </div>
-          <div className='price'>$ {product.attributes?.price}</div>
+    <StyledProductCard
+      key={product.id}
+      initial={{
+        opacity: 0,
+        y: '10rem',
+        rotateY: 90,
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+        rotateY: 0,
+      }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      <Paper elevation={6} className='picture'>
+        <img src={product.attributes?.img} />
+        <div className='quickView'>
+          <StyledButton
+            sx={{
+              bgcolor: 'gray.main',
+              color: 'black',
+              '&:hover': { bgcolor: 'black', color: 'gray.main' },
+            }}
+            onClick={() => handleOpenModal(product.id!)}
+          >
+            Quick View
+          </StyledButton>
         </div>
-      </StyledProductCard>
-    </>
+      </Paper>
+      <div className='footer'>
+        <div className='title'>
+          <Link to={`${product.id}`}>{product.attributes?.name}</Link>
+          {activeUser ? <LikeButton /> : !foundCartProduct && <LikeButton />}
+        </div>
+        <div className='price'>$ {product.attributes?.price}</div>
+      </div>
+    </StyledProductCard>
   );
 };
 

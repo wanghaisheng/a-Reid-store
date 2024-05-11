@@ -8,8 +8,9 @@ import { productThumbs } from './_data.ts';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCT } from '../../graphql/queries.ts';
 import { Maybe } from '../../gql/graphql.ts';
+import { motion } from 'framer-motion';
 
-export const ModalContainer = styled('div')(({ theme }) => ({
+export const ModalContainer = styled(motion.div)(({ theme }) => ({
   background: theme.palette.mode == 'light' ? 'white' : '#121212',
   width: '95%',
   borderTopLeftRadius: '2rem',
@@ -73,7 +74,19 @@ const ProductView = ({ modalItem }: { modalItem: Maybe<string> }) => {
         <div className='modalHeader' onClick={handleCloseModal}>
           <CloseIcon sx={{ color: 'gray.main' }} />
         </div>
-        <ModalContainer className='lenis lenis-smooth'>
+        <ModalContainer
+          className='lenis lenis-smooth'
+          initial={{
+            opacity: 0,
+            scale: 0,
+          }}
+          whileInView={{
+            opacity: 1,
+            scale: 1,
+          }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <ProductGalleryBox thumbs={thumbs!} img={data.product.data.attributes.img} />
           <ProductCartDetails id={data.product.data.id} />
         </ModalContainer>

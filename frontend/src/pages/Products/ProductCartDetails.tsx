@@ -9,7 +9,6 @@ import {
   SelectChangeEvent,
   Typography,
   styled,
-  useTheme,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -70,7 +69,6 @@ const ProductCartDetails = ({ id }: { id: string }) => {
     (e: ProductEntity) => e.id == id
   );
   const { t } = useTranslation();
-  const theme = useTheme();
 
   useEffect(() => {
     setSize(data.product.data.attributes?.size);
@@ -124,12 +122,12 @@ const ProductCartDetails = ({ id }: { id: string }) => {
       if (condition) {
         return (
           <FavoriteIcon
-            sx={{
+            sx={(theme) => ({
               fontSize: '3rem',
               color: theme.palette.mode == 'light' ? 'primary.main' : 'white',
               cursor: 'pointer',
               outline: 0,
-            }}
+            })}
             onClick={() => handleFavoriteProduct(false)}
             component={motion.svg}
             whileTap={{ scale: 0.75 }}
@@ -138,12 +136,12 @@ const ProductCartDetails = ({ id }: { id: string }) => {
       } else {
         return (
           <FavoriteBorderIcon
-            sx={{
+            sx={(theme) => ({
               fontSize: '3rem',
               color: theme.palette.mode == 'light' ? 'primary.main' : 'white',
               cursor: 'pointer',
               outline: 0,
-            }}
+            })}
             onClick={() => handleFavoriteProduct(true)}
             component={motion.svg}
             whileTap={{ scale: 0.75 }}
@@ -250,14 +248,16 @@ const ProductCartDetails = ({ id }: { id: string }) => {
         </div>
       </Box>
       <StyledButton
-        sx={{
+        sx={(theme) => ({
           p: '1rem 3rem',
           mb: '2rem',
           color: 'white',
           bgcolor: theme.palette.mode == 'light' ? 'primary.main' : '#2F1C40',
           '&:hover': { bgcolor: 'black' },
-        }}
+        })}
         onClick={handleCartProduct}
+        component={motion.div}
+        whileTap={{ scale: 0.9 }}
       >
         {activeUser
           ? data.product.data.attributes?.isAddedToCart

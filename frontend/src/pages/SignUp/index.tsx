@@ -41,6 +41,7 @@ export const StyledForm = styled('form')(({ theme }) => ({
 
   '& .question': {
     color: 'white',
+    display: 'inline-block',
     a: {
       textDecoration: 'none',
       color: theme.palette.secondary.main,
@@ -50,6 +51,17 @@ export const StyledForm = styled('form')(({ theme }) => ({
     },
   },
 }));
+
+export const titleVariants = {
+  initial: {
+    opacity: 0,
+    y: '10rem',
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+  },
+};
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -61,6 +73,7 @@ const SignUp = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const MotionTextField = motion(TextField);
 
   useEffect(() => {
     if (registerError) dispatch(openToast({ type: 'error', message: registerError.message }));
@@ -87,10 +100,16 @@ const SignUp = () => {
         <Typography
           variant='h5'
           sx={{ fontSize: '3rem !important', fontWeight: 'bold', color: 'white' }}
+          component={motion.h5}
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
         >
           {t('SignUp')}
         </Typography>
-        <TextField
+        <MotionTextField
           required
           id='outlined-required'
           label={t('Username')}
@@ -99,8 +118,13 @@ const SignUp = () => {
           value={user.username}
           onChange={handleChange}
           sx={{ width: '100%' }}
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         />
-        <TextField
+        <MotionTextField
           required
           id='outlined-required'
           label={t('Email')}
@@ -109,8 +133,13 @@ const SignUp = () => {
           value={user.email}
           onChange={handleChange}
           sx={{ width: '100%' }}
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         />
-        <TextField
+        <MotionTextField
           required
           id='outlined-required'
           label={t('Password')}
@@ -119,18 +148,35 @@ const SignUp = () => {
           value={user.password}
           onChange={handleChange}
           sx={{ width: '100%' }}
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
         />
         <StyledButton
           type='submit'
           className='submitBtn'
           component={motion.button}
           whileTap={{ scale: 0.95 }}
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
         >
           {t('SignUp')}
         </StyledButton>
-        <span className='question'>
+        <motion.span
+          className='question'
+          variants={titleVariants}
+          initial='initial'
+          animate='animate'
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
           {t('AlreadyHaveAnAccount')} <Link to='/login'>{t('Login')}</Link>
-        </span>
+        </motion.span>
       </StyledForm>
       <Toast />
     </PageContainer>

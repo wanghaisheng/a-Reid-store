@@ -1,6 +1,7 @@
 import { Grid, styled } from '@mui/material';
+import { motion } from 'framer-motion';
 
-export const StyledGrid = styled(Grid)(({ theme }) => ({
+export const StyledGrid = styled(motion(Grid))(({ theme }) => ({
   background: theme.palette.mode == 'light' ? 'white' : '#2F1C40',
   overflow: 'hidden',
   height: '150vh',
@@ -18,7 +19,7 @@ export const GridItem = styled(Grid)({
   alignItems: 'center',
 }) as typeof Grid;
 
-export const Img = styled('img')(({ theme }) => ({
+export const Img = styled(motion.img)(({ theme }) => ({
   position: 'absolute',
   borderRadius: 30,
   width: '20%',
