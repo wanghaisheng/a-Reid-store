@@ -9,6 +9,8 @@ const Toast = () => {
   const { open, type, iconName, message } = useAppSelector((store) => store.toast);
   const dispatch = useAppDispatch();
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;

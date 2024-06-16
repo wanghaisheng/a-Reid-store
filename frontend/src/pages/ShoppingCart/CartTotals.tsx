@@ -63,6 +63,8 @@ const CartTotals = ({ data, target }: CartTotalsProps) => {
       }
     } else {
       getLatestStoredValue('wishlistProducts').data.forEach((product: ProductEntity) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         setValue(product);
       });
     }

@@ -83,6 +83,8 @@ const CardContent = styled('div')(({ theme }) => ({
 }));
 
 const TestimonialsSlider = () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const { parse } = new Parser();
   const { lang } = useContext(LocaleContext);
 

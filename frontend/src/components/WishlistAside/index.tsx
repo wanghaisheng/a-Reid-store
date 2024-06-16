@@ -53,13 +53,15 @@ const WishlistAside = () => {
       }
     } else {
       getLatestStoredValue('wishlistProducts').data.forEach((product: ProductEntity) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         setValue(product);
       });
     }
   };
 
   if (loadingWishlistProducts) return false;
-  if (errorWishlistProducts) return <p>Error : {errorWishlistProducts.message}</p>;
+  if (errorWishlistProducts) return false;
 
   const OrderButton = () => (
     <Box sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>

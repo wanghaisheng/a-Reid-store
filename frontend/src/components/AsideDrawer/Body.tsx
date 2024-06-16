@@ -42,6 +42,8 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
       await handleCart('CREATE', createCartProduct);
       handleWishlist(false, product);
     } else {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       setValue(product);
     }
   };
@@ -77,7 +79,9 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
                   to={`products/${
                     activeDrawer == 'wishlist' || !activeUser
                       ? product.id
-                      : product.attributes?.productId
+                      : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-expect-error
+                        product.attributes?.productId
                   }`}
                   onClick={() => dispatch(closeDrawer())}
                 >

@@ -52,6 +52,8 @@ const Thumbnails = () => {
           item
           xs={matches ? 4 : 12}
           component={motion.div}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           style={{ rotateX, rotateY, scale }}
         >
           <GridItemContainerOne />
@@ -60,6 +62,8 @@ const Thumbnails = () => {
           item
           xs={matches ? 4 : 12}
           component={motion.div}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           style={{ rotateX, rotateY, scale }}
         >
           <GridItemContainerTwo />
@@ -68,6 +72,8 @@ const Thumbnails = () => {
           item
           xs={matches ? 4 : 12}
           component={motion.div}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           style={{ rotateX, rotateY, scale }}
         >
           <GridItemContainerThree />

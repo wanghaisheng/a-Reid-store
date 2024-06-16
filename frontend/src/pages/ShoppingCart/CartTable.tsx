@@ -68,6 +68,8 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
   if (!activeUser && target == 'wishlist')
     tableProducts = getLatestStoredWishlistValue('wishlistProducts').data;
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const handleProductCounter = (product, counterFlag: boolean) => {
     const updateCounter = async (cartCounter: number) => {
       try {

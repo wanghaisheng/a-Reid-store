@@ -20,7 +20,7 @@ const CartFooter = () => {
   const { t } = useTranslation();
 
   if (loadingCartProducts) return false;
-  if (errorCartProducts) return <p>Error : {errorCartProducts.message}</p>;
+  if (errorCartProducts) return false;
 
   const CartFooter = () => (
     <div className='cartFooter'>

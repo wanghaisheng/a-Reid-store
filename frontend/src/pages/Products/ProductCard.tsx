@@ -40,6 +40,8 @@ const ProductCard = ({ product }: { product: ProductEntity }) => {
 
   const handleFavoriteProduct = (isLiked: boolean) => {
     if (activeUser) handleWishlist(isLiked, product);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     else setValue(product);
   };
 

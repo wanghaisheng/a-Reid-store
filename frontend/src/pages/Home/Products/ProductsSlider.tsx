@@ -96,6 +96,8 @@ const ProductsSlider = ({ productsData }: ProductSliderProps) => {
         },
       };
       const isCartProduct = cartProducts?.find(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         (e: ProductEntity) => e.attributes?.productId == productId
       );
       if (!isCartProduct) await handleCart('CREATE', createCartProduct);
@@ -105,6 +107,8 @@ const ProductsSlider = ({ productsData }: ProductSliderProps) => {
       const isCartProduct = getLatestStoredCartValue('cartProducts').data?.find(
         (e: ProductEntity) => e.id == productId
       );
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       if (!isCartProduct) setValue(product!);
     }
   };

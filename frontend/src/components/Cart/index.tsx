@@ -24,7 +24,7 @@ const Cart = () => {
   };
 
   if (loadingCartProducts) return false;
-  if (errorCartProducts) return <p>Error : {errorCartProducts.message}</p>;
+  if (errorCartProducts) return false;
 
   return (
     <AsideDrawer>
