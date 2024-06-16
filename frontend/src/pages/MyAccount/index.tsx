@@ -65,23 +65,23 @@ const MyAccount = () => {
     if (!activeUser) navigate('/login', { replace: true });
   }, [activeUser, navigate]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const paymentIntentsData = await axios.post(
-          `${import.meta.env.VITE_APP_SERVER_URL}/api/orders`,
-          {
-            stripeId: 'some value',
-            id: 'some value',
-            flag: 'get',
-          }
-        );
-        setPaymentIntents(paymentIntentsData);
-      } catch (error) {
-        console.error('Error canceling PaymentIntent:', error);
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const paymentIntentsData = await axios.post(
+  //         `${import.meta.env.VITE_APP_SERVER_URL}/api/orders`,
+  //         {
+  //           stripeId: 'some value',
+  //           id: 'some value',
+  //           flag: 'get',
+  //         }
+  //       );
+  //       setPaymentIntents(paymentIntentsData);
+  //     } catch (error) {
+  //       console.error('Error canceling PaymentIntent:', error);
+  //     }
+  //   })();
+  // }, []);
 
   const cancelPayment = async (stripeId: string, id: string, customOrderId: string) => {
     if (activeUser) {
