@@ -48,7 +48,13 @@ const MyAccount = () => {
   const navigate = useNavigate();
   const { loading, error, data, refetch } = useQuery(GET_ORDERS, {
     variables: { userId: activeUser?.user.id },
+    context: {
+      headers: {
+        Authorization: `Bearer ${activeUser?.jwt}`,
+      },
+    },
   });
+
   const [paymentIntents, setPaymentIntents] = useState<AxiosResponse>();
   const [cancelLoading, setCancelLoading] = useState(false);
   const dispatch = useAppDispatch();
@@ -75,19 +81,6 @@ const MyAccount = () => {
         console.error('Error canceling PaymentIntent:', error);
       }
     })();
-  }, []);
-
-  useEffect(() => {
-    // to logout the user & end the session after closing the browser window
-    const handleBeforeUnload = () => {
-      logoutUser();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
   }, []);
 
   const cancelPayment = async (stripeId: string, id: string, customOrderId: string) => {

@@ -21,7 +21,7 @@ export const useCheckout = (data: dataType) => {
     setLoadingPayment(true);
 
     let products;
-    if (activeUser) products = data.products.data;
+    if (activeUser) products = data;
     if (!activeUser) products = getLatestStoredValue('cartProducts').data;
 
     const lineItems = products.map((item: ProductEntity) => {

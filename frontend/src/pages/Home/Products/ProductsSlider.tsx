@@ -32,8 +32,9 @@ const ProductsSlider = ({ productsData }: ProductSliderProps) => {
   const [scope, animate] = useAnimate();
   const navigate = useNavigate();
   const { activeUser } = useAuth();
-  const { handleProduct } = useAsideDrawer();
-  const { setValue } = useSessionStorage('cartProducts');
+  const { cartProducts, handleCart, wishlistProducts, handleWishlist } = useAsideDrawer();
+  const { getLatestStoredValue: getLatestStoredCartValue, setValue } =
+    useSessionStorage('cartProducts');
   const { t } = useTranslation();
 
   const handleSlickGoTo = (e: React.MouseEvent<HTMLElement>) => {
@@ -74,7 +75,7 @@ const ProductsSlider = ({ productsData }: ProductSliderProps) => {
     navigate(`/products/${productId}`);
   };
 
-  const handleCartProduct = () => {
+  const handleCartProduct = async () => {
     const productId = document.querySelector(
       '.slick-active.slick-center.slick-current .product-card'
     )?.id;
@@ -82,17 +83,29 @@ const ProductsSlider = ({ productsData }: ProductSliderProps) => {
       (p) => p.id == productId
     );
     if (activeUser) {
-      handleProduct(
-        product!.id,
-        false,
-        true,
-        product!.attributes!.size!,
-        product!.attributes!.color!,
-        1,
-        'cart'
+      const createCartProduct = {
+        data: {
+          users_permissions_user: activeUser?.user.id,
+          productId,
+          name: product!.attributes!.name,
+          size: product!.attributes!.size!,
+          color: product!.attributes!.color!,
+          cartCounter: 1,
+          img: product!.attributes!.img,
+          price: product!.attributes!.price,
+        },
+      };
+      const isCartProduct = cartProducts?.find(
+        (e: ProductEntity) => e.attributes?.productId == productId
       );
+      if (!isCartProduct) await handleCart('CREATE', createCartProduct);
+      const isWishlistProduct = wishlistProducts?.find((e: ProductEntity) => e.id == productId);
+      if (isWishlistProduct) handleWishlist(false, product!);
     } else {
-      setValue(product!);
+      const isCartProduct = getLatestStoredCartValue('cartProducts').data?.find(
+        (e: ProductEntity) => e.id == productId
+      );
+      if (!isCartProduct) setValue(product!);
     }
   };
 

@@ -9,6 +9,7 @@ import { Spinner } from '../../../components/Spinners';
 import { useTranslation } from 'react-i18next';
 import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 import { motion } from 'framer-motion';
+import Toast from '../../../components/Toasts/Toast';
 
 const StyledContainer = styled('div')(({ theme }) => ({
   overflowX: 'hidden',
@@ -152,6 +153,7 @@ const Products = () => {
         {productsError && <p>Error : {productsError.message}</p>}
         {productsData && <ProductsSlider productsData={productsData} />}
       </div>
+      <Toast />
     </StyledContainer>
   );
 };

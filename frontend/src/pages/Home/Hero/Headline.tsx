@@ -2,9 +2,12 @@ import { Container, Typography } from '@mui/material';
 import { ArrowIcon, BottomText, StyledHeadLine, TopText } from './StyledHeadLine';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { useContext } from 'react';
+import { LocaleContext } from '../../../contexts/locale/LocaleContext';
 
 const Headline = () => {
   const { t } = useTranslation();
+  const { lang } = useContext(LocaleContext);
 
   const TopTextVariants = {
     initial: {
@@ -59,19 +62,21 @@ const Headline = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 1.2 }}
           >
-            {t('Headline3')
-              .split('')
-              .map((letter, index) => (
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0, y: '10rem' }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                  style={{ display: 'inline-block' }}
-                >
-                  {letter}
-                </motion.span>
-              ))}
+            {lang == 'ar'
+              ? t('Headline3')
+              : t('Headline3')
+                  .split('')
+                  .map((letter, index) => (
+                    <motion.span
+                      key={index}
+                      initial={{ opacity: 0, y: '10rem' }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: index * 0.2 }}
+                      style={{ display: 'inline-block' }}
+                    >
+                      {letter}
+                    </motion.span>
+                  ))}
           </Typography>
         </BottomText>
       </StyledHeadLine>

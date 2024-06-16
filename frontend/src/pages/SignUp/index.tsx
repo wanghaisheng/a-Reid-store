@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef } from 'react';
 import Toast from '../../components/Toasts/Toast';
 import { useAppDispatch } from '../../app/store';
 import { openToast } from '../../app/features/toastSlice';
@@ -52,6 +52,7 @@ export const StyledForm = styled('form')(({ theme }) => ({
   },
 }));
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const titleVariants = {
   initial: {
     opacity: 0,
@@ -64,11 +65,9 @@ export const titleVariants = {
 };
 
 const SignUp = () => {
-  const [user, setUser] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
+  const usernameRef = useRef<HTMLInputElement>(undefined!);
+  const emailRef = useRef<HTMLInputElement>(undefined!);
+  const passwordRef = useRef<HTMLInputElement>(undefined!);
   const { activeUser, registerUser, registerLoading, registerError } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -83,12 +82,13 @@ const SignUp = () => {
     if (activeUser) navigate('/account', { replace: true });
   }, [activeUser, navigate]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const user = {
+      username: usernameRef.current?.value,
+      email: emailRef.current?.value,
+      password: passwordRef.current?.value,
+    };
     registerUser(user);
   };
 
@@ -115,8 +115,7 @@ const SignUp = () => {
           label={t('Username')}
           type='username'
           name='username'
-          value={user.username}
-          onChange={handleChange}
+          inputRef={usernameRef}
           sx={{ width: '100%' }}
           variants={titleVariants}
           initial='initial'
@@ -130,8 +129,7 @@ const SignUp = () => {
           label={t('Email')}
           type='email'
           name='email'
-          value={user.email}
-          onChange={handleChange}
+          inputRef={emailRef}
           sx={{ width: '100%' }}
           variants={titleVariants}
           initial='initial'
@@ -145,8 +143,7 @@ const SignUp = () => {
           label={t('Password')}
           type='password'
           name='password'
-          value={user.password}
-          onChange={handleChange}
+          inputRef={passwordRef}
           sx={{ width: '100%' }}
           variants={titleVariants}
           initial='initial'

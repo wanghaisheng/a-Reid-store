@@ -36,21 +36,15 @@ export const StyledImage = styled(Box)({
 });
 
 const ItemImage = ({ product, target }: { product: ProductEntity; target: string }) => {
-  const { handleProduct } = useAsideDrawer();
+  const { handleCart, handleWishlist } = useAsideDrawer();
   const { activeUser } = useAuth();
   const { removeSessionProduct } = useSessionStorage('cartProducts');
 
-  const handleRemoveProduct = (product: ProductEntity) => {
+  const handleRemoveProduct = async (product: ProductEntity) => {
     if (activeUser) {
-      handleProduct(
-        product.id,
-        target == 'wishlist' ? false : product.attributes!.isLiked!,
-        target == 'cart' ? false : product.attributes!.isAddedToCart!,
-        product.attributes!.size!,
-        product.attributes!.color!,
-        product.attributes!.cartCounter!,
-        target
-      );
+      if (target == 'cart')
+        await handleCart('DELETE', { id: product.id, name: product.attributes?.name });
+      if (target == 'wishlist') await handleWishlist(false, product);
     } else {
       removeSessionProduct(product, target == 'cart' ? 'cartProducts' : 'wishlistProducts');
     }

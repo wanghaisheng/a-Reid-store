@@ -17,13 +17,6 @@
       "required": true,
       "unique": true
     },
-    "rating": {
-      "required": true,
-      "min": 1,
-      "max": 10,
-      "default": 1,
-      "type": "integer"
-    },
     "desc": {
       "type": "text",
       "required": true
@@ -36,21 +29,11 @@
       "type": "decimal",
       "required": true
     },
-    "isLiked": {
-      "type": "boolean",
-      "default": false,
-      "required": false
-    },
     "categories": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::category.category",
       "mappedBy": "products"
-    },
-    "isAddedToCart": {
-      "type": "boolean",
-      "default": false,
-      "required": false
     },
     "size": {
       "type": "string",
@@ -60,13 +43,11 @@
       "type": "string",
       "default": "Red"
     },
-    "cartCounter": {
-      "type": "integer",
-      "default": 0
-    },
-    "target": {
-      "type": "string",
-      "required": true
+    "wishlist": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::wishlist.wishlist",
+      "inversedBy": "products"
     }
   }
 }

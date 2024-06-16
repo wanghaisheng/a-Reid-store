@@ -6,10 +6,11 @@ import StyledButton from '../../components/Buttons/StyledButton';
 import { useQuery } from '@apollo/client';
 import { CategoryEntity, Maybe, ProductEntity } from '../../gql/graphql';
 import { GET_CATEGORIES, GET_CATEGORY, PAGINATION } from '../../graphql/queries';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Spinner } from '../../components/Spinners';
 import { useTranslation } from 'react-i18next';
 import { LocaleContext } from '../../contexts/locale/LocaleContext';
+import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 
 const StyledProductsGrid = styled('div')(({ theme }) => ({
   margin: '6rem auto',
@@ -34,6 +35,7 @@ const ProductsGrid = () => {
   const [categoryId, setCategoryId] = useState('1');
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
+  const { numOfWishlists, createWishlist, numOfCarts, createCart } = useAsideDrawer();
 
   const PAGE_SIZE = 16;
 
@@ -49,6 +51,15 @@ const ProductsGrid = () => {
   const { data: dataPagination, refetch: refetchPagination } = useQuery(PAGINATION, {
     variables: { categoryId: categoryId, limit: PAGE_SIZE },
   });
+
+  useEffect(() => {
+    if (numOfWishlists == 0) {
+      createWishlist();
+    }
+    if (numOfCarts == 0) {
+      createCart();
+    }
+  }, []);
 
   const handleFilter = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>,

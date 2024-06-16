@@ -36,26 +36,31 @@ type CartTotalsProps = {
 const CartTotals = ({ data, target }: CartTotalsProps) => {
   const { handleCheckout, loadingPayment } = useCheckout(data);
   const { total } = useCartInfo(data, target);
-  const { handleProduct } = useAsideDrawer();
+  const { wishlistProducts, handleCart, handleWishlist } = useAsideDrawer();
   const { activeUser } = useAuth();
   const { getLatestStoredValue } = useSessionStorage('wishlistProducts');
   const { setValue } = useSessionStorage('cartProducts');
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     if (activeUser) {
-      data.products.data.forEach((product: ProductEntity) =>
-        handleProduct(
-          product.id,
-          false,
-          true,
-          product.attributes!.size!,
-          product.attributes!.color!,
-          product.attributes!.cartCounter!,
-          'cart'
-        )
-      );
+      for (const product of wishlistProducts) {
+        const createCartProduct = {
+          data: {
+            users_permissions_user: activeUser?.user.id,
+            productId: product.id,
+            name: product.attributes?.name,
+            size: 'S',
+            color: 'Red',
+            cartCounter: 1,
+            img: product.attributes?.img,
+            price: product.attributes?.price,
+          },
+        };
+        await handleCart('CREATE', createCartProduct);
+        await handleWishlist(false, product);
+      }
     } else {
       getLatestStoredValue('wishlistProducts').data.forEach((product: ProductEntity) => {
         setValue(product);

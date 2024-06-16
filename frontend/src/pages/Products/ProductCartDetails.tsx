@@ -57,24 +57,39 @@ const ProductCartDetails = ({ id }: { id: string }) => {
   const [color, setColor] = useState<Maybe<string> | undefined>(
     data.product.data.attributes?.color
   );
-  const [count, setCount] = useState<Maybe<number> | undefined>(
-    data.product.data.attributes?.cartCounter
-  );
-  const { handleProduct } = useAsideDrawer();
+  const [count, setCount] = useState<Maybe<number> | undefined>(0);
+  const { loadingWishlistProducts, errorWishlistProducts, wishlistProducts, handleWishlist } =
+    useAsideDrawer();
+  const { loadingCartProducts, errorCartProducts, cartProducts, refreshCartProducts, handleCart } =
+    useAsideDrawer();
   const { activeUser } = useAuth();
   const { getLatestStoredValue, setValue } = useSessionStorage('wishlistProducts');
-  const { getLatestStoredValue: getLatestStoredCartValue, setValue: setCartValue } =
-    useSessionStorage('cartProducts');
+  const {
+    getLatestStoredValue: getLatestStoredCartValue,
+    setValue: setCartValue,
+    removeSessionProduct: removeCartProduct,
+  } = useSessionStorage('cartProducts');
+  const cartProduct = cartProducts?.find(
+    (item: { attributes: { productId: string } }) => item.attributes.productId == id
+  );
   const foundCartProduct = getLatestStoredCartValue('cartProducts').data?.find(
     (e: ProductEntity) => e.id == id
   );
   const { t } = useTranslation();
 
   useEffect(() => {
-    setSize(data.product.data.attributes?.size);
-    setColor(data.product.data.attributes?.color);
-    setCount(data.product.data.attributes?.cartCounter);
-  }, [data]);
+    if (activeUser && cartProduct) {
+      setSize(cartProduct.attributes?.size);
+      setColor(cartProduct.attributes?.color);
+      setCount(cartProduct.attributes?.cartCounter);
+    }
+    if (!activeUser && foundCartProduct) {
+      setSize(foundCartProduct.attributes?.size);
+      setColor(foundCartProduct.attributes?.color);
+      setCount(foundCartProduct.attributes?.cartCounter);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeUser, cartProduct]);
 
   const handleChangeSize = (event: SelectChangeEvent) => {
     setSize(event.target.value as string);
@@ -85,35 +100,74 @@ const ProductCartDetails = ({ id }: { id: string }) => {
 
   const handleFavoriteProduct = (isLiked: boolean) => {
     if (activeUser) {
-      handleProduct(
-        data.product.data.id,
-        isLiked,
-        data.product.data.attributes!.isAddedToCart!,
-        size as string,
-        color as string,
-        count as number,
-        'wishlist'
-      );
+      handleWishlist(isLiked, data.product.data);
     } else {
       setValue(data.product.data);
     }
   };
 
-  const handleCartProduct = () => {
+  const resetValues = () => {
+    setSize(undefined);
+    setColor(undefined);
+    setCount(0);
+  };
+
+  const handleCartProduct = async () => {
     if (activeUser) {
-      handleProduct(data.product.data.id, false, true, size!, color!, count!, 'cart');
+      if (!cartProduct && count! > 0) {
+        const createCartProduct = {
+          data: {
+            users_permissions_user: activeUser?.user.id,
+            productId: id,
+            name: data.product.data.attributes?.name,
+            size: size,
+            color: color,
+            cartCounter: count,
+            img: data.product.data.attributes?.img,
+            price: data.product.data.attributes?.price,
+          },
+        };
+        await handleCart('CREATE', createCartProduct);
+        const foundProduct = wishlistProducts?.find((e: ProductEntity) => e.id == id);
+        if (foundProduct) handleFavoriteProduct(false);
+      }
+      if (cartProduct && count! > 0) {
+        const updateCartProduct = {
+          id: cartProduct.id,
+          data: {
+            users_permissions_user: cartProduct.attributes.users_permissions_user.data.id,
+            productId: cartProduct.attributes.productId,
+            name: cartProduct.attributes.name,
+            size: size,
+            color: color,
+            cartCounter: count,
+            cart: cartProduct.attributes.cart.data.id,
+          },
+        };
+        await handleCart('UPDATE', updateCartProduct);
+      }
+      if (cartProduct && count! == 0) {
+        await handleCart('DELETE', { id: cartProduct.id, name: cartProduct.attributes.name });
+        resetValues();
+      }
+      refreshCartProducts();
     } else {
-      const sessionProduct: ProductEntity = {
-        __typename: 'ProductEntity',
-        id: data.product.data.id,
-        attributes: {
-          ...data.product.data.attributes,
-          size,
-          color,
-          cartCounter: count,
-        },
-      };
-      setCartValue(sessionProduct);
+      if (count! > 0) {
+        const sessionProduct = {
+          __typename: 'ProductEntity',
+          id: data.product.data.id,
+          attributes: {
+            ...data.product.data.attributes,
+            size,
+            color,
+            cartCounter: count,
+          },
+        };
+        setCartValue(sessionProduct);
+      } else {
+        removeCartProduct(foundCartProduct, 'cartProducts');
+        resetValues();
+      }
     }
   };
 
@@ -151,8 +205,10 @@ const ProductCartDetails = ({ id }: { id: string }) => {
     };
 
     if (activeUser) {
-      if (!data.product.data.attributes?.isAddedToCart)
-        return renderIcon(data.product.data.attributes?.isLiked);
+      if (loadingWishlistProducts) return false;
+      if (errorWishlistProducts) return false;
+      const foundProduct = wishlistProducts?.find((e: ProductEntity) => e.id == id);
+      return renderIcon(Boolean(foundProduct));
     } else {
       const foundProduct = getLatestStoredValue('wishlistProducts').data?.find(
         (e: ProductEntity) => e.id == id
@@ -163,6 +219,11 @@ const ProductCartDetails = ({ id }: { id: string }) => {
 
   if (loading) return <Spinner />;
   if (error) return <p>Error : {error.message}</p>;
+
+  if (activeUser) {
+    if (loadingCartProducts) return <Spinner />;
+    if (errorCartProducts) return false;
+  }
 
   return (
     <Container>
@@ -221,7 +282,7 @@ const ProductCartDetails = ({ id }: { id: string }) => {
             <Button
               aria-label='reduce'
               onClick={() => {
-                setCount(Math.max(count! - 1, 1));
+                setCount(Math.max(count! - 1, 0));
               }}
               className='styledButton'
             >
@@ -260,18 +321,21 @@ const ProductCartDetails = ({ id }: { id: string }) => {
         whileTap={{ scale: 0.9 }}
       >
         {activeUser
-          ? data.product.data.attributes?.isAddedToCart
+          ? cartProducts?.findIndex(
+              (item: { attributes: { productId: string } }) => item.attributes.productId == id
+            ) != -1
             ? t('UPDATE_CART')
             : t('ADD_TO_CART')
           : foundCartProduct
           ? t('UPDATE_CART')
           : t('ADD_TO_CART')}
       </StyledButton>
-      {activeUser ? (
+      {activeUser && !cartProduct ? (
         <Box>
           <LikeButton />
         </Box>
       ) : (
+        !activeUser &&
         !foundCartProduct && (
           <Box>
             <LikeButton />

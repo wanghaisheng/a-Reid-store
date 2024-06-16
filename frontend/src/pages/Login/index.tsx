@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef } from 'react';
 import Toast from '../../components/Toasts/Toast';
 import { useAppDispatch } from '../../app/store';
 import { openToast } from '../../app/features/toastSlice';
@@ -13,10 +13,8 @@ import { Spinner } from '../../components/Spinners';
 import { useTranslation } from 'react-i18next';
 
 const Login = () => {
-  const [user, setUser] = useState({
-    identifier: '',
-    password: '',
-  });
+  const emailRef = useRef<HTMLInputElement>(undefined!);
+  const passwordRef = useRef<HTMLInputElement>(undefined!);
   const { activeUser, loginUser, loginLoading, loginError } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -31,12 +29,12 @@ const Login = () => {
     if (activeUser) navigate('/account', { replace: true });
   }, [activeUser, navigate]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const user = {
+      identifier: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
     loginUser(user);
   };
 
@@ -63,8 +61,7 @@ const Login = () => {
           label={t('Email')}
           type='email'
           name='identifier'
-          value={user.identifier}
-          onChange={handleChange}
+          inputRef={emailRef}
           sx={{ width: '100%' }}
           variants={titleVariants}
           initial='initial'
@@ -78,8 +75,7 @@ const Login = () => {
           label={t('Password')}
           type='password'
           name='password'
-          value={user.password}
-          onChange={handleChange}
+          inputRef={passwordRef}
           sx={{ width: '100%' }}
           variants={titleVariants}
           initial='initial'

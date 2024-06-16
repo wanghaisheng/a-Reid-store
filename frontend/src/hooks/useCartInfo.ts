@@ -14,7 +14,7 @@ export const useCartInfo = (data: dataType, target: string) => {
 
   useEffect(() => {
     let products;
-    if (activeUser && data) products = data.products.data;
+    if (activeUser && data) products = data;
     if (!activeUser)
       products = getLatestStoredValue(
         `${target == 'cart' ? 'cartProducts' : 'wishlistProducts'}`
@@ -22,7 +22,10 @@ export const useCartInfo = (data: dataType, target: string) => {
 
     const tot = products.reduce(
       (total: number, product: ProductEntity) =>
-        total + product.attributes!.cartCounter! * product.attributes!.price!,
+        total +
+        (target == 'cart'
+          ? product.attributes!.cartCounter! * product.attributes!.price!
+          : product.attributes!.price!),
       0
     );
     setTotal(tot);

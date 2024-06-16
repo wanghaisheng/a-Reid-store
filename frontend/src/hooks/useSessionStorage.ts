@@ -1,4 +1,4 @@
-import { ProductEntity } from '../gql/graphql';
+import { Maybe, ProductEntity } from '../gql/graphql';
 import { useAppDispatch } from '../app/store';
 import { openToast } from '../app/features/toastSlice';
 import { useCallback, useEffect } from 'react';
@@ -23,7 +23,10 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
     dispatch(setSessionCounters({ key, products: getLatestStoredValue(key) }));
   }, [getLatestStoredValue, dispatch, key]);
 
-  const setValue = (sessionProduct: ProductEntity) => {
+  const setValue = (sessionProduct: {
+    id: Maybe<string> | undefined;
+    attributes: { name: unknown };
+  }) => {
     const valueToStore = getLatestStoredValue(key);
     try {
       const index = valueToStore.data?.findIndex((e: ProductEntity) => e.id == sessionProduct.id);
@@ -36,6 +39,7 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
             ...sessionProduct.attributes,
             isLiked: key == 'wishlistProducts' ? true : false,
             isAddedToCart: key == 'cartProducts' ? true : false,
+            cartCounter: 1,
           },
         };
         valueToStore.data.push(product);
@@ -68,9 +72,7 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
             openToast({
               type: 'success',
               iconName: undefined,
-              message: `${sessionProduct.attributes?.name} ${t('Is')} ${t('AddedTo')} ${t(
-                'cart'
-              )}!`,
+              message: `${sessionProduct.attributes?.name} ${t('Is')} ${t('Updated')}!`,
             })
           );
         } else {
@@ -95,7 +97,7 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
     }
   };
 
-  const setProductCounter = (sessionProduct: ProductEntity, key: string) => {
+  const setProductCounter = (sessionProduct: { id: Maybe<string> | undefined }, key: string) => {
     const valueToStore = getLatestStoredValue(key);
     const index = valueToStore.data.findIndex((e: ProductEntity) => e.id == sessionProduct.id);
     valueToStore.data[index] = sessionProduct;

@@ -7,19 +7,30 @@ import StyledButton from '../../components/Buttons/StyledButton';
 import { Link } from 'react-router-dom';
 import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { motion } from 'framer-motion';
-import { ProductEntity } from '../../gql/graphql';
+import { Maybe, ProductEntity } from '../../gql/graphql';
 import StyledProductCard from './StyledProductCard';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 const ProductCard = ({ product }: { product: ProductEntity }) => {
   const dispatch = useAppDispatch();
-  const { handleProduct } = useAsideDrawer();
+  const {
+    loadingWishlistProducts,
+    errorWishlistProducts,
+    wishlistProducts,
+    handleWishlist,
+    cartProducts,
+  } = useAsideDrawer();
+
   const { activeUser } = useAuth();
   const { getLatestStoredValue, setValue } = useSessionStorage('wishlistProducts');
   const { getLatestStoredValue: getLatestStoredCartValue } = useSessionStorage('cartProducts');
   const foundCartProduct = getLatestStoredCartValue('cartProducts').data?.find(
     (e: ProductEntity) => e.id == product.id
+  );
+  const cartProduct = cartProducts?.find(
+    (item: { attributes: { productId: Maybe<string> | undefined } }) =>
+      item.attributes.productId == product.id
   );
 
   const handleOpenModal = (id: string) => {
@@ -28,19 +39,8 @@ const ProductCard = ({ product }: { product: ProductEntity }) => {
   };
 
   const handleFavoriteProduct = (isLiked: boolean) => {
-    if (activeUser)
-      handleProduct(
-        product.id,
-        isLiked,
-        product.attributes!.isAddedToCart!,
-        product.attributes!.size!,
-        product.attributes!.color!,
-        product.attributes!.cartCounter!,
-        'wishlist'
-      );
-    else {
-      setValue(product);
-    }
+    if (activeUser) handleWishlist(isLiked, product);
+    else setValue(product);
   };
 
   const LikeButton = () => {
@@ -67,7 +67,10 @@ const ProductCard = ({ product }: { product: ProductEntity }) => {
     };
 
     if (activeUser) {
-      if (!product.attributes?.isAddedToCart) return renderIcon(product.attributes?.isLiked);
+      if (loadingWishlistProducts) return false;
+      if (errorWishlistProducts) return false;
+      const foundProduct = wishlistProducts?.find((e: ProductEntity) => e.id == product.id);
+      return renderIcon(Boolean(foundProduct));
     } else {
       const foundProduct = getLatestStoredValue('wishlistProducts').data?.find(
         (e: ProductEntity) => e.id == product.id
@@ -110,7 +113,11 @@ const ProductCard = ({ product }: { product: ProductEntity }) => {
       <div className='footer'>
         <div className='title'>
           <Link to={`${product.id}`}>{product.attributes?.name}</Link>
-          {activeUser ? <LikeButton /> : !foundCartProduct && <LikeButton />}
+          {activeUser && !cartProduct ? (
+            <LikeButton />
+          ) : (
+            !activeUser && !foundCartProduct && <LikeButton />
+          )}
         </div>
         <div className='price'>$ {product.attributes?.price}</div>
       </div>

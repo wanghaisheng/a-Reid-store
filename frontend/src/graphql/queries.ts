@@ -14,12 +14,8 @@ export const GET_PRODUCTS = gql`
           desc
           img
           price
-          rating
-          isLiked
-          isAddedToCart
           size
           color
-          cartCounter
         }
       }
       meta {
@@ -45,53 +41,8 @@ export const GET_PRODUCT = gql`
           desc
           img
           price
-          rating
-          isLiked
-          isAddedToCart
           size
           color
-          cartCounter
-        }
-      }
-    }
-  }
-`;
-
-export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct(
-    $id: ID!
-    $isLiked: Boolean
-    $isAddedToCart: Boolean
-    $size: String
-    $color: String
-    $cartCounter: Int
-    $target: String
-  ) {
-    updateProduct(
-      id: $id
-      data: {
-        isLiked: $isLiked
-        isAddedToCart: $isAddedToCart
-        size: $size
-        color: $color
-        cartCounter: $cartCounter
-        target: $target
-      }
-    ) {
-      data {
-        id
-        attributes {
-          name
-          desc
-          img
-          price
-          rating
-          isLiked
-          isAddedToCart
-          size
-          color
-          cartCounter
-          target
         }
       }
     }
@@ -131,12 +82,8 @@ export const GET_CATEGORY = gql`
                 desc
                 img
                 price
-                rating
-                isLiked
-                isAddedToCart
                 size
                 color
-                cartCounter
               }
             }
           }
@@ -228,6 +175,270 @@ export const GET_ORDERS = gql`
           pageSize
           total
           pageCount
+        }
+      }
+    }
+  }
+`;
+
+export const GET_USER_WISHLIST = gql`
+  query GetUserWishlist($userId: IDFilterInput) {
+    wishlists(filters: { users_permissions_user: { id: $userId } }) {
+      data {
+        id
+        attributes {
+          products {
+            data {
+              id
+              attributes {
+                name
+                desc
+                img
+                price
+                size
+                color
+              }
+            }
+          }
+          users_permissions_user {
+            data {
+              id
+              attributes {
+                username
+                email
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_USER_WISHLIST = gql`
+  mutation CreateWishlist($data: WishlistInput!) {
+    createWishlist(data: $data) {
+      data {
+        id
+        attributes {
+          products {
+            data {
+              id
+            }
+          }
+          users_permissions_user {
+            data {
+              id
+              attributes {
+                username
+                email
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_USER_WISHLIST = gql`
+  mutation UpdateWishlist($id: ID!, $data: WishlistInput!) {
+    updateWishlist(id: $id, data: $data) {
+      data {
+        id
+        attributes {
+          products {
+            data {
+              id
+              attributes {
+                name
+                desc
+                img
+                price
+                size
+                color
+              }
+            }
+          }
+          users_permissions_user {
+            data {
+              id
+              attributes {
+                email
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_USER_CART = gql`
+  query GetUserCart($userId: IDFilterInput) {
+    carts(filters: { users_permissions_user: { id: $userId } }) {
+      data {
+        id
+        attributes {
+          cart_products(filters: { users_permissions_user: { id: $userId } }) {
+            data {
+              id
+              attributes {
+                users_permissions_user {
+                  data {
+                    id
+                    attributes {
+                      email
+                    }
+                  }
+                }
+                productId
+                name
+                size
+                color
+                cartCounter
+                img
+                price
+                cart {
+                  data {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_USER_CART = gql`
+  mutation CreateCart($data: CartInput!) {
+    createCart(data: $data) {
+      data {
+        id
+        attributes {
+          cart_products {
+            data {
+              id
+            }
+          }
+          users_permissions_user {
+            data {
+              id
+              attributes {
+                username
+                email
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_USER_CART = gql`
+  mutation UpdateCart($id: ID!, $data: CartInput!, $userId: IDFilterInput) {
+    updateCart(id: $id, data: $data) {
+      data {
+        id
+        attributes {
+          users_permissions_user {
+            data {
+              id
+              attributes {
+                email
+                username
+              }
+            }
+          }
+          cart_products(filters: { users_permissions_user: { id: $userId } }) {
+            data {
+              id
+              attributes {
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_CART_PRODUCT = gql`
+  mutation CreateCartProduct($data: CartProductInput!) {
+    createCartProduct(data: $data) {
+      data {
+        id
+        attributes {
+          users_permissions_user {
+            data {
+              id
+              attributes {
+                email
+              }
+            }
+          }
+          productId
+          name
+          size
+          color
+          cartCounter
+          img
+          price
+          cart {
+            data {
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_CART_PRODUCT = gql`
+  mutation UpdateCartProduct($id: ID!, $data: CartProductInput!) {
+    updateCartProduct(id: $id, data: $data) {
+      data {
+        id
+        attributes {
+          users_permissions_user {
+            data {
+              id
+              attributes {
+                username
+                email
+              }
+            }
+          }
+          productId
+          name
+          size
+          color
+          cartCounter
+          cart {
+            data {
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const DELETE_CART_PRODUCT = gql`
+  mutation DeleteCartProduct($id: ID!) {
+    deleteCartProduct(id: $id) {
+      data {
+        id
+        attributes {
+          name
+          productId
         }
       }
     }

@@ -15,7 +15,7 @@ const useAuth = () => {
       const { data } = await register({ variables: user });
       if (data.register.jwt) {
         Cookies.set('userData', JSON.stringify(data.register), {
-          expires: 5 / (24 * 60),
+          expires: 10 / (24 * 60),
           secure: true,
           sameSite: 'Strict',
         });
@@ -32,7 +32,7 @@ const useAuth = () => {
       const { data } = await login({ variables: user });
       if (data.login.jwt) {
         Cookies.set('userData', JSON.stringify(data.login), {
-          expires: 5 / (24 * 60),
+          expires: 10 / (24 * 60),
           secure: true,
           sameSite: 'Strict',
         });

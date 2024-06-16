@@ -138,5 +138,6 @@
   "SomeErrorHappened": "Some error happened!",
   "YouHaveSubscribedSuccessfully": "You have subscribed successfully!",
   "YourMessageSentSuccessfully": "Your message sent successfully!",
-  "CancelOrder": "Cancel order"
+  "CancelOrder": "Cancel order",
+  "Updated": "Updated"
 }

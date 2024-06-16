@@ -21,21 +21,26 @@ type BodyProps = {
 const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
   const dispatch = useAppDispatch();
   const { activeDrawer } = useAppSelector((store) => store.drawer);
-  const { handleProduct } = useAsideDrawer();
+  const { handleCart, handleWishlist } = useAsideDrawer();
   const { activeUser } = useAuth();
   const { setValue } = useSessionStorage('cartProducts');
 
-  const handleCartProduct = (product: ProductEntity) => {
+  const handleCartProduct = async (product: ProductEntity) => {
     if (activeUser) {
-      handleProduct(
-        product.id,
-        false,
-        true,
-        product.attributes!.size!,
-        product.attributes!.color!,
-        product.attributes!.cartCounter!,
-        'cart'
-      );
+      const createCartProduct = {
+        data: {
+          users_permissions_user: activeUser?.user.id,
+          productId: product.id,
+          name: product.attributes?.name,
+          size: 'S',
+          color: 'Red',
+          cartCounter: 1,
+          img: product.attributes?.img,
+          price: product.attributes?.price,
+        },
+      };
+      await handleCart('CREATE', createCartProduct);
+      handleWishlist(false, product);
     } else {
       setValue(product);
     }
@@ -68,7 +73,14 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
                   },
                 })}
               >
-                <Link to={`products/${product.id}`} onClick={() => dispatch(closeDrawer())}>
+                <Link
+                  to={`products/${
+                    activeDrawer == 'wishlist' || !activeUser
+                      ? product.id
+                      : product.attributes?.productId
+                  }`}
+                  onClick={() => dispatch(closeDrawer())}
+                >
                   {product.attributes!.name.length > 15
                     ? activeDrawer == 'wishlist'
                       ? product.attributes?.name.substring(0, 13) + '...'

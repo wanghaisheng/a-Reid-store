@@ -35,7 +35,7 @@ function App() {
       dispatch(
         setDrawerCounters({
           target: 'wishlist',
-          counter: wishlistCounter.products.meta.pagination.total,
+          counter: wishlistCounter,
         })
       );
     }
@@ -43,7 +43,7 @@ function App() {
       dispatch(
         setDrawerCounters({
           target: 'cart',
-          counter: cartCounter.products.meta.pagination.total,
+          counter: cartCounter,
         })
       );
     }
@@ -66,9 +66,7 @@ function App() {
         window.location.reload();
       }
     };
-
     window.addEventListener('storage', handleStorageChange);
-
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };

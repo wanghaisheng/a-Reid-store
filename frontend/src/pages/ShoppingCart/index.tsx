@@ -1,12 +1,9 @@
-import { useQuery } from '@apollo/client';
-import { GET_PRODUCTS } from '../../graphql/queries';
 import PageContainer from '../../components/PageContainer';
 import { Alert, AlertTitle, Backdrop, styled } from '@mui/material';
 import CartTable from './CartTable';
 import { useEffect, useState } from 'react';
 import CartTotals from './CartTotals';
 import Empty from '../../components/AsideDrawer/Empty';
-import { useAppSelector } from '../../app/store';
 import { useSearchParams } from 'react-router-dom';
 import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 import { ProductEntity } from '../../gql/graphql';
@@ -51,12 +48,8 @@ export const PageWrapper = styled('div')(({ theme }) => ({
 }));
 
 const ShoppingCart = () => {
-  const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
-    variables: { isAddedToCart: true, isLiked: false },
-  });
-  const { cartCounter } = useAppSelector((store) => store.drawer);
   const [searchParams] = useSearchParams();
-  const { handleProduct } = useAsideDrawer();
+  const { loadingCartProducts, errorCartProducts, cartProducts, handleCart } = useAsideDrawer();
   const [succeedPayment, setSucceedPayment] = useState(false);
   const [canceledPayment, setCanceledPayment] = useState(false);
   const [open, setOpen] = useState(true);
@@ -69,13 +62,12 @@ const ShoppingCart = () => {
   };
 
   useEffect(() => {
-    refetch();
     setSucceedPayment(JSON.parse(searchParams.get('success')!));
     setCanceledPayment(JSON.parse(searchParams.get('cancel')!));
     if (succeedPayment) {
       if (activeUser) {
-        data?.products.data.forEach((product: ProductEntity) => {
-          handleProduct(product.id, product.attributes!.isLiked!, false, '', '', 1, 'cart');
+        cartProducts?.forEach((product: ProductEntity) => {
+          handleCart('DELETE', { id: product.id, name: product.attributes?.name });
         });
       } else {
         getLatestStoredValue('cartProducts').data.forEach((product: ProductEntity) => {
@@ -84,33 +76,31 @@ const ShoppingCart = () => {
       }
     }
   }, [
-    data,
-    refetch,
-    cartCounter,
-    handleProduct,
     searchParams,
     succeedPayment,
     activeUser,
     getLatestStoredValue,
     removeSessionProduct,
+    cartProducts,
+    handleCart,
   ]);
 
-  if (loading) return <Spinner />;
-  if (error) return <p>Error : {error.message}</p>;
+  if (loadingCartProducts) return <Spinner />;
+  if (errorCartProducts) return false;
 
   return (
     <PageContainer style={{ paddingTop: '4rem' }}>
       <PageWrapper>
-        {(activeUser && !data.products.data.length) ||
+        {(activeUser && !cartProducts.length) ||
         (!activeUser && !getLatestStoredValue('cartProducts').data.length) ? (
           <Empty name={t('ShoppingCart2')} />
         ) : (
           <>
             <CartTable
-              products={activeUser ? data.products.data : getLatestStoredValue('cartProducts').data}
+              products={activeUser ? cartProducts : getLatestStoredValue('cartProducts').data}
               target='cart'
             />
-            <CartTotals data={data} target='cart' />
+            <CartTotals data={cartProducts} target='cart' />
           </>
         )}
         {succeedPayment && (

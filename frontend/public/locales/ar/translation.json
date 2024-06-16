@@ -102,7 +102,7 @@
   "Your2": "الخاصة بك",
   "IsEmpty": "فارغة",
   "YouHaveNoItemsInYour": "ليس لديك أي عناصر في",
-  "LetsGoBuySomething": "قم بشراء شيء ما",
+  "LetsGoBuySomething": "!قم بشراء شيء ما",
   "SHOP_NOW": "تسوق الآن",
   "ShoppingCart2": "عربة التسوق",
   "Success": "تم بنجاح",
@@ -138,5 +138,6 @@
   "SomeErrorHappened": "حدث خطأ ما!",
   "YouHaveSubscribedSuccessfully": "لقد تم إشتراكك بنجاح!",
   "YourMessageSentSuccessfully": "تم إرسال رسالتك بنجاح!",
-  "CancelOrder": "إلغاء الطلبية"
+  "CancelOrder": "إلغاء الطلبية",
+  "Updated": "تحديثه"
 }

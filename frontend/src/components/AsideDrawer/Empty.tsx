@@ -43,7 +43,7 @@ const Empty = ({ name }: { name: string }) => {
         </Typography>
         <Typography variant='body1' sx={{ textAlign: 'center', mb: '2rem' }}>
           {t('YouHaveNoItemsInYour')} {name}.
-          <br /> {t('LetsGoBuySomething')}!
+          <br /> {t('LetsGoBuySomething')}
         </Typography>
         <Link to={`${window.origin}/products`}>
           <StyledButton className='button' onClick={() => dispatch(closeDrawer())}>

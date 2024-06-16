@@ -16,14 +16,13 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { useAppSelector } from '../../app/store';
 import { ProductEntity } from '../../gql/graphql';
-import { useMutation } from '@apollo/client';
-import { UPDATE_PRODUCT } from '../../graphql/queries';
 import ItemImage from './ItemImage';
 import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { LocaleContext } from '../../contexts/locale/LocaleContext';
+import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -55,7 +54,7 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const CartTable = ({ products, target }: { products: ProductEntity[]; target: string }) => {
   const { cartCounter, wishlistCounter, sessionCartCounter, sessionWishlistCounter } =
     useAppSelector((store) => store.drawer);
-  const [updateProductCounter] = useMutation(UPDATE_PRODUCT);
+  const { handleCart } = useAsideDrawer();
   const { activeUser } = useAuth();
   const { getLatestStoredValue, setProductCounter } = useSessionStorage('cartProducts');
   const { getLatestStoredValue: getLatestStoredWishlistValue } =
@@ -69,20 +68,22 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
   if (!activeUser && target == 'wishlist')
     tableProducts = getLatestStoredWishlistValue('wishlistProducts').data;
 
-  const handleProductCounter = (product: ProductEntity, counterFlag: boolean) => {
+  const handleProductCounter = (product, counterFlag: boolean) => {
     const updateCounter = async (cartCounter: number) => {
       try {
-        await updateProductCounter({
-          variables: {
-            id: product.id,
-            cartCounter,
+        const updateCartProduct = {
+          id: product.id,
+          data: {
+            users_permissions_user: product.attributes?.users_permissions_user.data.id,
+            productId: product.attributes?.productId,
+            name: product.attributes?.name,
+            size: product.attributes?.size,
+            color: product.attributes?.color,
+            cartCounter: cartCounter,
+            cart: product.attributes?.cart.data.id,
           },
-          context: {
-            headers: {
-              Authorization: `Bearer ${activeUser.jwt}`,
-            },
-          },
-        });
+        };
+        await handleCart('UPDATE', updateCartProduct);
       } catch (e) {
         console.log(e);
       }
@@ -137,11 +138,13 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
             <TableRow>
               <StyledTableCell>{t('PRODUCT')}</StyledTableCell>
               <StyledTableCell align='center'>{t('DESCRIPTION')}</StyledTableCell>
-              <StyledTableCell align='center'>{t('SIZE')}</StyledTableCell>
-              <StyledTableCell align='center'>{t('COLOR')}</StyledTableCell>
-              <StyledTableCell align='center'>{t('QUANTITY')}</StyledTableCell>
+              {target == 'cart' && <StyledTableCell align='center'>{t('SIZE')}</StyledTableCell>}
+              {target == 'cart' && <StyledTableCell align='center'>{t('COLOR')}</StyledTableCell>}
+              {target == 'cart' && (
+                <StyledTableCell align='center'>{t('QUANTITY')}</StyledTableCell>
+              )}
               <StyledTableCell align='center'>{t('PRICE')}</StyledTableCell>
-              <StyledTableCell align='center'>{t('TOTAL')}</StyledTableCell>
+              {target == 'cart' && <StyledTableCell align='center'>{t('TOTAL')}</StyledTableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -151,33 +154,41 @@ const CartTable = ({ products, target }: { products: ProductEntity[]; target: st
                   <ItemImage product={product} target={target} />
                 </StyledTableCell>
                 <StyledTableCell align='center'>{product.attributes?.name}</StyledTableCell>
-                <StyledTableCell align='center'>{product.attributes?.size}</StyledTableCell>
-                <StyledTableCell align='center'>{product.attributes?.color}</StyledTableCell>
-                <StyledTableCell align='center'>
-                  <ButtonGroup>
-                    <Button
-                      aria-label='reduce'
-                      onClick={() => handleProductCounter(product, false)}
-                      className='styledButton'
-                    >
-                      <RemoveIcon fontSize='small' />
-                    </Button>
-                    <Button sx={{ fontSize: '1.8rem !important' }} className='styledButton'>
-                      {product.attributes?.cartCounter}
-                    </Button>
-                    <Button
-                      aria-label='increase'
-                      onClick={() => handleProductCounter(product, true)}
-                      className='styledButton'
-                    >
-                      <AddIcon fontSize='small' />
-                    </Button>
-                  </ButtonGroup>
-                </StyledTableCell>
+                {target == 'cart' && (
+                  <StyledTableCell align='center'>{product.attributes?.size}</StyledTableCell>
+                )}
+                {target == 'cart' && (
+                  <StyledTableCell align='center'>{product.attributes?.color}</StyledTableCell>
+                )}
+                {target == 'cart' && (
+                  <StyledTableCell align='center'>
+                    <ButtonGroup>
+                      <Button
+                        aria-label='reduce'
+                        onClick={() => handleProductCounter(product, false)}
+                        className='styledButton'
+                      >
+                        <RemoveIcon fontSize='small' />
+                      </Button>
+                      <Button sx={{ fontSize: '1.8rem !important' }} className='styledButton'>
+                        {product.attributes?.cartCounter}
+                      </Button>
+                      <Button
+                        aria-label='increase'
+                        onClick={() => handleProductCounter(product, true)}
+                        className='styledButton'
+                      >
+                        <AddIcon fontSize='small' />
+                      </Button>
+                    </ButtonGroup>
+                  </StyledTableCell>
+                )}
                 <StyledTableCell align='center'>{product.attributes?.price}</StyledTableCell>
-                <StyledTableCell align='center'>
-                  {(product.attributes!.cartCounter! * product.attributes!.price).toFixed(2)}
-                </StyledTableCell>
+                {target == 'cart' && (
+                  <StyledTableCell align='center'>
+                    {(product.attributes!.cartCounter! * product.attributes!.price).toFixed(2)}
+                  </StyledTableCell>
+                )}
               </StyledTableRow>
             ))}
           </TableBody>

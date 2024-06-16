@@ -1,10 +1,6 @@
-import { useQuery } from '@apollo/client';
-import { GET_PRODUCTS } from '../../graphql/queries';
 import PageContainer from '../../components/PageContainer';
 import { PageWrapper } from '../ShoppingCart';
 import Empty from '../../components/AsideDrawer/Empty';
-import { useEffect } from 'react';
-import { useAppSelector } from '../../app/store';
 import Toast from '../../components/Toasts/Toast';
 import CartTable from '../ShoppingCart/CartTable';
 import CartTotals from '../ShoppingCart/CartTotals';
@@ -12,38 +8,32 @@ import useAuth from '../../hooks/useAuth';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { Spinner } from '../../components/Spinners';
 import { useTranslation } from 'react-i18next';
+import { useAsideDrawer } from '../../hooks/useAsideDrawer';
 
 const Wishlist = () => {
-  const { loading, error, data, refetch } = useQuery(GET_PRODUCTS, {
-    variables: { isLiked: true, isAddedToCart: false },
-  });
-  const { wishlistCounter } = useAppSelector((store) => store.drawer);
   const { activeUser } = useAuth();
+  const { loadingWishlistProducts, errorWishlistProducts, wishlistProducts } = useAsideDrawer();
   const { getLatestStoredValue } = useSessionStorage('wishlistProducts');
   const { t } = useTranslation();
 
-  useEffect(() => {
-    refetch();
-  }, [data, refetch, wishlistCounter]);
-
-  if (loading) return <Spinner />;
-  if (error) return <p>Error : {error.message}</p>;
+  if (loadingWishlistProducts) return <Spinner />;
+  if (errorWishlistProducts) return false;
 
   return (
     <PageContainer style={{ paddingTop: '4rem' }}>
       <PageWrapper>
-        {(activeUser && !data.products.data.length) ||
+        {(activeUser && !wishlistProducts.length) ||
         (!activeUser && !getLatestStoredValue('wishlistProducts').data.length) ? (
           <Empty name={t('wishlist')} />
         ) : (
           <>
             <CartTable
               products={
-                activeUser ? data.products.data : getLatestStoredValue('wishlistProducts').data
+                activeUser ? wishlistProducts : getLatestStoredValue('wishlistProducts').data
               }
               target='wishlist'
             />
-            <CartTotals data={data} target='wishlist' />
+            <CartTotals data={wishlistProducts} target='wishlist' />
           </>
         )}
         <Toast />
