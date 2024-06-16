@@ -49,7 +49,7 @@ const ProductGalleryBox = ({ thumbs, img }: { thumbs: string[]; img: string | un
   return (
     <Container>
       <div className='thumbs'>
-        {thumbs.map((thumb, index) => (
+        {thumbs?.map((thumb, index) => (
           <img
             src={window.origin + thumb}
             key={index}
