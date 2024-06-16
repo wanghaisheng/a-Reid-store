@@ -55,8 +55,7 @@ const MyAccount = () => {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [paymentIntents, setPaymentIntents] = useState<AxiosResponse>();
+  const [paymentIntents] = useState<AxiosResponse>();
   const [cancelLoading, setCancelLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
