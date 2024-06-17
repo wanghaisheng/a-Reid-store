@@ -124,30 +124,31 @@ const Products = () => {
             maxWidth: '850px',
           }}
         >
-          {categoriesData.categories.data.map((category: CategoryEntity, index: number) => (
-            <FilterButton
-              ref={FilterButtonRef}
-              key={category.id}
-              className={`filterItem ${category.id == categoryId ? 'active' : null}`}
-              onClick={(e) => handleFilter(e, category.id)}
-              style={{
-                width: lang == 'ar' ? 'auto' : '13.1rem',
-              }}
-              initial={{
-                opacity: 0,
-                scaleX: 0,
-                transformOrigin: 'left',
-              }}
-              whileInView={{
-                opacity: 1,
-                scaleX: 1,
-              }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-            >
-              <span>{t(`${category.attributes?.categoryName}`)}</span>
-            </FilterButton>
-          ))}
+          {categoriesData &&
+            categoriesData?.categories.data.map((category: CategoryEntity, index: number) => (
+              <FilterButton
+                ref={FilterButtonRef}
+                key={category.id}
+                className={`filterItem ${category.id == categoryId ? 'active' : null}`}
+                onClick={(e) => handleFilter(e, category.id)}
+                style={{
+                  width: lang == 'ar' ? 'auto' : '13.1rem',
+                }}
+                initial={{
+                  opacity: 0,
+                  scaleX: 0,
+                  transformOrigin: 'left',
+                }}
+                whileInView={{
+                  opacity: 1,
+                  scaleX: 1,
+                }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+              >
+                <span>{t(`${category.attributes?.categoryName}`)}</span>
+              </FilterButton>
+            ))}
         </Box>
         {productsLoading && <Spinner place='productsSlider' />}
         {productsError && <p>Error : {productsError.message}</p>}
