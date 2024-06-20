@@ -79,9 +79,10 @@ const ProductCartDetails = ({ id }: { id: string }) => {
 
   useEffect(() => {
     if (activeUser && cartProduct) {
-      setSize(cartProduct.attributes?.size);
-      setColor(cartProduct.attributes?.color);
-      setCount(cartProduct.attributes?.cartCounter);
+      const cartProductData = { ...cartProduct };
+      setSize(cartProductData.attributes?.size);
+      setColor(cartProductData.attributes?.color);
+      setCount(cartProductData.attributes?.cartCounter);
     }
     if (!activeUser && foundCartProduct) {
       setSize(foundCartProduct.attributes?.size);
