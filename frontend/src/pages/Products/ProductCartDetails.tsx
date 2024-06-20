@@ -53,10 +53,11 @@ const Container = styled('div')(({ theme }) => ({
 
 const ProductCartDetails = ({ id }: { id: string }) => {
   const { loading, error, data } = useQuery(GET_PRODUCT, { variables: { id } });
-  const [size, setSize] = useState<Maybe<string> | undefined>(data.product?.data.attributes?.size);
-  const [color, setColor] = useState<Maybe<string> | undefined>(
-    data.product.data.attributes?.color
-  );
+  const [size, setSize] = useState<
+    Maybe<string> | undefined
+  >(/* data.product?.data.attributes?.size */);
+  const [color, setColor] = useState<Maybe<string> | undefined>();
+  //data.product.data.attributes?.color
   const [count, setCount] = useState<Maybe<number> | undefined>(0);
   const { loadingWishlistProducts, errorWishlistProducts, wishlistProducts, handleWishlist } =
     useAsideDrawer();
@@ -79,10 +80,15 @@ const ProductCartDetails = ({ id }: { id: string }) => {
 
   useEffect(() => {
     if (activeUser && cartProduct) {
-      const cartProductData = { ...cartProduct };
-      setSize(cartProductData.attributes?.size);
-      setColor(cartProductData.attributes?.color);
-      setCount(cartProductData.attributes?.cartCounter);
+      const foundUserCartProduct = {
+        ...cartProduct,
+        attributes: {
+          ...cartProduct.attributes,
+        },
+      };
+      setSize(foundUserCartProduct.attributes?.size);
+      setColor(foundUserCartProduct.attributes?.color);
+      setCount(foundUserCartProduct.attributes?.cartCounter);
     }
     if (!activeUser && foundCartProduct) {
       setSize(foundCartProduct.attributes?.size);
@@ -93,6 +99,15 @@ const ProductCartDetails = ({ id }: { id: string }) => {
   }, [activeUser, cartProduct]);
 
   const handleChangeSize = (event: SelectChangeEvent) => {
+    // if (activeUser && cartProduct) {
+    //   const updatedProduct = {
+    //     ...cartProduct,
+    //     attributes: {
+    //       ...cartProduct.attributes,
+    //       size: event.target.value,
+    //     },
+    //   };
+    // }
     setSize(event.target.value as string);
   };
   const handleChangeColor = (event: SelectChangeEvent) => {
