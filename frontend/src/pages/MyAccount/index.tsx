@@ -55,7 +55,7 @@ const MyAccount = () => {
     },
   });
 
-  const [paymentIntents] = useState<AxiosResponse>();
+  const [paymentIntents, setPaymentIntents] = useState<AxiosResponse>();
   const [cancelLoading, setCancelLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
