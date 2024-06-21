@@ -8,8 +8,11 @@ const StyledContactPage = styled('div')(({ theme }) => ({
     border: `2px solid white`,
     borderRadius: '20px',
     marginBottom: '8rem',
-    padding: '4rem',
+    padding: '2rem',
     gap: '4rem',
+    [theme.breakpoints.up('sm')]: {
+      padding: '4rem',
+    },
     [theme.breakpoints.up('md')]: {
       flexDirection: 'row',
       justifyContent: 'space-evenly',
@@ -91,6 +94,7 @@ const StyledContactPage = styled('div')(({ theme }) => ({
     '& .mapBtn': {
       display: 'block',
       textAlign: 'center',
+      marginTop: '2rem',
 
       '& button': {
         color: 'black',

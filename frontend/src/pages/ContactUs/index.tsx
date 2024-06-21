@@ -66,7 +66,7 @@ const ContactUs = () => {
             <form ref={form} onSubmit={sendEmail}>
               <Typography
                 variant='h5'
-                sx={{ fontSize: '3rem !important', fontWeight: 'bold', color: 'white' }}
+                sx={{ fontSize: '2.8rem !important', fontWeight: 'bold', color: 'white' }}
                 component={motion.h5}
                 variants={titleVariants}
                 initial='initial'

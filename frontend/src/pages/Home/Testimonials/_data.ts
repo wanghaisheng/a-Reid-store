@@ -13,7 +13,7 @@ const testimonials = [
   {
     id: 2,
     img: '/assets/testimonials/testimonial-2.jpg',
-    name: 'Anahita Mellatnejad',
+    name: 'Anahita Mellatn',
     title: 'Sales strategist of Reid',
     title2: 'استراتيجي المبيعات في ريد',
     comment:
@@ -46,7 +46,7 @@ const testimonials = [
   {
     id: 5,
     img: '/assets/testimonials/testimonial-5.jpg',
-    name: 'Anahita Mellatnejad',
+    name: 'Anahita Mellatn',
     title: 'Sales strategist of Reid',
     title2: 'استراتيجي المبيعات في ريد',
     comment:

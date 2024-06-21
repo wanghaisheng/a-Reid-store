@@ -5,12 +5,21 @@ import Headline from './Headline';
 import SubHeadline from './SubHeadline';
 import Thumbnails from './Thumbnails';
 
-const StyledBox = styled(Box)({
+const StyledBox = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   display: 'flex',
   alignItems: 'flex-start',
   overflow: 'hidden',
-}) as typeof Box;
+  [theme.breakpoints.up('md')]: {
+     minHeight: '80vh',
+  },
+  [theme.breakpoints.up('lg')]: {
+    alignItems: 'center',
+  },
+  [theme.breakpoints.up('xl')]: {
+    minHeight: '100vh',
+  },
+})) as typeof Box;
 
 const Hero = () => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up(1024));

@@ -7,10 +7,7 @@ const StyledSubHeadline = styled('div')(({ theme }) => ({
   color: 'white',
   maxWidth: '30rem',
   position: 'relative',
-  top: '53vh',
-  [theme.breakpoints.up('sm')]: {
-    top: '47vh',
-  },
+  top: '50vh',
   [theme.breakpoints.up('md')]: {
     maxWidth: '25rem',
     top: '-5vh',
@@ -24,6 +21,15 @@ const StyledSubHeadline = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
     maxWidth: '33rem',
     right: '-48vw',
+  },
+  '@media (min-width: 1600px)': {
+    right: '-45vw',
+  },
+  '@media (min-width: 1700px)': {
+    right: '-40vw',
+  },
+  '@media (min-width: 1800px)': {
+    right: '-35vw',
   },
 }));
 

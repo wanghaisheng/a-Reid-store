@@ -36,9 +36,7 @@ const ProductsGrid = () => {
   const { t } = useTranslation();
   const { lang } = useContext(LocaleContext);
   const { numOfWishlists, createWishlist, numOfCarts, createCart } = useAsideDrawer();
-
   const PAGE_SIZE = 16;
-
   const {
     loading: productsLoading,
     error: productsError,
@@ -47,7 +45,6 @@ const ProductsGrid = () => {
   } = useQuery(GET_CATEGORY, {
     variables: { id: categoryId, limit: PAGE_SIZE },
   });
-
   const { data: dataPagination, refetch: refetchPagination } = useQuery(PAGINATION, {
     variables: { categoryId: categoryId, limit: PAGE_SIZE },
   });
@@ -74,9 +71,6 @@ const ProductsGrid = () => {
     refetchPagination({ categoryId, limit: PAGE_SIZE });
   };
 
-  if (loading) return false;
-  if (error) return false;
-
   const handleLoadMore = () => {
     getCategoryProducts({
       id: categoryId,
@@ -85,6 +79,9 @@ const ProductsGrid = () => {
         dataPagination.products.meta.pagination.pageSize,
     });
   };
+
+  if (loading) return false;
+  if (error) return false;
 
   return (
     <>
@@ -106,7 +103,6 @@ const ProductsGrid = () => {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            width: 400,
             borderRadius: '24px',
           }}
         >

@@ -44,7 +44,7 @@ const Body = ({ name, products, handleRemoveProduct, cartIcon }: BodyProps) => {
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
-      setValue(product);
+      setValue({ ...product, attributes: { ...product.attributes, cartCounter: 1 } });
     }
   };
 

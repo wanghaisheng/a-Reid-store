@@ -18,12 +18,28 @@ const StyledSlider = styled(motion.div)({
 
 const SliderCard = styled('div')(({ theme }) => ({
   padding: '4rem',
+
   marginBottom: '0.5rem',
   display: 'flex !important',
   justifyContent: 'space-between',
   background: theme.palette.secondary.main,
   borderRadius: 40,
   position: 'relative',
+
+  '& .arrowIcon': {
+    transform: 'rotateX(-180deg)',
+    fontSize: '3.5rem',
+    color: 'white',
+    marginTop: '2%',
+  },
+
+  '& .quoteIcon': {
+    fontSize: '10rem',
+    color: theme.palette.secondary.dark,
+    position: 'absolute',
+    left: '75%',
+    top: '6%',
+  },
 
   '&.whiteCard': {
     background: 'white',
@@ -41,19 +57,13 @@ const SliderCard = styled('div')(({ theme }) => ({
     },
   },
 
-  '& .arrowIcon': {
-    transform: 'rotateX(-180deg)',
-    fontSize: '3.5rem',
-    color: 'white',
-    marginTop: '2%',
-  },
-
-  '& .quoteIcon': {
-    fontSize: '10rem',
-    color: theme.palette.secondary.dark,
-    position: 'absolute',
-    left: '75%',
-    top: '6%',
+  [theme.breakpoints.down('sm')]: {
+    padding: '4rem 1rem 0',
+    '& .quoteIcon': {
+      fontSize: '6rem',
+      left: '80%',
+      top: '8%',
+    },
   },
 }));
 
@@ -68,6 +78,9 @@ const CardContent = styled('div')(({ theme }) => ({
     '& img': { width: 50, height: 50, borderRadius: '100%' },
     '& h3, p': { color: 'rgba(0, 0, 0, 0.87)', fontSize: '2rem', lineHeight: 0 },
     '& p': { color: theme.palette.gray.dark, fontSize: '1.4rem' },
+    [theme.breakpoints.down('sm')]: {
+      gap: '0.5rem',
+    }
   },
 
   '& .body': {

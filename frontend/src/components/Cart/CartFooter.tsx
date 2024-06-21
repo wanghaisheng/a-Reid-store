@@ -25,7 +25,7 @@ const CartFooter = () => {
   const CartFooter = () => (
     <div className='cartFooter'>
       <Typography variant='h6' sx={{ fontWeight: 'bold', mb: '2rem' }}>
-        {t('Total')}: ${total.toFixed(2)}
+        {t('Total')}: ${total?.toFixed(2)}
       </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
         <Link to='shopping-cart'>

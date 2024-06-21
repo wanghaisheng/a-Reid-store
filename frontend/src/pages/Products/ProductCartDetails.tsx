@@ -53,12 +53,6 @@ const Container = styled('div')(({ theme }) => ({
 
 const ProductCartDetails = ({ id }: { id: string }) => {
   const { loading, error, data } = useQuery(GET_PRODUCT, { variables: { id } });
-  const [size, setSize] = useState<
-    Maybe<string> | undefined
-  >(/* data.product?.data.attributes?.size */);
-  const [color, setColor] = useState<Maybe<string> | undefined>();
-  //data.product.data.attributes?.color
-  const [count, setCount] = useState<Maybe<number> | undefined>(0);
   const { loadingWishlistProducts, errorWishlistProducts, wishlistProducts, handleWishlist } =
     useAsideDrawer();
   const { loadingCartProducts, errorCartProducts, cartProducts, refreshCartProducts, handleCart } =
@@ -77,39 +71,42 @@ const ProductCartDetails = ({ id }: { id: string }) => {
     (e: ProductEntity) => e.id == id
   );
   const { t } = useTranslation();
-
-  useEffect(() => {
+  const [size, setSize] = useState<Maybe<string> | undefined>(() => {
     if (activeUser && cartProduct) {
-      const foundUserCartProduct = {
-        ...cartProduct,
-        attributes: {
-          ...cartProduct.attributes,
-        },
-      };
-      setSize(foundUserCartProduct.attributes?.size);
-      setColor(foundUserCartProduct.attributes?.color);
-      setCount(foundUserCartProduct.attributes?.cartCounter);
+      return cartProduct.attributes?.size;
     }
     if (!activeUser && foundCartProduct) {
-      setSize(foundCartProduct.attributes?.size);
-      setColor(foundCartProduct.attributes?.color);
-      setCount(foundCartProduct.attributes?.cartCounter);
+      return foundCartProduct.attributes?.size;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeUser, cartProduct]);
+  });
+  const [color, setColor] = useState<Maybe<string> | undefined>(() => {
+    if (activeUser && cartProduct) {
+      return cartProduct.attributes?.color;
+    }
+    if (!activeUser && foundCartProduct) {
+      return foundCartProduct.attributes?.color;
+    }
+  });
+  const [count, setCount] = useState<Maybe<number> | undefined>(() => {
+    if (activeUser && cartProduct) {
+      return cartProduct.attributes?.cartCounter;
+    }
+    if (!activeUser && foundCartProduct) {
+      return foundCartProduct.attributes?.cartCounter;
+    }
+    return 0;
+  });
+
+  useEffect(() => {
+    if (!activeUser && !foundCartProduct) {
+      resetValues();
+    }
+  }, [activeUser, cartProduct, foundCartProduct]);
 
   const handleChangeSize = (event: SelectChangeEvent) => {
-    // if (activeUser && cartProduct) {
-    //   const updatedProduct = {
-    //     ...cartProduct,
-    //     attributes: {
-    //       ...cartProduct.attributes,
-    //       size: event.target.value,
-    //     },
-    //   };
-    // }
     setSize(event.target.value as string);
   };
+  
   const handleChangeColor = (event: SelectChangeEvent) => {
     setColor(event.target.value as string);
   };

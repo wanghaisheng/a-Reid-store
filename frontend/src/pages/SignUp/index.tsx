@@ -12,12 +12,15 @@ import { Spinner } from '../../components/Spinners';
 import { useTranslation } from 'react-i18next';
 
 export const StyledForm = styled('form')(({ theme }) => ({
-  width: '350px',
+  width: '320px',
   margin: '0 auto',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   gap: '3rem',
+  [theme.breakpoints.up('sm')]: {
+    width: '350px',
+  },
 
   '& .MuiFormLabel-root, & label.Mui-focused': {
     color: 'white',

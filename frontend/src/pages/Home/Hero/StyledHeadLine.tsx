@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export const StyledHeadLine = styled('div')(({ theme }) => ({
   position: 'relative',
-  top: '50vh',
+  top: '45vh',
   color: 'white',
   display: 'flex',
   flexDirection: 'column',
@@ -14,6 +14,9 @@ export const StyledHeadLine = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
     top: '8vh',
     left: '-7vw',
+  },
+  [theme.breakpoints.up('xl')]: {
+    width: '110%',
   },
 }));
 
@@ -52,6 +55,9 @@ export const BottomText = styled('div')(({ theme }) => ({
   width: '100%',
   display: 'flex',
   alignItems: 'center',
+  '& h1': {
+    fontSize: '4rem',
+  },
   [theme.breakpoints.up('sm')]: {
     marginLeft: '20%',
     position: 'relative',
@@ -59,6 +65,9 @@ export const BottomText = styled('div')(({ theme }) => ({
   },
   [theme.breakpoints.up('md')]: {
     top: '-3rem',
+    '& h1': {
+      fontSize: '6rem',
+    },
   },
   [theme.breakpoints.up('lg')]: {
     gap: '2rem',

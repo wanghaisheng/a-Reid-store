@@ -16,6 +16,7 @@ const StyledProductsHeader = styled('div')(({ theme }) => ({
     listStyle: 'none',
     display: 'flex',
     gap: '2rem',
+    justifyContent: 'space-between',
 
     '& .filterItem': {
       color: 'white',
@@ -64,6 +65,22 @@ const StyledProductsHeader = styled('div')(({ theme }) => ({
           transform: 'translate3d(0, -2px, 0)',
         },
       },
+    },
+
+    [theme.breakpoints.down('sm')]: {
+      width: '320px',
+      gap: '1rem',
+      '& .filterItem': {
+        color: 'white',
+        fontSize: '1.4rem',
+      },
+    },
+  },
+
+  '& .searchBox': {
+    width: 320,
+    [theme.breakpoints.up('sm')]: {
+      width: 400,
     },
   },
 }));

@@ -12,8 +12,12 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
   const getLatestStoredValue = useCallback(
     (key: string) => {
       const item = window.sessionStorage.getItem(key);
-      if (item) return JSON.parse(item);
-      else return initialValue;
+      if (item) {
+        return JSON.parse(item);
+      } else {
+        window.sessionStorage.setItem(key, JSON.stringify(initialValue));
+        return initialValue;
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [initialValue]
@@ -39,7 +43,6 @@ export const useSessionStorage = (key: string, initialValue = { data: [] }) => {
             ...sessionProduct.attributes,
             isLiked: key == 'wishlistProducts' ? true : false,
             isAddedToCart: key == 'cartProducts' ? true : false,
-            cartCounter: 1,
           },
         };
         valueToStore.data.push(product);

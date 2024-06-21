@@ -20,7 +20,7 @@ export const useCartInfo = (data: dataType, target: string) => {
         `${target == 'cart' ? 'cartProducts' : 'wishlistProducts'}`
       ).data;
 
-    const tot = products.reduce(
+    const tot = products?.reduce(
       (total: number, product: ProductEntity) =>
         total +
         (target == 'cart'
