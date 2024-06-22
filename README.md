@@ -25,8 +25,8 @@
 ### Built with
 
 - [React.JS](https://react.dev/)
-- [MUI](https://mui.com/)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
+- [MUI](https://mui.com/)
 - [Framer Motion](https://www.framer.com/motion/)
 - [Strapi](https://strapi.io/)
 - [GraphQL](https://graphql.org/)
