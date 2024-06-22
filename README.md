@@ -25,6 +25,7 @@
 ### Built with
 
 - [React.JS](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
 - [MUI](https://mui.com/)
 - [Framer Motion](https://www.framer.com/motion/)
