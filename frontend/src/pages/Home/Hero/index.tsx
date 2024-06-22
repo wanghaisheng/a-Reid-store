@@ -11,12 +11,12 @@ const StyledBox = styled(Box)(({ theme }) => ({
   alignItems: 'flex-start',
   overflow: 'hidden',
   [theme.breakpoints.up('md')]: {
-     minHeight: '80vh',
+    minHeight: '80vh',
   },
   [theme.breakpoints.up('lg')]: {
     alignItems: 'center',
   },
-  [theme.breakpoints.up('xl')]: {
+  '@media (min-width: 1400px)': {
     minHeight: '100vh',
   },
 })) as typeof Box;

@@ -117,12 +117,18 @@ const ProductsSlider = ({ productsData }: ProductSliderProps) => {
     dots: matches ? true : false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 7,
     slidesToScroll: 1,
     accessibility: true,
     centerMode: true,
     arrows: false,
     responsive: [
+      {
+        breakpoint: 1400,
+        settings: {
+          slidesToShow: 5,
+        },
+      },
       {
         breakpoint: 1200,
         settings: {

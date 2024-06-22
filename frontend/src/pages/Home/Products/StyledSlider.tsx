@@ -44,6 +44,23 @@ const StyledSlider = styled(Slider)(({ theme }) => ({
         transform: 'rotate(-350deg) translate(0px, 80px)',
       },
     },
+    '@media (min-width: 1400px)': {
+      '&.slick-active': {
+        transform: 'none',
+      },
+      '&.slick-active + .slick-active': {
+        transform: 'none',
+      },
+      '&.slick-active.slick-current': {
+        transform: 'none',
+      },
+      '&.slick-current + .slick-active': {
+        transform: 'none',
+      },
+      '&.slick-current + .slick-active + .slick-active': {
+        transform: 'none',
+      },
+    },
   },
 }));
 
