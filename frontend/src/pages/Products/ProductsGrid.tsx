@@ -80,7 +80,7 @@ const ProductsGrid = () => {
     });
   };
 
-  if (loading) return false;
+  if (loading) return <Spinner place='productsPage' />;
   if (error) return false;
 
   return (

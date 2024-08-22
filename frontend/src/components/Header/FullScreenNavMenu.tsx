@@ -49,7 +49,6 @@ const FullScreenNavMenu = () => {
         <Link to='/account'>
           <StyledButton
             sx={{
-              width: '112px',
               p: '0.3rem 1.8rem',
               ml: 2,
               mr: 2,
