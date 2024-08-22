@@ -66,7 +66,7 @@ const Products = () => {
     getCategoryProducts({ id: categoryId, limit: PAGE_SIZE });
   };
 
-  if (loading) return false;
+  if (loading) return <Spinner place='productsSlider' />;
   if (error) return false;
 
   const titleVariants = {
