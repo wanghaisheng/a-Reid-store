@@ -1,0 +1,13 @@
+=> The Project is deoloyed on three parts:
+1- Frontend => Vercel 
+2- Backend => Render 
+3- PostgreSQL Database => Neon
+4- I registered for each website with my (GitHub) acount.
+
+=> we changed the strapi sqlite database to Neon postgreSQL because render takes a long time to restart the server &
+   it doesn't persist the data (it cleares the data for each restart).
+
+=> follow the instructions from these strapi videos (Strapi Gatsby Tutorial):
+-  #6 - Deploying Strapi to Render
+-  #7 - Migrating to Neon Postgres Database
+

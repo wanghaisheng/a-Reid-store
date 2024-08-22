@@ -1,0 +1,16 @@
+shaherashraf77@gmail.com
+Test1234
+____________________________
+
+shaherashraf339@gmail.com
+Test1234
+____________________________
+
+omaraboelwafa95@gmail.com
+cL@b7-Pt33REG+v
+
+_________________________________________
+
+=> get the old data stored on strapi
+
+git reset --hard 9c758db47a050a876e3e03742de01cf21ddfc85e
