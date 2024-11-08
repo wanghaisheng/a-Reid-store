@@ -30,7 +30,7 @@ export const useCheckout = (data: dataType) => {
           currency: 'usd',
           product_data: {
             name: item.attributes?.name,
-            images: [item.attributes?.img],
+            images: [`${window.location.origin}/` + item.attributes?.img],
           },
           unit_amount: Math.round(item.attributes!.price) * 100,
         },
